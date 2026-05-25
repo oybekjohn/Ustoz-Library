@@ -18,7 +18,7 @@ const BOOKS_DATA = [
     pages: null,
     file: "books/kitob1 monografiya.pdf",
     cover: "books/pics/kitob1.png",
-    qr: "books/pics/kitob1qr.jpg",
+    qr: "books/pics/kitob1qr.png",
     description: {
       uz: "Axborot texnologiyalari sohasida ilmiy tadqiqotlar metodologiyasi bo'yicha monografiya",
       ru: "Монография по методологии научных исследований в области информационных технологий",
@@ -39,7 +39,7 @@ const BOOKS_DATA = [
     pages: null,
     file: "books/kitob2 Глоссарий Рак Техн-RTU-лотин 2025.pdf",
     cover: "books/pics/kitob2.png",
-    qr: "books/pics/kitob2qr.jpg",
+    qr: "books/pics/kitob2qr.png",
     description: {
       uz: "Axborot texnologiyalari sohasidagi atamalar lug'ati (lotin yozuvida)",
       ru: "Глоссарий терминов в области информационных технологий (латиница)",
@@ -60,7 +60,7 @@ const BOOKS_DATA = [
     pages: null,
     file: "books/kitob3 Инф тех в обр-Дарслик-2021 март.pdf",
     cover: "books/pics/kitob3.png",
-    qr: "books/pics/kitob3qr.jpg",
+    qr: "books/pics/kitob3qr.png",
     description: {
       uz: "Oliy ta'lim muassasalari uchun axborot texnologiyalari darsligi",
       ru: "Учебник по информационным технологиям в образовании для вузов",
@@ -81,7 +81,7 @@ const BOOKS_DATA = [
     pages: null,
     file: "books/kitob4 Инф_тех_в_образовании_УЧЕБНИК_для_УзГУМЯ.pdf",
     cover: "books/pics/kitob4.png",
-    qr: "books/pics/kitob4qr.jpg",
+    qr: "books/pics/kitob4qr.png",
     description: {
       uz: "O'zbekiston Davlat Jahon Tillari Universiteti uchun darslik",
       ru: "Учебник для Узбекского государственного университета мировых языков",

@@ -1,7 +1,11 @@
 /* ============================================
    USTOZ KUTUBXONASI — Flipbook Reader
    PDF.js + StPageFlip integration
+   Dual mode: flipbook on http(s), iframe on file://
    ============================================ */
+
+// ---------- Detect protocol ----------
+const isLocalFile = window.location.protocol === 'file:';
 
 // ---------- Flipbook State ----------
 const flipbookState = {
@@ -69,8 +73,7 @@ function createFlipSound() {
 let playFlipSound = null;
 
 // ---------- Open Flipbook ----------
-async function openFlipbook(encodedFile, title, qrImage) {
-  const file = decodeURIComponent(encodedFile);
+async function openFlipbook(file, title, qrImage) {
   flipbookState.currentBookFile = file;
   flipbookState.currentBookTitle = title;
   flipbookState.currentBookQr = qrImage || '';
@@ -94,10 +97,49 @@ async function openFlipbook(encodedFile, title, qrImage) {
     qrContainer.style.display = 'none';
   }
 
+  // Choose mode based on protocol
+  if (isLocalFile) {
+    openIframeMode(file, container, loading, pageInfo);
+  } else {
+    await openFlipbookMode(file, container, loading, pageInfo);
+  }
+}
+
+// ---------- IFRAME MODE (for file:// protocol) ----------
+function openIframeMode(file, container, loading, pageInfo) {
+  loading.style.display = 'none';
+  if (pageInfo) pageInfo.textContent = '';
+
+  // Hide flipbook nav buttons in iframe mode
+  const navBtns = document.querySelectorAll('.flipbook-nav-btn');
+  navBtns.forEach(btn => btn.style.display = 'none');
+
+  // Create iframe for browser's built-in PDF viewer
+  container.innerHTML = '';
+  const iframe = document.createElement('iframe');
+  iframe.src = file;
+  iframe.style.cssText = `
+    width: 100%;
+    height: 100%;
+    min-height: 70vh;
+    border: none;
+    border-radius: 8px;
+    background: #fff;
+  `;
+  iframe.title = flipbookState.currentBookTitle;
+  container.appendChild(iframe);
+}
+
+// ---------- FLIPBOOK MODE (for http/https) ----------
+async function openFlipbookMode(file, container, loading, pageInfo) {
   // Init sound on first interaction
   if (!playFlipSound) {
     playFlipSound = createFlipSound();
   }
+
+  // Show nav buttons
+  const navBtns = document.querySelectorAll('.flipbook-nav-btn');
+  navBtns.forEach(btn => btn.style.display = '');
 
   // Show loading
   loading.style.display = 'flex';
@@ -105,7 +147,7 @@ async function openFlipbook(encodedFile, title, qrImage) {
 
   try {
     // Load PDF
-    const loadingTask = pdfjsLib.getDocument(encodeURI(file));
+    const loadingTask = pdfjsLib.getDocument(file);
     flipbookState.pdfDoc = await loadingTask.promise;
     flipbookState.totalPages = flipbookState.pdfDoc.numPages;
     flipbookState.renderedPages.clear();
@@ -272,6 +314,10 @@ function closeFlipbook() {
     flipbookState.renderedPages.clear();
     const container = document.getElementById('flipbook-container');
     if (container) container.innerHTML = '';
+
+    // Restore nav buttons visibility
+    const navBtns = document.querySelectorAll('.flipbook-nav-btn');
+    navBtns.forEach(btn => btn.style.display = '');
   }, 400);
 }
 
@@ -279,7 +325,7 @@ function closeFlipbook() {
 function downloadFromFlipbook() {
   if (flipbookState.currentBookFile) {
     const a = document.createElement('a');
-    a.href = encodeURI(flipbookState.currentBookFile);
+    a.href = flipbookState.currentBookFile;
     a.download = '';
     document.body.appendChild(a);
     a.click();
@@ -325,7 +371,7 @@ function checkUrlBookParam() {
       const lang = state ? state.currentLang : 'uz';
       const title = book.title[lang] || book.title.uz;
       setTimeout(() => {
-        openFlipbook(encodeURIComponent(book.file), title, book.qr);
+        openFlipbook(book.file, title, book.qr);
       }, 800);
     }
   }

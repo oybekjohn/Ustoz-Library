@@ -198,7 +198,7 @@ function renderBooks() {
           </div>
           ` : ''}
           <div class="book-card__actions">
-            <button class="btn btn--primary" onclick="openFlipbook('${encodeURIComponent(book.file)}', '${escapedTitle}', '${qrSrc}')" title="${t.btnRead}">
+            <button class="btn btn--primary" onclick="openFlipbook('${book.file}', '${escapedTitle}', '${qrSrc}')" title="${t.btnRead}">
               ${t.btnRead}
             </button>
             <a class="btn btn--secondary" href="${encodeURI(book.file)}" download title="${t.btnDownload}">
