@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="uz" data-theme="dark">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- SEO -->
+  <title>Ayupov Ravshan Hamdamovich — Ustoz Kutubxonasi</title>
+  <meta name="description"
+    content="Professor Ayupov Ravshan Hamdamovich ilmiy asarlari, darsliklar va monografiyalar — onlayn kutubxona">
+  <meta name="keywords"
+    content="Ayupov Ravshan, professor, darslik, monografiya, axborot texnologiyalari, ta'limda IT, kitoblar, kutubxona">
+  <meta name="author" content="Ayupov Ravshan Hamdamovich">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Professor Ayupov R.H. — Onlayn Kutubxona">
+  <meta property="og:description"
+    content="Professorning barcha ilmiy asarlari, darsliklari va monografiyalari bir joyda">
+  <meta property="og:url" content="https://oybekjohn.github.io/Ustoz-Library/">
+  <meta property="og:locale" content="uz_UZ">
+
+  <!-- Favicon -->
+  <link rel="icon"
+    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='0.9em' font-size='90'>📚</text></svg>">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="css/style.css">
+
+  <!-- PDF.js (Mozilla) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <script>
+    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+  </script>
+
+  <!-- StPageFlip (page turn library) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/page-flip/2.0.7/js/page-flip.browser.js"></script>
+</head>
+
+<body>
+
+  <!-- Animated Background -->
+  <div class="bg-decoration" aria-hidden="true">
+    <div class="bg-orb bg-orb--1"></div>
+    <div class="bg-orb bg-orb--2"></div>
+    <div class="bg-orb bg-orb--3"></div>
+  </div>
+
+  <!-- ========== NAVBAR ========== -->
+  <nav class="navbar" id="navbar">
+    <div class="container">
+      <a href="#" class="navbar__logo">
+        <div class="navbar__logo-icon">📚</div>
+        <div class="navbar__logo-text"><span>Ustoz Kutubxonasi</span></div>
+      </a>
+      <div class="navbar__actions">
+        <div class="lang-switcher">
+          <button class="lang-btn active" data-lang="uz">UZ</button>
+          <button class="lang-btn" data-lang="ru">RU</button>
+          <button class="lang-btn" data-lang="en">EN</button>
+        </div>
+        <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">🌙</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ========== HERO ========== -->
+  <section class="hero" id="hero">
+    <div class="container">
+      <img class="hero__avatar" src="pictures/ustoz.jpg" alt="Professor Ayupov Ravshan Hamdamovich" loading="eager" />
+      <h1 class="hero__name" id="hero-name">Ayupov Ravshan Hamdamovich</h1>
+      <p class="hero__title" id="hero-title">Professor, texnika fanlari doktori</p>
+      <p class="hero__bio" id="hero-bio">
+        Axborot texnologiyalari va ta'lim sohasidagi yetakchi mutaxassis. Quyida professorning barcha ilmiy asarlari,
+        darsliklari va monografiyalari jamlangan.
+      </p>
+
+      <!-- Stats -->
+      <div class="stats">
+        <div class="stat">
+          <div class="stat__number" id="stat-books-num">0</div>
+          <div class="stat__label" id="stat-books-label">Kitoblar</div>
+        </div>
+        <div class="stat">
+          <div class="stat__number" id="stat-darslik-num">0</div>
+          <div class="stat__label" id="stat-darslik-label">Darsliklar</div>
+        </div>
+        <div class="stat">
+          <div class="stat__number" id="stat-monografiya-num">0</div>
+          <div class="stat__label" id="stat-monografiya-label">Monografiyalar</div>
+        </div>
+        <div class="stat">
+          <div class="stat__number" id="stat-years-num">—</div>
+          <div class="stat__label" id="stat-years-label">Yillar</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== SEARCH & FILTERS ========== -->
+  <section class="controls" id="controls">
+    <div class="container">
+      <div class="search-wrapper">
+        <span class="search-icon">🔍</span>
+        <input type="text" class="search-input" id="search-input" placeholder="Kitob nomini qidirish..."
+          autocomplete="off" />
+        <span class="search-count" id="search-count"></span>
+      </div>
+      <div class="filters">
+        <button class="filter-btn active" data-category="all">Barchasi</button>
+        <button class="filter-btn" data-category="darslik">📘 Darsliklar</button>
+        <button class="filter-btn" data-category="monografiya">📕 Monografiyalar</button>
+        <button class="filter-btn" data-category="qollanma">📗 Qo'llanmalar</button>
+        <button class="filter-btn" data-category="lugat">📙 Lug'atlar</button>
+        <button class="filter-btn" data-category="boshqa">📓 Boshqa</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== BOOKS GRID ========== -->
+  <section class="books-section">
+    <div class="container">
+      <div class="books-grid" id="books-grid">
+        <!-- Books will be rendered by JavaScript -->
+        <div class="book-card skeleton" style="height: 380px;"></div>
+        <div class="book-card skeleton" style="height: 380px;"></div>
+        <div class="book-card skeleton" style="height: 380px;"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== FLIPBOOK READER MODAL ========== -->
+  <div class="flipbook-overlay" id="flipbook-modal">
+    <div class="flipbook-modal-content">
+      <!-- Header -->
+      <div class="flipbook-header">
+        <h2 class="flipbook-header__title" id="flipbook-title">Kitob nomi</h2>
+        <div class="flipbook-header__controls">
+          <button class="flipbook-btn" onclick="flipPrev()" title="Oldingi sahifa">◀</button>
+          <span class="flipbook-header__page-info" id="flipbook-page-info">—</span>
+          <button class="flipbook-btn" onclick="flipNext()" title="Keyingi sahifa">▶</button>
+          <button class="flipbook-btn" onclick="downloadFromFlipbook()" title="Yuklab olish">⬇</button>
+          <button class="flipbook-btn" onclick="toggleFlipbookFullscreen()" title="To'liq ekran">⛶</button>
+          <button class="flipbook-btn flipbook-btn--close" onclick="closeFlipbook()" title="Yopish">✕</button>
+        </div>
+      </div>
+
+      <!-- Body -->
+      <div class="flipbook-body" id="flipbook-body">
+        <!-- Loading -->
+        <div class="flipbook-loading" id="flipbook-loading">
+          <div class="flipbook-spinner"></div>
+          <div class="flipbook-loading__text">PDF yuklanmoqda...</div>
+        </div>
+
+        <!-- Page flip container -->
+        <div id="flipbook-container"></div>
+
+        <!-- Navigation arrows -->
+        <div class="flipbook-nav flipbook-nav--prev">
+          <button class="flipbook-nav-btn" onclick="flipPrev()" title="◀ Oldingi">◀</button>
+        </div>
+        <div class="flipbook-nav flipbook-nav--next">
+          <button class="flipbook-nav-btn" onclick="flipNext()" title="Keyingi ▶">▶</button>
+        </div>
+
+        <!-- QR Code -->
+        <div class="flipbook-qr" id="flipbook-qr" style="display:none;"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== FOOTER ========== -->
+  <footer class="footer">
+    <div class="container">
+      <p class="footer__text">
+        © 2026–2027 <span id="footer-rights">Barcha huquqlar himoyalangan</span>.
+      </p>
+    </div>
+  </footer>
+
+  <!-- ========== SCROLL TO TOP ========== -->
+  <button class="scroll-top" id="scroll-top" aria-label="Scroll to top">↑</button>
+
+  <!-- Scripts -->
+  <script src="js/books-data.js"></script>
+  <script src="js/flipbook.js"></script>
+  <script src="js/app.js"></script>
+</body>
+
+</html>
