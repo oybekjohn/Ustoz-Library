@@ -146,8 +146,9 @@ async function openFlipbookMode(file, container, loading, pageInfo) {
   container.innerHTML = '';
 
   try {
-    // Load PDF
-    const loadingTask = pdfjsLib.getDocument(file);
+    // Load PDF — encode URL for http/https (spaces, Cyrillic in filenames)
+    const pdfUrl = encodeURI(file);
+    const loadingTask = pdfjsLib.getDocument(pdfUrl);
     flipbookState.pdfDoc = await loadingTask.promise;
     flipbookState.totalPages = flipbookState.pdfDoc.numPages;
     flipbookState.renderedPages.clear();
@@ -325,7 +326,7 @@ function closeFlipbook() {
 function downloadFromFlipbook() {
   if (flipbookState.currentBookFile) {
     const a = document.createElement('a');
-    a.href = flipbookState.currentBookFile;
+    a.href = encodeURI(flipbookState.currentBookFile);
     a.download = '';
     document.body.appendChild(a);
     a.click();
