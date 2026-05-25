@@ -97,8 +97,10 @@ async function openFlipbook(file, title, qrImage) {
     qrContainer.style.display = 'none';
   }
 
-  // Choose mode based on protocol
-  if (isLocalFile) {
+  // Choose mode based on protocol & library availability
+  // Fall back to iframe if StPageFlip didn't load from CDN
+  const hasPageFlip = typeof window.St !== 'undefined' && typeof window.St.PageFlip === 'function';
+  if (isLocalFile || !hasPageFlip) {
     openIframeMode(file, container, loading, pageInfo);
   } else {
     await openFlipbookMode(file, container, loading, pageInfo);
@@ -237,6 +239,7 @@ async function openFlipbookMode(file, container, loading, pageInfo) {
 
   } catch (error) {
     console.error('PDF yuklashda xatolik:', error);
+    loading.style.display = 'flex';
     loading.innerHTML = `
       <div style="text-align:center;color:var(--text-muted);">
         <div style="font-size:2rem;margin-bottom:12px;">⚠️</div>
@@ -244,6 +247,8 @@ async function openFlipbookMode(file, container, loading, pageInfo) {
         <div style="font-size:0.85rem;margin-top:8px;opacity:0.7;">${error.message}</div>
       </div>
     `;
+    // Last-resort fallback to iframe so the user can still read the book
+    setTimeout(() => openIframeMode(file, container, loading, pageInfo), 1500);
   }
 }
 
