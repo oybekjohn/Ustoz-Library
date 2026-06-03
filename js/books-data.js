@@ -88,4 +88,46 @@ const BOOKS_DATA = [
       en: "Textbook for Uzbekistan State World Languages University"
     }
   }
+  {
+    id: 5,
+    title: {
+      uz: "Ta'limda axborot texnologiyalari — O'quv qo'llanma (UzGUMYa)",
+      ru: "Информационные технологии в образовании — Учебник для УзГУМЯ",
+      en: "Information Technologies in Education — Textbook for UzSWLU"
+    },
+    author: "Ayupov R.X.",
+    year: 2022,
+    category: "darslik",
+    language: "ru",
+    pages: null,
+    file: "books/kitob5 Прогр сред ИИ-2026-rus-Oxigisi",
+    cover: "books/pics/kitob5.png",
+    qr: "books/pics/kitob5qr.png",
+    description: {
+      uz: "O'zbekiston Davlat Jahon Tillari Universiteti uchun darslik",
+      ru: "Учебник для Узбекского государственного университета мировых языков",
+      en: "Textbook for Uzbekistan State World Languages University"
+    }
+  }
+  {
+    id: 6,
+    title: {
+      uz: "GOOGLE EKOTIZIMINING SMART ILOVALARI VA ULARDAN FOYDALANISH",
+      ru: "GOOGLE EKOTIZIMINING SMART ILOVALARI VA ULARDAN FOYDALANISH",
+      en: "GOOGLE EKOTIZIMINING SMART ILOVALARI VA ULARDAN FOYDALANISH"
+    },
+    author: "Ayupov R.X.",
+    year: 2026,
+    category: "o'quv qo'llanma",
+    language: "uz",
+    pages: null,
+    file: "books/kitob6 GOOGLE EKOTIZIMINING SMART ILOVALARI VA ULARDAN FOYDALANISH.pdf",
+    cover: "books/pics/kitob6.png",
+    qr: "books/pics/kitob6qr.png",
+    description: {
+      uz: "GOOGLE EKOTIZIMINING SMART ILOVALARI VA ULARDAN FOYDALANISH",
+      ru: "GOOGLE EKOTIZIMINING SMART ILOVALARI VA ULARDAN FOYDALANISH",
+      en: "GOOGLE EKOTIZIMINING SMART ILOVALARI VA ULARDAN FOYDALANISH"
+    }
+  }
 ];
