@@ -16,20 +16,20 @@
     particleMaxSize: 3.5,
     speed: 0.4,
     pulseSpeed: 0.02,
-    mouseRadius: 200,
+    mouseRadius: 220,
     colors: {
       light: {
         particle: [102, 126, 234],    // #667eea
         particleAlt: [139, 92, 246],  // #8b5cf6
         connection: [102, 126, 234],
-        pulse: [225, 29, 72],         // #e11d48
+        pulse: [56, 189, 176],        // teal #38bdb0
         bg: '#f4f4fb'
       },
       dark: {
         particle: [160, 168, 248],    // #a0a8f8
         particleAlt: [167, 139, 250], // #a78bfa
         connection: [130, 140, 248],
-        pulse: [251, 113, 133],       // #fb7185
+        pulse: [94, 234, 212],        // light teal #5eead4
         bg: '#141428'
       }
     }
@@ -72,9 +72,15 @@
       const dy = mouse.y - this.y;
       const dist = Math.sqrt(dx * dx + dy * dy);
       if (dist < CONFIG.mouseRadius && dist > 0) {
-        const force = (CONFIG.mouseRadius - dist) / CONFIG.mouseRadius * 0.008;
+        const force = (CONFIG.mouseRadius - dist) / CONFIG.mouseRadius * 0.012;
         this.vx += dx / dist * force;
         this.vy += dy / dist * force;
+
+        // Particles near mouse glow brighter
+        this.opacity = Math.min(0.95, this.opacity + 0.01);
+      } else {
+        // Fade back to normal
+        this.opacity = Math.max(0.4 + Math.random() * 0.1, this.opacity - 0.005);
       }
 
       // Speed limit
@@ -162,10 +168,10 @@
       const dist = Math.sqrt(dx * dx + dy * dy);
 
       if (dist < CONFIG.mouseRadius) {
-        const opacity = (1 - dist / CONFIG.mouseRadius) * 0.35;
+        const opacity = (1 - dist / CONFIG.mouseRadius) * 0.25;
         ctx.beginPath();
         ctx.strokeStyle = `rgba(${colors.pulse[0]}, ${colors.pulse[1]}, ${colors.pulse[2]}, ${opacity})`;
-        ctx.lineWidth = 1;
+        ctx.lineWidth = 0.8;
         ctx.moveTo(particles[i].x, particles[i].y);
         ctx.lineTo(mouse.x, mouse.y);
         ctx.stroke();
@@ -197,7 +203,6 @@
   // --- Events ---
   window.addEventListener('resize', () => {
     resize();
-    // Re-distribute particles for new size
     for (const p of particles) {
       if (p.x > width || p.y > height) {
         p.x = Math.random() * width;
@@ -206,25 +211,26 @@
     }
   });
 
-  canvas.addEventListener('mousemove', (e) => {
+  // Mouse tracking on DOCUMENT level (not canvas) so it works through content
+  document.addEventListener('mousemove', (e) => {
     mouse.x = e.clientX;
     mouse.y = e.clientY;
   });
 
-  canvas.addEventListener('mouseleave', () => {
+  document.addEventListener('mouseleave', () => {
     mouse.x = -1000;
     mouse.y = -1000;
   });
 
-  // Touch support
-  canvas.addEventListener('touchmove', (e) => {
+  // Touch support on document
+  document.addEventListener('touchmove', (e) => {
     if (e.touches.length > 0) {
       mouse.x = e.touches[0].clientX;
       mouse.y = e.touches[0].clientY;
     }
   }, { passive: true });
 
-  canvas.addEventListener('touchend', () => {
+  document.addEventListener('touchend', () => {
     mouse.x = -1000;
     mouse.y = -1000;
   });
