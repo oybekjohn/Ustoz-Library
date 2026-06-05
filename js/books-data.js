@@ -87,47 +87,68 @@ const BOOKS_DATA = [
       ru: "Учебник для Узбекского государственного университета мировых языков",
       en: "Textbook for Uzbekistan State World Languages University"
     }
-  }
+  },
   {
     id: 5,
     title: {
-      uz: "Ta'limda axborot texnologiyalari — O'quv qo'llanma (UzGUMYa)",
-      ru: "Информационные технологии в образовании — Учебник для УзГУМЯ",
-      en: "Information Technologies in Education — Textbook for UzSWLU"
+      uz: "Sun'iy intellektning dasturiy vositalari",
+      ru: "Программные средства искусственного интеллекта",
+      en: "Software Tools of Artificial Intelligence"
     },
-    author: "Ayupov R.X.",
-    year: 2022,
-    category: "darslik",
+    author: "Ayupov R.X., Maxmudova M.A.",
+    year: 2026,
+    category: "qollanma",
     language: "ru",
     pages: null,
-    file: "books/kitob5 Прогр сред ИИ-2026-rus-Oxigisi",
+    file: "books/kitob5 Прогр сред ИИ-2026-rus-Oxigisi.pdf",
     cover: "books/pics/kitob5.png",
     qr: "books/pics/kitob5qr.png",
     description: {
-      uz: "O'zbekiston Davlat Jahon Tillari Universiteti uchun darslik",
-      ru: "Учебник для Узбекского государственного университета мировых языков",
-      en: "Textbook for Uzbekistan State World Languages University"
+      uz: "Sun'iy intellekt dasturiy vositalari bo'yicha o'quv-uslubiy qo'llanma. Renessans Ta'lim Universiteti",
+      ru: "Учебно-методическое пособие по программным средствам искусственного интеллекта. Университет Ренессанс",
+      en: "Teaching manual on software tools of artificial intelligence. Renaissance University"
     }
-  }
+  },
   {
     id: 6,
     title: {
-      uz: "GOOGLE EKOTIZIMINING SMART ILOVALARI VA ULARDAN FOYDALANISH",
-      ru: "GOOGLE EKOTIZIMINING SMART ILOVALARI VA ULARDAN FOYDALANISH",
-      en: "GOOGLE EKOTIZIMINING SMART ILOVALARI VA ULARDAN FOYDALANISH"
+      uz: "Google ekotizimining smart ilovalari va ulardan foydalanish",
+      ru: "Умные приложения экосистемы Google и их использование",
+      en: "Smart Applications of Google Ecosystem and Their Usage"
     },
-    author: "Ayupov R.X.",
+    author: "Ayupov R.X., Fayzullayev J.J., Shakarov A.R.",
     year: 2026,
-    category: "o'quv qo'llanma",
+    category: "qollanma",
     language: "uz",
     pages: null,
-    file: "books/kitob6 GOOGLE EKOTIZIMINING SMART ILOVALARI VA ULARDAN FOYDALANISH.pdf",
+    file: "books/kitob6 Google Ekotizimi-qo'llqnma-2026.pdf",
     cover: "books/pics/kitob6.png",
     qr: "books/pics/kitob6qr.png",
     description: {
-      uz: "GOOGLE EKOTIZIMINING SMART ILOVALARI VA ULARDAN FOYDALANISH",
-      ru: "GOOGLE EKOTIZIMINING SMART ILOVALARI VA ULARDAN FOYDALANISH",
-      en: "GOOGLE EKOTIZIMINING SMART ILOVALARI VA ULARDAN FOYDALANISH"
+      uz: "Google ekotizimining smart ilovalari va ulardan foydalanish bo'yicha o'quv qo'llanma. Renessans Ta'lim Universiteti",
+      ru: "Учебное пособие по умным приложениям экосистемы Google и их использованию. Университет Ренессанс",
+      en: "Teaching manual on smart applications of Google ecosystem. Renaissance University"
+    }
+  },
+  {
+    id: 7,
+    title: {
+      uz: "Scratch grafik dasturlash muhiti va unda ishlash asoslari",
+      ru: "Среда графического программирования Scratch и основы работы в ней",
+      en: "Scratch Graphical Programming Environment and Its Fundamentals"
+    },
+    author: "Ayupov R.X., Fayzullayev J.J., Shakarov A.R.",
+    year: 2026,
+    category: "qollanma",
+    language: "uz",
+    pages: null,
+    file: "books/kitob7 O'quv uslubiy qo'llanma-Oxirgisi-Scratch-2026.pdf",
+    cover: "books/pics/kitob7.png",
+    qr: "books/pics/kitob7qr.png",
+    description: {
+      uz: "Scratch grafik dasturlash muhiti va unda ishlash asoslari bo'yicha o'quv-uslubiy qo'llanma. Renessans Ta'lim Universiteti",
+      ru: "Учебно-методическое пособие по среде графического программирования Scratch. Университет Ренессанс",
+      en: "Teaching manual on Scratch graphical programming environment. Renaissance University"
     }
   }
 ];

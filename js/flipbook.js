@@ -1,7 +1,7 @@
 /* ============================================
-   USTOZ KUTUBXONASI — Flipbook Reader
-   PDF.js + StPageFlip integration
-   Dual mode: flipbook on http(s), iframe on file://
+   DL-LIBRARY.UZ — Flipbook Reader
+   PDF.js canvas rendering (no download, no iframe)
+   Dual mode: flipbook (StPageFlip) or scroll view
    ============================================ */
 
 // ---------- Detect protocol ----------
@@ -22,39 +22,32 @@ const flipbookState = {
 };
 
 // ---------- Page Flip Sound ----------
-// Lightweight page flip sound using Web Audio API
 function createFlipSound() {
   try {
     const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
     return function playFlip() {
-      // Create a short "swish" sound
       const duration = 0.25;
       const now = audioCtx.currentTime;
 
-      // White noise burst for paper sound
       const bufferSize = audioCtx.sampleRate * duration;
       const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
       const data = buffer.getChannelData(0);
 
       for (let i = 0; i < bufferSize; i++) {
         const t = i / audioCtx.sampleRate;
-        // Envelope: quick attack, fast decay
         const envelope = Math.exp(-t * 18) * 0.3;
-        // Filtered noise for paper-like sound
         data[i] = (Math.random() * 2 - 1) * envelope;
       }
 
       const source = audioCtx.createBufferSource();
       source.buffer = buffer;
 
-      // Bandpass filter for paper-like quality
       const filter = audioCtx.createBiquadFilter();
       filter.type = 'bandpass';
       filter.frequency.value = 3000;
       filter.Q.value = 0.8;
 
-      // Gain control
       const gain = audioCtx.createGain();
       gain.gain.value = 0.15;
 
@@ -66,7 +59,7 @@ function createFlipSound() {
       source.stop(now + duration);
     };
   } catch (e) {
-    return function() {}; // Fallback: no sound
+    return function() {};
   }
 }
 
@@ -91,35 +84,163 @@ async function openFlipbook(file, title, qrImage) {
 
   // Show QR code if available
   if (qrImage && qrContainer) {
-    qrContainer.innerHTML = `<img src="${qrImage}" alt="QR Code" class="flipbook-qr__img" onerror="this.parentElement.style.display='none'">`;
+    qrContainer.innerHTML = `<img src="${qrImage}" alt="QR Code" class="flipbook-qr__img" onerror="this.parentElement.style.display='none'" draggable="false">`;
     qrContainer.style.display = 'block';
   } else if (qrContainer) {
     qrContainer.style.display = 'none';
   }
 
-  // Choose mode based on protocol & library availability
-  // Fall back to iframe if StPageFlip didn't load from CDN
+  // Try best rendering mode available
   const hasPageFlip = typeof window.St !== 'undefined' && typeof window.St.PageFlip === 'function';
-  if (isLocalFile || !hasPageFlip) {
-    openIframeMode(file, container, loading, pageInfo);
-  } else {
+  const hasPdfJs = typeof pdfjsLib !== 'undefined';
+
+  if (hasPageFlip && hasPdfJs && !isLocalFile) {
+    // Best mode: flipbook with page turning (http/https only)
     await openFlipbookMode(file, container, loading, pageInfo);
+  } else if (hasPdfJs) {
+    // Canvas scroll mode (try PDF.js, fallback to iframe)
+    await openScrollMode(file, container, loading, pageInfo);
+  } else {
+    // Last resort: secure iframe
+    openSecureIframe(file, container, loading, pageInfo);
   }
 }
 
-// ---------- IFRAME MODE (for file:// protocol) ----------
-function openIframeMode(file, container, loading, pageInfo) {
-  loading.style.display = 'none';
-  if (pageInfo) pageInfo.textContent = '';
+// ---------- SCROLL MODE (secure canvas rendering, no iframe) ----------
+async function openScrollMode(file, container, loading, pageInfo) {
+  loading.style.display = 'flex';
+  container.innerHTML = '';
 
-  // Hide flipbook nav buttons in iframe mode
+  // Hide flipbook nav buttons in scroll mode
   const navBtns = document.querySelectorAll('.flipbook-nav-btn');
   navBtns.forEach(btn => btn.style.display = 'none');
 
-  // Create iframe for browser's built-in PDF viewer
+  try {
+    const pdfUrl = isLocalFile ? file : encodeURI(file);
+    const loadingTask = pdfjsLib.getDocument(pdfUrl);
+    flipbookState.pdfDoc = await loadingTask.promise;
+    flipbookState.totalPages = flipbookState.pdfDoc.numPages;
+
+    loading.style.display = 'none';
+
+    // Create scrollable container
+    container.style.cssText = `
+      width: 100%;
+      height: 100%;
+      overflow-y: auto;
+      overflow-x: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      padding: 16px;
+      -webkit-user-select: none;
+      user-select: none;
+    `;
+
+    if (pageInfo) pageInfo.textContent = `1 / ${flipbookState.totalPages}`;
+
+    // Render all pages as canvases (secure — no download option)
+    for (let i = 1; i <= flipbookState.totalPages; i++) {
+      const page = await flipbookState.pdfDoc.getPage(i);
+
+      // Calculate scale to fit container width
+      const modalBody = document.getElementById('flipbook-body');
+      const availW = modalBody.clientWidth - 48;
+      const viewport = page.getViewport({ scale: 1 });
+      const scale = Math.min(availW / viewport.width, 2);
+      const scaledViewport = page.getViewport({ scale });
+
+      const canvas = document.createElement('canvas');
+      canvas.width = scaledViewport.width;
+      canvas.height = scaledViewport.height;
+      canvas.style.cssText = `
+        max-width: 100%;
+        height: auto;
+        border-radius: 4px;
+        box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+        background: #fff;
+        display: block;
+        -webkit-user-select: none;
+        user-select: none;
+        pointer-events: none;
+      `;
+      canvas.setAttribute('draggable', 'false');
+
+      // Wrap canvas in a protected div
+      const wrapper = document.createElement('div');
+      wrapper.className = 'scroll-page-wrapper';
+      wrapper.style.cssText = `
+        position: relative;
+        -webkit-user-select: none;
+        user-select: none;
+      `;
+      wrapper.setAttribute('data-page', i);
+
+      // Add transparent overlay to prevent right-click save on canvas
+      const overlay = document.createElement('div');
+      overlay.style.cssText = `
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 2;
+        background: transparent;
+        -webkit-user-select: none;
+        user-select: none;
+      `;
+      overlay.addEventListener('contextmenu', (e) => e.preventDefault());
+
+      wrapper.appendChild(canvas);
+      wrapper.appendChild(overlay);
+      container.appendChild(wrapper);
+
+      const ctx = canvas.getContext('2d');
+      await page.render({ canvasContext: ctx, viewport: scaledViewport }).promise;
+
+      // Update loading progress
+      if (loading.querySelector('.flipbook-loading__text')) {
+        loading.querySelector('.flipbook-loading__text').textContent =
+          `Sahifalar yuklanmoqda... ${i}/${flipbookState.totalPages}`;
+      }
+    }
+
+    // Track scroll position for page info
+    container.addEventListener('scroll', () => {
+      const wrappers = container.querySelectorAll('.scroll-page-wrapper');
+      let currentVisible = 1;
+      for (const w of wrappers) {
+        const rect = w.getBoundingClientRect();
+        const containerRect = container.getBoundingClientRect();
+        if (rect.top < containerRect.top + containerRect.height / 2) {
+          currentVisible = parseInt(w.dataset.page);
+        }
+      }
+      if (pageInfo) pageInfo.textContent = `${currentVisible} / ${flipbookState.totalPages}`;
+    }, { passive: true });
+
+  } catch (error) {
+    console.warn('PDF.js xatolik (file:// CORS cheklovi):', error.message);
+    // Fallback: secure iframe with toolbar hidden (for file:// protocol)
+    openSecureIframe(file, container, loading, pageInfo);
+  }
+}
+
+// ---------- SECURE IFRAME FALLBACK (file:// only, toolbar hidden) ----------
+function openSecureIframe(file, container, loading, pageInfo) {
+  loading.style.display = 'none';
+  if (pageInfo) pageInfo.textContent = '';
+
+  const navBtns = document.querySelectorAll('.flipbook-nav-btn');
+  navBtns.forEach(btn => btn.style.display = 'none');
+
   container.innerHTML = '';
+  container.style.cssText = 'width:100%;height:100%;position:relative;';
+
+  // Use #toolbar=0 to hide Chrome PDF viewer toolbar (download/print buttons)
   const iframe = document.createElement('iframe');
-  iframe.src = file;
+  iframe.src = file + '#toolbar=0&navpanes=0&scrollbar=1&view=FitH';
   iframe.style.cssText = `
     width: 100%;
     height: 100%;
@@ -129,12 +250,34 @@ function openIframeMode(file, container, loading, pageInfo) {
     background: #fff;
   `;
   iframe.title = flipbookState.currentBookTitle;
+
+  // Overlay to block right-click on iframe
+  const overlay = document.createElement('div');
+  overlay.style.cssText = `
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 3;
+    background: transparent;
+    cursor: default;
+  `;
+  overlay.addEventListener('contextmenu', (e) => e.preventDefault());
+  // Allow click-through for scrolling but block context menu
+  overlay.addEventListener('mousedown', (e) => {
+    if (e.button === 2) { e.preventDefault(); return false; }
+    // Allow left click to pass through to iframe for scrolling
+    overlay.style.pointerEvents = 'none';
+    setTimeout(() => { overlay.style.pointerEvents = 'auto'; }, 300);
+  });
+
   container.appendChild(iframe);
+  container.appendChild(overlay);
 }
 
-// ---------- FLIPBOOK MODE (for http/https) ----------
+// ---------- FLIPBOOK MODE (for http/https with StPageFlip) ----------
 async function openFlipbookMode(file, container, loading, pageInfo) {
-  // Init sound on first interaction
   if (!playFlipSound) {
     playFlipSound = createFlipSound();
   }
@@ -143,24 +286,21 @@ async function openFlipbookMode(file, container, loading, pageInfo) {
   const navBtns = document.querySelectorAll('.flipbook-nav-btn');
   navBtns.forEach(btn => btn.style.display = '');
 
-  // Show loading
   loading.style.display = 'flex';
   container.innerHTML = '';
+  container.style.cssText = '';
 
   try {
-    // Load PDF — encode URL for http/https (spaces, Cyrillic in filenames)
     const pdfUrl = encodeURI(file);
     const loadingTask = pdfjsLib.getDocument(pdfUrl);
     flipbookState.pdfDoc = await loadingTask.promise;
     flipbookState.totalPages = flipbookState.pdfDoc.numPages;
     flipbookState.renderedPages.clear();
 
-    // Determine page dimensions from first page
     const firstPage = await flipbookState.pdfDoc.getPage(1);
     const viewport = firstPage.getViewport({ scale: 1 });
     const pageRatio = viewport.height / viewport.width;
 
-    // Calculate container size
     const modalBody = document.getElementById('flipbook-body');
     const availW = modalBody.clientWidth - 40;
     const availH = modalBody.clientHeight - 20;
@@ -175,7 +315,6 @@ async function openFlipbookMode(file, container, loading, pageInfo) {
 
     flipbookState.scale = pageW / viewport.width;
 
-    // Create page elements
     container.innerHTML = '';
 
     for (let i = 0; i < flipbookState.totalPages; i++) {
@@ -183,7 +322,6 @@ async function openFlipbookMode(file, container, loading, pageInfo) {
       pageDiv.className = 'flipbook-page';
       pageDiv.dataset.pageNum = i + 1;
 
-      // Loading placeholder
       const placeholder = document.createElement('div');
       placeholder.className = 'flipbook-page__loading';
       placeholder.innerHTML = `<span>${i + 1}</span>`;
@@ -192,10 +330,8 @@ async function openFlipbookMode(file, container, loading, pageInfo) {
       container.appendChild(pageDiv);
     }
 
-    // Hide loading
     loading.style.display = 'none';
 
-    // Initialize StPageFlip
     flipbookState.pageFlip = new St.PageFlip(container, {
       width: Math.round(pageW),
       height: Math.round(pageH),
@@ -217,17 +353,14 @@ async function openFlipbookMode(file, container, loading, pageInfo) {
 
     flipbookState.pageFlip.loadFromHTML(container.querySelectorAll('.flipbook-page'));
 
-    // Render visible pages
     await renderPage(1);
     if (flipbookState.totalPages > 1) await renderPage(2);
 
-    // Events
     flipbookState.pageFlip.on('flip', async (e) => {
       playFlipSound && playFlipSound();
       flipbookState.currentPage = e.data;
       updatePageInfo();
 
-      // Pre-render nearby pages
       const pg = e.data + 1;
       for (let i = Math.max(1, pg - 1); i <= Math.min(flipbookState.totalPages, pg + 3); i++) {
         await renderPage(i);
@@ -239,16 +372,8 @@ async function openFlipbookMode(file, container, loading, pageInfo) {
 
   } catch (error) {
     console.error('PDF yuklashda xatolik:', error);
-    loading.style.display = 'flex';
-    loading.innerHTML = `
-      <div style="text-align:center;color:var(--text-muted);">
-        <div style="font-size:2rem;margin-bottom:12px;">⚠️</div>
-        <div>PDF faylni yuklashda xatolik</div>
-        <div style="font-size:0.85rem;margin-top:8px;opacity:0.7;">${error.message}</div>
-      </div>
-    `;
-    // Last-resort fallback to iframe so the user can still read the book
-    setTimeout(() => openIframeMode(file, container, loading, pageInfo), 1500);
+    // Fallback to scroll mode instead of iframe
+    await openScrollMode(file, container, loading, pageInfo);
   }
 }
 
@@ -266,17 +391,20 @@ async function renderPage(pageNum) {
     const canvas = document.createElement('canvas');
     canvas.width = viewport.width;
     canvas.height = viewport.height;
+    canvas.setAttribute('draggable', 'false');
 
     const ctx = canvas.getContext('2d');
     await page.render({ canvasContext: ctx, viewport: viewport }).promise;
 
-    // Find the page element and replace placeholder
     const pageElements = document.querySelectorAll('.flipbook-page');
     const pageEl = pageElements[pageNum - 1];
     if (pageEl) {
       pageEl.innerHTML = '';
       canvas.style.width = '100%';
       canvas.style.height = '100%';
+      canvas.style.pointerEvents = 'none';
+      canvas.style.userSelect = 'none';
+      canvas.style.webkitUserSelect = 'none';
       pageEl.appendChild(canvas);
     }
   } catch (e) {
@@ -319,7 +447,10 @@ function closeFlipbook() {
     flipbookState.pdfDoc = null;
     flipbookState.renderedPages.clear();
     const container = document.getElementById('flipbook-container');
-    if (container) container.innerHTML = '';
+    if (container) {
+      container.innerHTML = '';
+      container.style.cssText = '';
+    }
 
     // Restore nav buttons visibility
     const navBtns = document.querySelectorAll('.flipbook-nav-btn');
@@ -327,16 +458,9 @@ function closeFlipbook() {
   }, 400);
 }
 
-// ---------- Download Current ----------
+// ---------- Download Disabled ----------
 function downloadFromFlipbook() {
-  if (flipbookState.currentBookFile) {
-    const a = document.createElement('a');
-    a.href = encodeURI(flipbookState.currentBookFile);
-    a.download = '';
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-  }
+  return false;
 }
 
 // ---------- Fullscreen Flipbook ----------

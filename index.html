@@ -6,18 +6,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <!-- SEO -->
-  <title>Ayupov Ravshan Hamdamovich — Ustoz Kutubxonasi</title>
+  <title>DL-library.uz — Raqamli Kutubxona | Renessans Ta'lim Universiteti</title>
   <meta name="description"
-    content="Professor Ayupov Ravshan Hamdamovich ilmiy asarlari, darsliklar va monografiyalar — onlayn kutubxona">
+    content="DL-library.uz — Renessans Ta'lim Universiteti Axborot texnologiyalari kafedrasi elektron kutubxonasi. Fan dasturlari, darsliklar, monografiyalar va o'quv qo'llanmalar.">
   <meta name="keywords"
-    content="Ayupov Ravshan, professor, darslik, monografiya, axborot texnologiyalari, ta'limda IT, kitoblar, kutubxona">
-  <meta name="author" content="Ayupov Ravshan Hamdamovich">
+    content="DL-library, Renessans Ta'lim Universiteti, RTU, elektron kutubxona, darslik, monografiya, axborot texnologiyalari, fan dasturi, o'quv qo'llanma, digital library">
+  <meta name="author" content="Renessans Ta'lim Universiteti — AT kafedrasi">
 
   <!-- Open Graph -->
   <meta property="og:type" content="website">
-  <meta property="og:title" content="Professor Ayupov R.H. — Onlayn Kutubxona">
+  <meta property="og:title" content="DL-library.uz — Raqamli Kutubxona">
   <meta property="og:description"
-    content="Professorning barcha ilmiy asarlari, darsliklari va monografiyalari bir joyda">
+    content="Renessans Ta'lim Universiteti Axborot texnologiyalari kafedrasi elektron kutubxonasi">
   <meta property="og:url" content="https://oybekjohn.github.io/Ustoz-Library/">
   <meta property="og:locale" content="uz_UZ">
 
@@ -36,7 +36,7 @@
 
   <!-- StPageFlip (page turn library) — cdnjs has no page-flip, use unpkg/jsdelivr -->
   <script src="https://unpkg.com/page-flip@2.0.7/dist/js/page-flip.browser.js"
-          onerror="this.onerror=null;this.src='https://cdn.jsdelivr.net/npm/page-flip@2.0.7/dist/js/page-flip.browser.js';"></script>
+    onerror="this.onerror=null;this.src='https://cdn.jsdelivr.net/npm/page-flip@2.0.7/dist/js/page-flip.browser.js';"></script>
 </head>
 
 <body>
@@ -53,7 +53,7 @@
     <div class="container">
       <a href="#" class="navbar__logo">
         <div class="navbar__logo-icon">📚</div>
-        <div class="navbar__logo-text"><span>Ustoz Kutubxonasi</span></div>
+        <div class="navbar__logo-text"><span>DL-library.uz</span></div>
       </a>
       <div class="navbar__actions">
         <div class="lang-switcher">
@@ -69,19 +69,48 @@
   <!-- ========== HERO ========== -->
   <section class="hero" id="hero">
     <div class="container">
-      <img class="hero__avatar" src="pictures/ustoz.jpg" alt="Professor Ayupov Ravshan Hamdamovich" loading="eager" />
-      <h1 class="hero__name" id="hero-name">Ayupov Ravshan Hamdamovich</h1>
-      <p class="hero__title" id="hero-title">Professor, texnika fanlari doktori</p>
+      <img class="hero__logo" src="pictures/RTU_logo.svg" alt="Renessans Ta'lim Universiteti" loading="eager" />
+      <h1 class="hero__name" id="hero-name">DL-library.uz</h1>
+      <p class="hero__title" id="hero-title">Renessans Ta'lim Universiteti — Raqamli Kutubxona</p>
       <p class="hero__bio" id="hero-bio">
-        Axborot texnologiyalari va ta'lim sohasidagi yetakchi mutaxassis. Quyida professorning barcha ilmiy asarlari,
-        darsliklari va monografiyalari jamlangan.
+        Ushbu elektron kutubxona Renessans ta'lim universiteti Matematika va Iqtisod fakultetining
+        Axborot texnologiyalari kafedrasi jamoasi tomonidan yaratilgan bo'lib, uning asosiy maqsadi
+        talabalarga fan dasturlarini, fanlar bo'yicha uslubiy qo'llanmalarni, o'quv qo'llanmalarni,
+        darsliklarni va monografiyalarni taqdim etishdir. Undan tashqari saytga talabalar uchun qiziq
+        bo'lgan mavzular bo'yicha ham bir qancha adabiyotlar jam qilingan.
       </p>
+
+      <!-- Contact Info -->
+      <div class="hero__contact" id="hero-contact">
+        <p class="hero__contact-text" id="hero-contact-text">
+          Agar siz elektron kutubxonadagi biror bir kitobni yuklab olmoqchi bo'lsangiz, quyidagi kontaktlarga murojaat
+          qiling:
+        </p>
+        <div class="hero__contact-links">
+          <a href="https://t.me/RavshanHamdamovich" class="contact-link" target="_blank" rel="noopener">
+            <span class="contact-link__icon">✈️</span>
+            <span>t.me/@RavshanHamdamovich</span>
+          </a>
+          <a href="tel:+998909359628" class="contact-link">
+            <span class="contact-link__icon">📞</span>
+            <span>+99890 935-96-28-74</span>
+          </a>
+          <a href="mailto:ayupovr1x1@gmail.com" class="contact-link">
+            <span class="contact-link__icon">📧</span>
+            <span>ayupovr1x1@gmail.com</span>
+          </a>
+        </div>
+      </div>
 
       <!-- Stats -->
       <div class="stats">
         <div class="stat">
           <div class="stat__number" id="stat-books-num">0</div>
-          <div class="stat__label" id="stat-books-label">Kitoblar</div>
+          <div class="stat__label" id="stat-books-label">Umumiy kitoblar</div>
+        </div>
+        <div class="stat">
+          <div class="stat__number" id="stat-fandastur-num">0</div>
+          <div class="stat__label" id="stat-fandastur-label">Fan dasturlar</div>
         </div>
         <div class="stat">
           <div class="stat__number" id="stat-darslik-num">0</div>
@@ -90,10 +119,6 @@
         <div class="stat">
           <div class="stat__number" id="stat-monografiya-num">0</div>
           <div class="stat__label" id="stat-monografiya-label">Monografiyalar</div>
-        </div>
-        <div class="stat">
-          <div class="stat__number" id="stat-years-num">—</div>
-          <div class="stat__label" id="stat-years-label">Yillar</div>
         </div>
       </div>
     </div>
@@ -110,6 +135,7 @@
       </div>
       <div class="filters">
         <button class="filter-btn active" data-category="all">Barchasi</button>
+        <button class="filter-btn" data-category="fandastur">📋 Fan dasturlar</button>
         <button class="filter-btn" data-category="darslik">📘 Darsliklar</button>
         <button class="filter-btn" data-category="monografiya">📕 Monografiyalar</button>
         <button class="filter-btn" data-category="qollanma">📗 Qo'llanmalar</button>
@@ -141,7 +167,6 @@
           <button class="flipbook-btn" onclick="flipPrev()" title="Oldingi sahifa">◀</button>
           <span class="flipbook-header__page-info" id="flipbook-page-info">—</span>
           <button class="flipbook-btn" onclick="flipNext()" title="Keyingi sahifa">▶</button>
-          <button class="flipbook-btn" onclick="downloadFromFlipbook()" title="Yuklab olish">⬇</button>
           <button class="flipbook-btn" onclick="toggleFlipbookFullscreen()" title="To'liq ekran">⛶</button>
           <button class="flipbook-btn flipbook-btn--close" onclick="closeFlipbook()" title="Yopish">✕</button>
         </div>
@@ -176,7 +201,10 @@
   <footer class="footer">
     <div class="container">
       <p class="footer__text">
-        © 2026–2027 <span id="footer-rights">Barcha huquqlar himoyalangan</span>.
+        © 2026–2027 DL-library.uz — <span id="footer-rights">Barcha huquqlar himoyalangan</span>.
+      </p>
+      <p class="footer__text footer__text--sub">
+        <span id="footer-university">Renessans Ta'lim Universiteti — Axborot texnologiyalari kafedrasi</span>
       </p>
     </div>
   </footer>
@@ -188,6 +216,7 @@
   <script src="js/books-data.js"></script>
   <script src="js/flipbook.js"></script>
   <script src="js/app.js"></script>
+
 </body>
 
 </html>

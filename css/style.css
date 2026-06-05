@@ -1,6 +1,6 @@
 /* ============================================
-   USTOZ KUTUBXONASI — Design System
-   Professor Ayupov R.H. Online Library
+   DL-LIBRARY.UZ — Design System
+   Renessans Ta'lim Universiteti Raqamli Kutubxona
    ============================================ */
 
 /* ---------- Google Fonts ---------- */
@@ -25,6 +25,7 @@
   --gradient-card-hover: linear-gradient(135deg, rgba(102, 126, 234, 0.12), rgba(118, 75, 162, 0.12));
 
   /* Category colors */
+  --cat-fandastur: #e11d48;
   --cat-darslik: #3b82f6;
   --cat-monografiya: #8b5cf6;
   --cat-qollanma: #10b981;
@@ -303,21 +304,27 @@ body {
   text-align: center;
 }
 
-.hero__avatar {
+.hero__logo {
   width: 130px;
   height: 130px;
   border-radius: var(--radius-full);
-  object-fit: cover;
+  object-fit: contain;
   border: 3px solid transparent;
   background-image: var(--gradient-primary);
   background-origin: border-box;
   background-clip: content-box, border-box;
   margin-bottom: 24px;
   box-shadow: 0 8px 32px rgba(102, 126, 234, 0.3);
-  animation: avatarGlow 4s ease-in-out infinite alternate;
+  animation: logoGlow 4s ease-in-out infinite alternate;
+  padding: 8px;
+  background-color: #fff;
 }
 
-@keyframes avatarGlow {
+[data-theme="dark"] .hero__logo {
+  background-color: rgba(255,255,255,0.95);
+}
+
+@keyframes logoGlow {
   0% { box-shadow: 0 8px 32px rgba(102, 126, 234, 0.3); }
   100% { box-shadow: 0 8px 48px rgba(118, 75, 162, 0.4); }
 }
@@ -344,9 +351,59 @@ body {
 .hero__bio {
   font-size: 0.95rem;
   color: var(--text-muted);
+  max-width: 700px;
+  margin: 0 auto 24px;
+  line-height: 1.7;
+  text-align: justify;
+}
+
+/* ---------- Contact Section ---------- */
+.hero__contact {
   max-width: 600px;
   margin: 0 auto 32px;
-  line-height: 1.7;
+  padding: 20px 24px;
+  background: var(--bg-glass);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  backdrop-filter: blur(10px);
+}
+
+.hero__contact-text {
+  font-size: 0.88rem;
+  color: var(--text-muted);
+  margin-bottom: 14px;
+  line-height: 1.6;
+}
+
+.hero__contact-links {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.contact-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  border-radius: var(--radius-md);
+  background: var(--bg-glass);
+  border: 1px solid var(--border-color);
+  color: var(--text-accent);
+  text-decoration: none;
+  font-size: 0.85rem;
+  font-weight: 500;
+  transition: all var(--transition-fast);
+}
+
+.contact-link:hover {
+  border-color: var(--primary-500);
+  background: rgba(102, 126, 234, 0.1);
+  transform: translateX(4px);
+}
+
+.contact-link__icon {
+  font-size: 1rem;
 }
 
 /* ---------- Stats ---------- */
@@ -574,6 +631,7 @@ body {
   backdrop-filter: blur(8px);
 }
 
+.book-card__badge--fandastur { background: rgba(225, 29, 72, 0.85); }
 .book-card__badge--darslik { background: rgba(59, 130, 246, 0.85); }
 .book-card__badge--monografiya { background: rgba(139, 92, 246, 0.85); }
 .book-card__badge--qollanma { background: rgba(16, 185, 129, 0.85); }
@@ -1051,9 +1109,13 @@ body {
 /* ---------- Responsive ---------- */
 @media (max-width: 768px) {
   .hero { padding: 40px 0 24px; }
-  .hero__avatar { width: 100px; height: 100px; }
+  .hero__logo { width: 100px; height: 100px; }
   .hero__name { font-size: 1.7rem; }
   .hero__title { font-size: 0.95rem; }
+  .hero__bio { font-size: 0.88rem; text-align: left; }
+  .hero__contact { padding: 16px; }
+  .hero__contact-text { font-size: 0.82rem; }
+  .contact-link { font-size: 0.8rem; padding: 6px 12px; }
   .stats { gap: 12px; }
   .stat { padding: 12px 16px; min-width: 90px; }
   .stat__number { font-size: 1.5rem; }
@@ -1078,10 +1140,11 @@ body {
 @media (max-width: 480px) {
   .container { padding: 0 16px; }
   .hero__name { font-size: 1.4rem; }
+  .hero__logo { width: 80px; height: 80px; }
   .stats { gap: 8px; }
-  .stat { min-width: 80px; padding: 10px 12px; }
+  .stat { min-width: 70px; padding: 10px 8px; }
   .stat__number { font-size: 1.3rem; }
-  .stat__label { font-size: 0.7rem; }
+  .stat__label { font-size: 0.65rem; }
   .navbar__logo-text { display: none; }
 }
 
@@ -1091,4 +1154,53 @@ body {
 
 @media (min-width: 1400px) {
   .books-grid { grid-template-columns: repeat(4, 1fr); }
+}
+
+/* ---------- Content Protection ---------- */
+/* Prevent selection on protected elements */
+.book-card,
+.book-card__cover,
+.book-card__qr-img,
+.flipbook-overlay,
+.flipbook-page,
+.flipbook-page canvas {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+}
+
+/* Prevent image dragging */
+.book-card img {
+  -webkit-user-drag: none;
+  user-drag: none;
+}
+
+.flipbook-page img,
+.flipbook-page canvas {
+  -webkit-user-drag: none;
+  user-drag: none;
+  pointer-events: none;
+}
+
+/* Clickable areas on book cards */
+.book-card__cover-wrapper,
+.book-card__title {
+  cursor: pointer;
+}
+
+.book-card__cover-wrapper:hover .book-card__cover {
+  transform: scale(1.08);
+}
+
+.book-card__title:hover {
+  color: var(--text-accent);
+}
+
+/* Footer sub-text */
+.footer__text--sub {
+  margin-top: 4px;
+  font-size: 0.78rem;
+  opacity: 0.7;
 }

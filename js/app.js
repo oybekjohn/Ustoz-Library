@@ -1,34 +1,36 @@
 /* ============================================
-   USTOZ KUTUBXONASI — Application Logic
-   Professor Ayupov R.H. Online Library
+   DL-LIBRARY.UZ — Application Logic
+   Renessans Ta'lim Universiteti Raqamli Kutubxona
    ============================================ */
 
 // ---------- Internationalization (i18n) ----------
 const translations = {
   uz: {
-    siteTitle: "Ustoz Kutubxonasi",
-    heroName: "Ayupov Ravshan Hamdamovich",
-    heroTitle: "Professor, texnika fanlari doktori",
-    heroBio: "Axborot texnologiyalari va ta'lim sohasidagi yetakchi mutaxassis. Quyida professorning barcha ilmiy asarlari, darsliklari va monografiyalari jamlangan.",
+    siteTitle: "DL-library.uz",
+    heroName: "DL-library.uz",
+    heroTitle: "Renessans Ta'lim Universiteti — Raqamli Kutubxona",
+    heroBio: "Ushbu elektron kutubxona Renessans ta'lim universiteti Matematika va Iqtisod fakul'tetining Axborot texnologiyalari kafedrasi jamoasi tomonidan yaratilgan bo'lib, uning asosiy maqsadi talabalarga fan dasturlarini, fanlar bo'yicha uslubiy qo'llanmalarni, o'quv qo'llanmalarni, darsliklarni va monografiyalarni taqdim etishdir. Undan tashqari saytga talabalar uchun qiziq bo'lgan mavzular bo'yicha ham bir qancha adabiyotlar jam qilingan.",
+    heroContact: "Agar siz elektron kutubxonadagi biror bir kitobni yuklab olmoqchi bo'lsangiz, quyidagi kontaktlarga murojaat qiling:",
     searchPlaceholder: "Kitob nomini qidirish...",
     filterAll: "Barchasi",
+    filterFandastur: "📋 Fan dasturlar",
     filterDarslik: "📘 Darsliklar",
     filterMonografiya: "📕 Monografiyalar",
     filterQollanma: "📗 Qo'llanmalar",
     filterLugat: "📙 Lug'atlar",
     filterBoshqa: "📓 Boshqa",
-    statBooks: "Kitoblar",
+    statBooks: "Umumiy kitoblar",
+    statFandastur: "Fan dasturlar",
     statDarslik: "Darsliklar",
     statMonografiya: "Monografiyalar",
-    statYears: "Yillar",
     btnRead: "📖 O'qish",
-    btnDownload: "⬇ Yuklab olish",
-    btnQr: "QR",
+    btnDownloadQr: "📱 QR yuklab olish",
     noResults: "Kitob topilmadi",
     noResultsDesc: "Boshqa kalit so'z bilan qidirib ko'ring",
     footerText: "Barcha huquqlar himoyalangan",
-    footerMadeWith: "Yaratilgan",
+    footerUniversity: "Renessans Ta'lim Universiteti — Axborot texnologiyalari kafedrasi",
     categoryNames: {
+      fandastur: "Fan dastur",
       darslik: "Darslik",
       monografiya: "Monografiya",
       qollanma: "Qo'llanma",
@@ -37,29 +39,31 @@ const translations = {
     }
   },
   ru: {
-    siteTitle: "Библиотека Устоза",
-    heroName: "Аюпов Равшан Хамдамович",
-    heroTitle: "Профессор, доктор технических наук",
-    heroBio: "Ведущий специалист в области информационных технологий и образования. Ниже собраны все научные труды, учебники и монографии профессора.",
+    siteTitle: "DL-library.uz",
+    heroName: "DL-library.uz",
+    heroTitle: "Университет Ренессанс — Цифровая Библиотека",
+    heroBio: "Данная электронная библиотека создана коллективом кафедры Информационных технологий факультета Математики и Экономики Ренессанс университета образования. Основная цель — предоставление студентам учебных программ, методических пособий, учебников и монографий. Кроме того, на сайте собрана литература по интересным для студентов темам.",
+    heroContact: "Если вы хотите скачать книгу из электронной библиотеки, обратитесь по следующим контактам:",
     searchPlaceholder: "Поиск по названию книги...",
     filterAll: "Все",
+    filterFandastur: "📋 Учебные программы",
     filterDarslik: "📘 Учебники",
     filterMonografiya: "📕 Монографии",
     filterQollanma: "📗 Пособия",
     filterLugat: "📙 Словари",
     filterBoshqa: "📓 Другие",
-    statBooks: "Книги",
+    statBooks: "Всего книг",
+    statFandastur: "Учебные программы",
     statDarslik: "Учебники",
     statMonografiya: "Монографии",
-    statYears: "Годы",
     btnRead: "📖 Читать",
-    btnDownload: "⬇ Скачать",
-    btnQr: "QR",
+    btnDownloadQr: "📱 Скачать QR",
     noResults: "Книги не найдены",
     noResultsDesc: "Попробуйте другое ключевое слово",
     footerText: "Все права защищены",
-    footerMadeWith: "Создано с",
+    footerUniversity: "Университет Ренессанс — Кафедра информационных технологий",
     categoryNames: {
+      fandastur: "Учебная программа",
       darslik: "Учебник",
       monografiya: "Монография",
       qollanma: "Пособие",
@@ -68,29 +72,31 @@ const translations = {
     }
   },
   en: {
-    siteTitle: "Ustoz Library",
-    heroName: "Ayupov Ravshan Khamdamovich",
-    heroTitle: "Professor, Doctor of Technical Sciences",
-    heroBio: "A leading expert in information technology and education. Below you will find all the professor's scientific works, textbooks, and monographs.",
+    siteTitle: "DL-library.uz",
+    heroName: "DL-library.uz",
+    heroTitle: "Renaissance University of Education — Digital Library",
+    heroBio: "This digital library was created by the Information Technology Department of the Faculty of Mathematics and Economics at Renaissance University of Education. Its main purpose is to provide students with syllabi, methodological manuals, textbooks, and monographs. Additionally, the site features a collection of literature on topics of interest to students.",
+    heroContact: "If you would like to download a book from the digital library, please contact us via:",
     searchPlaceholder: "Search for a book...",
     filterAll: "All",
+    filterFandastur: "📋 Syllabi",
     filterDarslik: "📘 Textbooks",
     filterMonografiya: "📕 Monographs",
     filterQollanma: "📗 Manuals",
     filterLugat: "📙 Glossaries",
     filterBoshqa: "📓 Other",
-    statBooks: "Books",
+    statBooks: "Total Books",
+    statFandastur: "Syllabi",
     statDarslik: "Textbooks",
     statMonografiya: "Monographs",
-    statYears: "Years",
     btnRead: "📖 Read",
-    btnDownload: "⬇ Download",
-    btnQr: "QR",
+    btnDownloadQr: "📱 Download QR",
     noResults: "No books found",
     noResultsDesc: "Try a different keyword",
     footerText: "All rights reserved",
-    footerMadeWith: "Made with",
+    footerUniversity: "Renaissance University of Education — IT Department",
     categoryNames: {
+      fandastur: "Syllabus",
       darslik: "Textbook",
       monografiya: "Monograph",
       qollanma: "Manual",
@@ -121,7 +127,48 @@ document.addEventListener('DOMContentLoaded', () => {
   applyLanguage();
   loadBooks();
   setupEventListeners();
+  setupContentProtection();
 });
+
+// ---------- Content Protection ----------
+function setupContentProtection() {
+  // Disable right-click context menu
+  document.addEventListener('contextmenu', (e) => {
+    e.preventDefault();
+    return false;
+  });
+
+  // Disable keyboard shortcuts for saving, printing, viewing source
+  document.addEventListener('keydown', (e) => {
+    // Ctrl+S, Ctrl+P, Ctrl+U, Ctrl+Shift+I, F12
+    if (
+      (e.ctrlKey && (e.key === 's' || e.key === 'S' || e.key === 'p' || e.key === 'P' || e.key === 'u' || e.key === 'U')) ||
+      (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'i' || e.key === 'J' || e.key === 'j' || e.key === 'C' || e.key === 'c')) ||
+      e.key === 'F12' ||
+      (e.ctrlKey && e.key === 'a') ||
+      (e.key === 'PrintScreen')
+    ) {
+      e.preventDefault();
+      return false;
+    }
+  });
+
+  // Disable text selection on book content
+  document.addEventListener('selectstart', (e) => {
+    if (e.target.closest('.book-card') || e.target.closest('.flipbook-overlay')) {
+      e.preventDefault();
+      return false;
+    }
+  });
+
+  // Disable drag on images
+  document.addEventListener('dragstart', (e) => {
+    if (e.target.tagName === 'IMG' || e.target.closest('.book-card')) {
+      e.preventDefault();
+      return false;
+    }
+  });
+}
 
 // ---------- Load Books ----------
 function loadBooks() {
@@ -173,19 +220,20 @@ function renderBooks() {
 
     return `
       <div class="book-card" style="animation-delay:${index * 0.08}s" data-book-id="${book.id}">
-        <div class="book-card__cover-wrapper">
+        <div class="book-card__cover-wrapper" onclick="openBookById(${book.id})" title="${t.btnRead}">
           <img
             class="book-card__cover"
             src="${book.cover}"
             alt="${escapedTitle}"
             loading="lazy"
             onerror="this.style.display='none'"
+            draggable="false"
           />
           <span class="book-card__badge book-card__badge--${book.category}">${catName}</span>
           <span class="book-card__lang-badge">${langLabel}</span>
         </div>
         <div class="book-card__body">
-          <h3 class="book-card__title">${title}</h3>
+          <h3 class="book-card__title" onclick="openBookById(${book.id})" title="${t.btnRead}">${title}</h3>
           <div class="book-card__meta">
             <span class="book-card__author">👤 ${book.author}</span>
             <span class="book-card__year">📅 ${book.year}</span>
@@ -193,17 +241,19 @@ function renderBooks() {
           <p class="book-card__desc">${desc}</p>
           ${qrSrc ? `
           <div class="book-card__qr">
-            <img src="${qrSrc}" alt="QR Code" class="book-card__qr-img" onerror="this.parentElement.style.display='none'">
+            <img src="${qrSrc}" alt="QR Code" class="book-card__qr-img" onerror="this.parentElement.style.display='none'" draggable="false">
             <span class="book-card__qr-label">📱 QR Code</span>
           </div>
           ` : ''}
           <div class="book-card__actions">
-            <button class="btn btn--primary" onclick="openFlipbook(decodeURIComponent('${encodeURIComponent(book.file)}'), '${escapedTitle}', '${qrSrc}')" title="${t.btnRead}">
+            <button class="btn btn--primary" onclick="openBookById(${book.id})" title="${t.btnRead}">
               ${t.btnRead}
             </button>
-            <a class="btn btn--secondary" href="${encodeURI(book.file)}" download title="${t.btnDownload}">
-              ⬇
-            </a>
+            ${qrSrc ? `
+            <button class="btn btn--secondary" onclick="downloadQrById(${book.id})" title="${t.btnDownloadQr}">
+              📱
+            </button>
+            ` : ''}
           </div>
         </div>
       </div>
@@ -211,6 +261,27 @@ function renderBooks() {
   }).join('');
 
   updateSearchCount(state.filteredBooks.length);
+}
+
+// ---------- Open Book by ID ----------
+function openBookById(id) {
+  const book = BOOKS_DATA.find(b => b.id === id);
+  if (!book) return;
+  const title = book.title[state.currentLang] || book.title.uz;
+  openFlipbook(book.file, title, book.qr || '');
+}
+
+// ---------- QR Code Download by ID ----------
+function downloadQrById(id) {
+  const book = BOOKS_DATA.find(b => b.id === id);
+  if (!book || !book.qr) return;
+  const title = book.title[state.currentLang] || book.title.uz;
+  const a = document.createElement('a');
+  a.href = book.qr;
+  a.download = `QR_${title.replace(/[^a-zA-Z0-9\u0400-\u04FF\s]/g, '').replace(/\s+/g, '_').substring(0, 50)}.png`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
 }
 
 // ---------- Search & Filter ----------
@@ -287,43 +358,42 @@ function applyLanguage() {
   setText('hero-name', t.heroName);
   setText('hero-title', t.heroTitle);
   setText('hero-bio', t.heroBio);
+  setText('hero-contact-text', t.heroContact);
   setText('stat-books-label', t.statBooks);
+  setText('stat-fandastur-label', t.statFandastur);
   setText('stat-darslik-label', t.statDarslik);
   setText('stat-monografiya-label', t.statMonografiya);
-  setText('stat-years-label', t.statYears);
   setText('footer-rights', t.footerText);
-  setText('footer-made', t.footerMadeWith);
+  setText('footer-university', t.footerUniversity);
 
   const searchInput = $('#search-input');
   if (searchInput) searchInput.placeholder = t.searchPlaceholder;
 
   const filterMap = {
-    all: t.filterAll, darslik: t.filterDarslik, monografiya: t.filterMonografiya,
-    qollanma: t.filterQollanma, lugat: t.filterLugat, boshqa: t.filterBoshqa
+    all: t.filterAll, fandastur: t.filterFandastur, darslik: t.filterDarslik,
+    monografiya: t.filterMonografiya, qollanma: t.filterQollanma,
+    lugat: t.filterLugat, boshqa: t.filterBoshqa
   };
   $$('.filter-btn[data-category]').forEach(btn => {
     const cat = btn.dataset.category;
     if (filterMap[cat]) btn.textContent = filterMap[cat];
   });
 
-  document.title = `${t.heroName} — ${t.siteTitle}`;
+  document.title = `${t.siteTitle} — ${t.heroTitle}`;
 }
 
 // ---------- Stats ----------
 function updateStats() {
   const books = state.books;
   const totalBooks = books.length;
+  const totalFandastur = books.filter(b => b.category === 'fandastur').length;
   const totalDarslik = books.filter(b => b.category === 'darslik').length;
   const totalMonografiya = books.filter(b => b.category === 'monografiya').length;
-  const years = [...new Set(books.map(b => b.year))];
-  const yearRange = years.length > 1 ? `${Math.min(...years)}-${Math.max(...years)}` : (years[0] || '—');
 
   animateNumber('stat-books-num', totalBooks);
+  animateNumber('stat-fandastur-num', totalFandastur);
   animateNumber('stat-darslik-num', totalDarslik);
   animateNumber('stat-monografiya-num', totalMonografiya);
-
-  const yearEl = document.getElementById('stat-years-num');
-  if (yearEl) yearEl.textContent = yearRange;
 }
 
 function animateNumber(id, target) {
@@ -390,7 +460,7 @@ function setupEventListeners() {
 // ---------- Preferences ----------
 function savePreferences() {
   try {
-    localStorage.setItem('ustoz_prefs', JSON.stringify({
+    localStorage.setItem('dl_library_prefs', JSON.stringify({
       lang: state.currentLang,
       theme: state.currentTheme
     }));
@@ -399,7 +469,7 @@ function savePreferences() {
 
 function loadPreferences() {
   try {
-    const prefs = JSON.parse(localStorage.getItem('ustoz_prefs'));
+    const prefs = JSON.parse(localStorage.getItem('dl_library_prefs'));
     if (prefs) {
       state.currentLang = prefs.lang || 'uz';
       state.currentTheme = prefs.theme || 'dark';
