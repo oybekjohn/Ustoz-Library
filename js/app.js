@@ -23,6 +23,9 @@ const translations = {
     statFandastur: "Fan dasturlar",
     statDarslik: "Darsliklar",
     statMonografiya: "Monografiyalar",
+    statQollanma: "Qo'llanmalar",
+    statLugat: "Lug'atlar",
+    statBoshqa: "Boshqalar",
     btnRead: "📖 O'qish",
     btnDownloadQr: "📱 QR yuklab olish",
     noResults: "Kitob topilmadi",
@@ -56,6 +59,9 @@ const translations = {
     statFandastur: "Учебные программы",
     statDarslik: "Учебники",
     statMonografiya: "Монографии",
+    statQollanma: "Пособия",
+    statLugat: "Словари",
+    statBoshqa: "Другие",
     btnRead: "📖 Читать",
     btnDownloadQr: "📱 Скачать QR",
     noResults: "Книги не найдены",
@@ -89,6 +95,9 @@ const translations = {
     statFandastur: "Syllabi",
     statDarslik: "Textbooks",
     statMonografiya: "Monographs",
+    statQollanma: "Manuals",
+    statLugat: "Glossaries",
+    statBoshqa: "Others",
     btnRead: "📖 Read",
     btnDownloadQr: "📱 Download QR",
     noResults: "No books found",
@@ -111,7 +120,7 @@ const state = {
   books: [],
   filteredBooks: [],
   currentLang: 'uz',
-  currentTheme: 'dark',
+  currentTheme: 'light',
   currentCategory: 'all',
   searchQuery: ''
 };
@@ -363,6 +372,9 @@ function applyLanguage() {
   setText('stat-fandastur-label', t.statFandastur);
   setText('stat-darslik-label', t.statDarslik);
   setText('stat-monografiya-label', t.statMonografiya);
+  setText('stat-qollanma-label', t.statQollanma);
+  setText('stat-lugat-label', t.statLugat);
+  setText('stat-boshqa-label', t.statBoshqa);
   setText('footer-rights', t.footerText);
   setText('footer-university', t.footerUniversity);
 
@@ -389,11 +401,17 @@ function updateStats() {
   const totalFandastur = books.filter(b => b.category === 'fandastur').length;
   const totalDarslik = books.filter(b => b.category === 'darslik').length;
   const totalMonografiya = books.filter(b => b.category === 'monografiya').length;
+  const totalQollanma = books.filter(b => b.category === 'qollanma').length;
+  const totalLugat = books.filter(b => b.category === 'lugat').length;
+  const totalBoshqa = books.filter(b => b.category === 'boshqa').length;
 
   animateNumber('stat-books-num', totalBooks);
   animateNumber('stat-fandastur-num', totalFandastur);
   animateNumber('stat-darslik-num', totalDarslik);
   animateNumber('stat-monografiya-num', totalMonografiya);
+  animateNumber('stat-qollanma-num', totalQollanma);
+  animateNumber('stat-lugat-num', totalLugat);
+  animateNumber('stat-boshqa-num', totalBoshqa);
 }
 
 function animateNumber(id, target) {

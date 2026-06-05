@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="uz" data-theme="dark">
+<html lang="uz" data-theme="light">
 
 <head>
   <meta charset="UTF-8">
@@ -41,7 +41,10 @@
 
 <body>
 
-  <!-- Animated Background -->
+  <!-- Neural Network Background -->
+  <canvas id="neural-bg" class="neural-bg" aria-hidden="true"></canvas>
+
+  <!-- Animated Background Orbs -->
   <div class="bg-decoration" aria-hidden="true">
     <div class="bg-orb bg-orb--1"></div>
     <div class="bg-orb bg-orb--2"></div>
@@ -52,7 +55,7 @@
   <nav class="navbar" id="navbar">
     <div class="container">
       <a href="#" class="navbar__logo">
-        <div class="navbar__logo-icon">📚</div>
+        <img src="pictures/RTU_logo.svg" alt="RTU" class="navbar__logo-img" />
         <div class="navbar__logo-text"><span>DL-library.uz</span></div>
       </a>
       <div class="navbar__actions">
@@ -119,6 +122,14 @@
         <div class="stat">
           <div class="stat__number" id="stat-monografiya-num">0</div>
           <div class="stat__label" id="stat-monografiya-label">Monografiyalar</div>
+        </div>
+        <div class="stat">
+          <div class="stat__number" id="stat-qollanma-num">0</div>
+          <div class="stat__label" id="stat-qollanma-label">Qo'llanmalar</div>
+        </div>
+        <div class="stat">
+          <div class="stat__number" id="stat-lugat-num">0</div>
+          <div class="stat__label" id="stat-lugat-label">Lug'atlar</div>
         </div>
       </div>
     </div>
@@ -213,6 +224,7 @@
   <button class="scroll-top" id="scroll-top" aria-label="Scroll to top">↑</button>
 
   <!-- Scripts -->
+  <script src="js/neural-bg.js"></script>
   <script src="js/books-data.js"></script>
   <script src="js/flipbook.js"></script>
   <script src="js/app.js"></script>
