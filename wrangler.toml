@@ -7,7 +7,7 @@ pages_build_output_dir = "public"
 [[d1_databases]]
 binding = "DB"
 database_name = "ustoz-library-db"
-database_id = "REPLACE_WITH_D1_DATABASE_ID"
+database_id = "1797ec13-f6e6-4501-9504-8d71036667ce"
 
 # ---- R2 (PDF va muqova fayllari) ----
 [[r2_buckets]]
