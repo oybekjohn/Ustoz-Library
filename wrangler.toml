@@ -1,0 +1,19 @@
+name = "ustoz-library"
+compatibility_date = "2025-01-01"
+pages_build_output_dir = "public"
+
+# ---- D1 (kitoblar metama'lumotlari bazasi) ----
+# `database_id` ni "wrangler d1 create ustoz-library-db" buyrug'idan keyin to'ldiring.
+[[d1_databases]]
+binding = "DB"
+database_name = "ustoz-library-db"
+database_id = "REPLACE_WITH_D1_DATABASE_ID"
+
+# ---- R2 (PDF va muqova fayllari) ----
+[[r2_buckets]]
+binding = "BUCKET"
+bucket_name = "ustoz-library-files"
+
+# Maxfiy qiymatlar (ADMIN_USERNAME, ADMIN_PASSWORD, SESSION_SECRET) bu yerda EMAS,
+# balki Cloudflare dashboard > Pages > Settings > Environment variables (Secrets)
+# yoki lokal ishlash uchun .dev.vars faylida saqlanadi.

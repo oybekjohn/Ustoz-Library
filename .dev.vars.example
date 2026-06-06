@@ -1,0 +1,6 @@
+# Lokal ishlash uchun maxfiy qiymatlar. Bu faylni `.dev.vars` deb nusxalang.
+# Cloudflare'da bular dashboard > Pages > Settings > Environment variables (Secrets) ga qo'yiladi.
+
+ADMIN_USERNAME = "admin"
+ADMIN_PASSWORD = "ParolniOzgartiring123!"
+SESSION_SECRET = "uzun-tasodifiy-maxfiy-satr-bu-yerga"

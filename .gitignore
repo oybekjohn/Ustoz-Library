@@ -216,3 +216,10 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# ---- Node / Cloudflare ----
+node_modules/
+.wrangler/
+.dev.vars
+_migrate_tmp.sql
+npm-debug.log*

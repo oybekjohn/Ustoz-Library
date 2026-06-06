@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="uz">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Admin panel — DL-library.uz</title>
+  <link rel="icon"
+    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='0.9em' font-size='90'>🔐</text></svg>">
+  <link rel="stylesheet" href="admin.css">
+  <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js"></script>
+</head>
+
+<body>
+
+  <!-- ===== LOGIN ===== -->
+  <div id="login-view" class="login-view hidden">
+    <form id="login-form" class="login-card">
+      <div class="login-logo">🔐</div>
+      <h1>Admin panel</h1>
+      <p class="login-sub">DL-library.uz boshqaruvi</p>
+      <label>Login
+        <input type="text" id="login-username" autocomplete="username" required>
+      </label>
+      <label>Parol
+        <input type="password" id="login-password" autocomplete="current-password" required>
+      </label>
+      <div id="login-error" class="error-msg"></div>
+      <button type="submit" class="btn btn--primary btn--block">Kirish</button>
+      <a href="/" class="back-link">← Saytga qaytish</a>
+    </form>
+  </div>
+
+  <!-- ===== DASHBOARD ===== -->
+  <div id="dash-view" class="dash-view hidden">
+    <header class="topbar">
+      <div class="topbar__brand">📚 DL-library.uz — Admin</div>
+      <div class="topbar__actions">
+        <a href="/" target="_blank" class="btn btn--ghost">🌐 Saytni ko'rish</a>
+        <span id="who" class="who"></span>
+        <button id="logout-btn" class="btn btn--ghost">Chiqish</button>
+      </div>
+    </header>
+
+    <main class="container">
+      <section class="panel">
+        <div class="panel__head">
+          <h2 id="form-title">➕ Yangi kitob qo'shish</h2>
+          <button id="reset-form" class="btn btn--ghost hidden">✖ Bekor qilish</button>
+        </div>
+
+        <form id="book-form" class="book-form">
+          <input type="hidden" id="book-id">
+
+          <div class="grid-3">
+            <label>Nom (UZ) *<input type="text" id="f-title-uz" required></label>
+            <label>Nom (RU)<input type="text" id="f-title-ru"></label>
+            <label>Nom (EN)<input type="text" id="f-title-en"></label>
+          </div>
+
+          <div class="grid-3">
+            <label>Muallif *<input type="text" id="f-author" required></label>
+            <label>Yil<input type="number" id="f-year" min="1900" max="2100"></label>
+            <label>Sahifalar<input type="number" id="f-pages" min="1"></label>
+          </div>
+
+          <div class="grid-3">
+            <label>Kategoriya *
+              <select id="f-category" required>
+                <option value="fandastur">Fan dasturi</option>
+                <option value="darslik">Darslik</option>
+                <option value="monografiya">Monografiya</option>
+                <option value="qollanma">Qo'llanma</option>
+                <option value="lugat">Lug'at</option>
+                <option value="boshqa">Boshqa</option>
+              </select>
+            </label>
+            <label>Til *
+              <select id="f-language" required>
+                <option value="uz">O'zbek</option>
+                <option value="ru">Rus</option>
+                <option value="en">Ingliz</option>
+              </select>
+            </label>
+            <div class="qr-preview">
+              <span>QR (avtomatik)</span>
+              <div id="qr-box" class="qr-box">—</div>
+            </div>
+          </div>
+
+          <div class="grid-3">
+            <label>Tavsif (UZ)<textarea id="f-desc-uz" rows="2"></textarea></label>
+            <label>Tavsif (RU)<textarea id="f-desc-ru" rows="2"></textarea></label>
+            <label>Tavsif (EN)<textarea id="f-desc-en" rows="2"></textarea></label>
+          </div>
+
+          <div class="grid-2">
+            <label>PDF fayl <span id="pdf-hint" class="hint">(majburiy)</span>
+              <input type="file" id="f-pdf" accept="application/pdf">
+            </label>
+            <label>Muqova rasmi <span class="hint">(png/jpg/webp)</span>
+              <input type="file" id="f-cover" accept="image/png,image/jpeg,image/webp">
+            </label>
+          </div>
+
+          <div id="form-error" class="error-msg"></div>
+          <div id="form-progress" class="progress hidden"></div>
+
+          <button type="submit" id="save-btn" class="btn btn--primary">💾 Saqlash</button>
+        </form>
+      </section>
+
+      <section class="panel">
+        <div class="panel__head">
+          <h2>📖 Kitoblar (<span id="count">0</span>)</h2>
+          <input type="text" id="search" class="search" placeholder="🔍 Qidirish...">
+        </div>
+        <div id="books-list" class="books-list">Yuklanmoqda…</div>
+      </section>
+    </main>
+  </div>
+
+  <script src="admin.js"></script>
+</body>
+
+</html>

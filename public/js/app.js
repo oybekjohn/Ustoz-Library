@@ -179,11 +179,14 @@ function setupContentProtection() {
   });
 }
 
-// ---------- Load Books ----------
-function loadBooks() {
-  // BOOKS_DATA is loaded from js/books-data.js (works on file:// and https://)
-  if (typeof BOOKS_DATA !== 'undefined') {
-    state.books = BOOKS_DATA;
+// ---------- Load Books (backend API) ----------
+async function loadBooks() {
+  try {
+    const res = await fetch('/api/books', { headers: { 'Accept': 'application/json' } });
+    const data = await res.json();
+    if (!data.ok) throw new Error(data.error || 'API xatosi');
+
+    state.books = data.books || [];
     state.filteredBooks = [...state.books];
     renderBooks();
     updateStats();
@@ -192,11 +195,12 @@ function loadBooks() {
     if (typeof checkUrlBookParam === 'function') {
       checkUrlBookParam();
     }
-  } else {
+  } catch (e) {
     $('#books-grid').innerHTML = `
       <div class="no-results">
         <div class="no-results__icon">⚠️</div>
-        <div class="no-results__text">Kitoblar ma'lumotlari topilmadi</div>
+        <div class="no-results__text">Kitoblar ma'lumotlarini yuklab bo'lmadi</div>
+        <div class="no-results__text" style="font-size:0.9rem;margin-top:8px;">${e.message}</div>
       </div>
     `;
   }
@@ -224,7 +228,7 @@ function renderBooks() {
     const desc = book.description[state.currentLang] || book.description.uz;
     const catName = t.categoryNames[book.category] || book.category;
     const langLabel = book.language.toUpperCase();
-    const qrSrc = book.qr || '';
+    const qrSrc = (typeof bookQrDataUrl === 'function') ? bookQrDataUrl(book.id) : '';
     const escapedTitle = escapeAttr(title);
 
     return `
@@ -274,23 +278,20 @@ function renderBooks() {
 
 // ---------- Open Book by ID ----------
 function openBookById(id) {
-  const book = BOOKS_DATA.find(b => b.id === id);
+  const book = state.books.find(b => b.id === id);
   if (!book) return;
   const title = book.title[state.currentLang] || book.title.uz;
-  openFlipbook(book.file, title, book.qr || '');
+  const qr = (typeof bookQrDataUrl === 'function') ? bookQrDataUrl(book.id) : '';
+  openFlipbook(book.file, title, qr);
 }
 
 // ---------- QR Code Download by ID ----------
 function downloadQrById(id) {
-  const book = BOOKS_DATA.find(b => b.id === id);
-  if (!book || !book.qr) return;
+  const book = state.books.find(b => b.id === id);
+  if (!book) return;
   const title = book.title[state.currentLang] || book.title.uz;
-  const a = document.createElement('a');
-  a.href = book.qr;
-  a.download = `QR_${title.replace(/[^a-zA-Z0-9\u0400-\u04FF\s]/g, '').replace(/\s+/g, '_').substring(0, 50)}.png`;
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
+  const name = `QR_${title.replace(/[^a-zA-Z0-9\u0400-\u04FF\s]/g, '').replace(/\s+/g, '_').substring(0, 50)}.png`;
+  if (typeof downloadQr === 'function') downloadQr(book.id, name);
 }
 
 // ---------- Search & Filter ----------

@@ -496,12 +496,14 @@ function checkUrlBookParam() {
   const params = new URLSearchParams(window.location.search);
   const bookId = params.get('book');
   if (bookId) {
-    const book = BOOKS_DATA.find(b => b.id === parseInt(bookId));
+    const list = (typeof state !== 'undefined' && state.books) ? state.books : [];
+    const book = list.find(b => b.id === parseInt(bookId));
     if (book) {
       const lang = state ? state.currentLang : 'uz';
       const title = book.title[lang] || book.title.uz;
+      const qr = (typeof bookQrDataUrl === 'function') ? bookQrDataUrl(book.id) : '';
       setTimeout(() => {
-        openFlipbook(book.file, title, book.qr);
+        openFlipbook(book.file, title, qr);
       }, 800);
     }
   }
