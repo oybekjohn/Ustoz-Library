@@ -97,7 +97,9 @@
 }
 
 /* ---------- Reset & Base ---------- */
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
@@ -178,13 +180,28 @@ body {
 }
 
 @keyframes orbFloat {
-  0%, 100% { transform: translate(0, 0) scale(1); }
-  25% { transform: translate(30px, -40px) scale(1.1); }
-  50% { transform: translate(-20px, 20px) scale(0.95); }
-  75% { transform: translate(15px, 30px) scale(1.05); }
+
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+
+  25% {
+    transform: translate(30px, -40px) scale(1.1);
+  }
+
+  50% {
+    transform: translate(-20px, 20px) scale(0.95);
+  }
+
+  75% {
+    transform: translate(15px, 30px) scale(1.05);
+  }
 }
 
-[data-theme="light"] .bg-orb { opacity: 0.08; }
+[data-theme="light"] .bg-orb {
+  opacity: 0.08;
+}
 
 /* ---------- Container ---------- */
 .container {
@@ -331,12 +348,17 @@ body {
 }
 
 [data-theme="dark"] .hero__logo {
-  background-color: rgba(255,255,255,0.95);
+  background-color: rgba(255, 255, 255, 0.95);
 }
 
 @keyframes logoGlow {
-  0% { box-shadow: 0 8px 32px rgba(102, 126, 234, 0.3); }
-  100% { box-shadow: 0 8px 48px rgba(118, 75, 162, 0.4); }
+  0% {
+    box-shadow: 0 8px 32px rgba(102, 126, 234, 0.3);
+  }
+
+  100% {
+    box-shadow: 0 8px 48px rgba(118, 75, 162, 0.4);
+  }
 }
 
 .hero__name {
@@ -361,7 +383,7 @@ body {
 }
 
 .hero__bio {
-  font-size: 1.15rem;
+  font-size: 1.35rem;
   color: var(--text-secondary);
   max-width: 750px;
   margin: 0 auto 24px;
@@ -643,12 +665,29 @@ body {
   backdrop-filter: blur(8px);
 }
 
-.book-card__badge--fandastur { background: rgba(225, 29, 72, 0.85); }
-.book-card__badge--darslik { background: rgba(59, 130, 246, 0.85); }
-.book-card__badge--monografiya { background: rgba(139, 92, 246, 0.85); }
-.book-card__badge--qollanma { background: rgba(16, 185, 129, 0.85); }
-.book-card__badge--lugat { background: rgba(245, 158, 11, 0.85); }
-.book-card__badge--boshqa { background: rgba(107, 114, 128, 0.85); }
+.book-card__badge--fandastur {
+  background: rgba(225, 29, 72, 0.85);
+}
+
+.book-card__badge--darslik {
+  background: rgba(59, 130, 246, 0.85);
+}
+
+.book-card__badge--monografiya {
+  background: rgba(139, 92, 246, 0.85);
+}
+
+.book-card__badge--qollanma {
+  background: rgba(16, 185, 129, 0.85);
+}
+
+.book-card__badge--lugat {
+  background: rgba(245, 158, 11, 0.85);
+}
+
+.book-card__badge--boshqa {
+  background: rgba(107, 114, 128, 0.85);
+}
 
 .book-card__lang-badge {
   position: absolute;
@@ -689,7 +728,8 @@ body {
   margin-bottom: 12px;
 }
 
-.book-card__year, .book-card__author {
+.book-card__year,
+.book-card__author {
   font-size: 0.82rem;
   color: var(--text-muted);
   display: flex;
@@ -894,7 +934,7 @@ body {
   justify-content: center;
   position: relative;
   overflow: hidden;
-  background: linear-gradient(135deg, rgba(20,20,40,0.5), rgba(30,30,60,0.5));
+  background: linear-gradient(135deg, rgba(20, 20, 40, 0.5), rgba(30, 30, 60, 0.5));
 }
 
 [data-theme="light"] .flipbook-body {
@@ -952,7 +992,9 @@ body {
 }
 
 @keyframes spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .flipbook-loading__text {
@@ -976,7 +1018,7 @@ body {
 
 .flipbook-qr:hover {
   transform: scale(1.1);
-  box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
 }
 
 .flipbook-qr__img {
@@ -997,8 +1039,13 @@ body {
   z-index: 5;
 }
 
-.flipbook-nav--prev { left: 12px; }
-.flipbook-nav--next { right: 12px; }
+.flipbook-nav--prev {
+  left: 12px;
+}
+
+.flipbook-nav--next {
+  right: 12px;
+}
 
 .flipbook-nav-btn {
   width: 44px;
@@ -1054,8 +1101,15 @@ body {
 }
 
 @keyframes heartbeat {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.15); }
+
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.15);
+  }
 }
 
 /* ---------- Scroll to Top ---------- */
@@ -1102,8 +1156,13 @@ body {
 }
 
 @keyframes shimmer {
-  0% { background-position: -200% 0; }
-  100% { background-position: 200% 0; }
+  0% {
+    background-position: -200% 0;
+  }
+
+  100% {
+    background-position: 200% 0;
+  }
 }
 
 /* ---------- Animations ---------- */
@@ -1112,6 +1171,7 @@ body {
     opacity: 0;
     transform: translateY(24px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -1120,52 +1180,167 @@ body {
 
 /* ---------- Responsive ---------- */
 @media (max-width: 768px) {
-  .hero { padding: 40px 0 24px; }
-  .hero__logo { width: 120px; height: 120px; }
-  .hero__name { font-size: 1.7rem; }
-  .hero__title { font-size: 1.1rem; }
-  .hero__bio { font-size: 0.88rem; text-align: left; }
-  .hero__contact { padding: 16px; }
-  .hero__contact-text { font-size: 0.82rem; }
-  .contact-link { font-size: 0.8rem; padding: 6px 12px; }
-  .stats { gap: 8px; flex-wrap: wrap; }
-  .stat { padding: 10px 12px; min-width: 80px; flex: 0 0 auto; }
-  .stat__number { font-size: 1.3rem; }
-  .controls { padding: 20px 0 12px; }
-  .search-input { padding: 14px 16px 14px 46px; font-size: 0.95rem; }
-  .filters { gap: 6px; }
-  .filter-btn { padding: 6px 14px; font-size: 0.8rem; }
-  .books-grid { grid-template-columns: 1fr; gap: 16px; }
-  .book-card__body { padding: 16px; }
+  .hero {
+    padding: 40px 0 24px;
+  }
 
-  .flipbook-modal-content { height: 97vh; border-radius: var(--radius-lg); }
-  .flipbook-header { padding: 10px 14px; }
-  .flipbook-header__title { font-size: 0.85rem; max-width: 40%; }
-  .flipbook-nav { display: none; }
-  .flipbook-qr { bottom: 10px; right: 10px; }
-  .flipbook-qr__img { width: 56px; height: 56px; }
+  .hero__logo {
+    width: 120px;
+    height: 120px;
+  }
 
-  .navbar__logo-text { font-size: 1rem; }
-  .lang-btn { padding: 5px 8px; font-size: 0.72rem; }
+  .hero__name {
+    font-size: 1.7rem;
+  }
+
+  .hero__title {
+    font-size: 1.1rem;
+  }
+
+  .hero__bio {
+    font-size: 0.88rem;
+    text-align: left;
+  }
+
+  .hero__contact {
+    padding: 16px;
+  }
+
+  .hero__contact-text {
+    font-size: 0.82rem;
+  }
+
+  .contact-link {
+    font-size: 0.8rem;
+    padding: 6px 12px;
+  }
+
+  .stats {
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .stat {
+    padding: 10px 12px;
+    min-width: 80px;
+    flex: 0 0 auto;
+  }
+
+  .stat__number {
+    font-size: 1.3rem;
+  }
+
+  .controls {
+    padding: 20px 0 12px;
+  }
+
+  .search-input {
+    padding: 14px 16px 14px 46px;
+    font-size: 0.95rem;
+  }
+
+  .filters {
+    gap: 6px;
+  }
+
+  .filter-btn {
+    padding: 6px 14px;
+    font-size: 0.8rem;
+  }
+
+  .books-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .book-card__body {
+    padding: 16px;
+  }
+
+  .flipbook-modal-content {
+    height: 97vh;
+    border-radius: var(--radius-lg);
+  }
+
+  .flipbook-header {
+    padding: 10px 14px;
+  }
+
+  .flipbook-header__title {
+    font-size: 0.85rem;
+    max-width: 40%;
+  }
+
+  .flipbook-nav {
+    display: none;
+  }
+
+  .flipbook-qr {
+    bottom: 10px;
+    right: 10px;
+  }
+
+  .flipbook-qr__img {
+    width: 56px;
+    height: 56px;
+  }
+
+  .navbar__logo-text {
+    font-size: 1rem;
+  }
+
+  .lang-btn {
+    padding: 5px 8px;
+    font-size: 0.72rem;
+  }
 }
 
 @media (max-width: 480px) {
-  .container { padding: 0 16px; }
-  .hero__name { font-size: 1.4rem; }
-  .hero__logo { width: 90px; height: 90px; }
-  .stats { gap: 6px; }
-  .stat { min-width: 65px; padding: 8px 6px; }
-  .stat__number { font-size: 1.1rem; }
-  .stat__label { font-size: 0.6rem; }
-  .navbar__logo-text { display: none; }
+  .container {
+    padding: 0 16px;
+  }
+
+  .hero__name {
+    font-size: 1.4rem;
+  }
+
+  .hero__logo {
+    width: 90px;
+    height: 90px;
+  }
+
+  .stats {
+    gap: 6px;
+  }
+
+  .stat {
+    min-width: 65px;
+    padding: 8px 6px;
+  }
+
+  .stat__number {
+    font-size: 1.1rem;
+  }
+
+  .stat__label {
+    font-size: 0.6rem;
+  }
+
+  .navbar__logo-text {
+    display: none;
+  }
 }
 
 @media (min-width: 1024px) {
-  .books-grid { grid-template-columns: repeat(3, 1fr); }
+  .books-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
 }
 
 @media (min-width: 1400px) {
-  .books-grid { grid-template-columns: repeat(4, 1fr); }
+  .books-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
 }
 
 /* ---------- Content Protection ---------- */
