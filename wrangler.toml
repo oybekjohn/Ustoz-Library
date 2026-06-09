@@ -1,4 +1,4 @@
-name = "dllibrary"
+name = "ustoz-library"
 compatibility_date = "2025-01-01"
 pages_build_output_dir = "public"
 
