@@ -20,7 +20,7 @@ export function ok(data = {}) {
 }
 
 // Kategoriya validatsiyasi (frontend bilan bir xil)
-export const CATEGORIES = ['fandastur', 'darslik', 'monografiya', 'qollanma', 'lugat', 'boshqa'];
+export const CATEGORIES = ['it', 'ai', 'iqtisodiyot', 'biznes', 'salomatlik', 'bogdorchilik', 'fandastur', 'ai_darslar', 'ai_agentlar', 'boshqa'];
 export const LANGUAGES = ['uz', 'ru', 'en'];
 
 // DB qatorini frontend kutadigan shaklga o'tkazadi

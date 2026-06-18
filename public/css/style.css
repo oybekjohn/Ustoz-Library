@@ -24,12 +24,16 @@
   --gradient-hero: linear-gradient(135deg, #1a1a3e 0%, #252550 50%, #352b6e 100%);
   --gradient-card-hover: linear-gradient(135deg, rgba(102, 126, 234, 0.12), rgba(118, 75, 162, 0.12));
 
-  /* Category colors */
+  /* Kategoriya ranglari (kalitlar app.js dagi CATEGORIES bilan bir xil) */
+  --cat-it: #3b82f6;
+  --cat-ai: #8b5cf6;
+  --cat-iqtisodiyot: #10b981;
+  --cat-biznes: #f59e0b;
+  --cat-salomatlik: #ec4899;
+  --cat-bogdorchilik: #22c55e;
   --cat-fandastur: #e11d48;
-  --cat-darslik: #3b82f6;
-  --cat-monografiya: #8b5cf6;
-  --cat-qollanma: #10b981;
-  --cat-lugat: #f59e0b;
+  --cat-ai_darslar: #06b6d4;
+  --cat-ai_agentlar: #6366f1;
   --cat-boshqa: #6b7280;
 
   /* Dark mode (default) — LIGHTENED for readability */
@@ -655,39 +659,31 @@ body {
   position: absolute;
   top: 12px;
   left: 12px;
+  max-width: calc(100% - 24px);
   padding: 4px 12px;
   border-radius: var(--radius-sm);
   font-size: 0.72rem;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.04em;
   color: #fff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   backdrop-filter: blur(8px);
 }
 
-.book-card__badge--fandastur {
-  background: rgba(225, 29, 72, 0.85);
-}
-
-.book-card__badge--darslik {
-  background: rgba(59, 130, 246, 0.85);
-}
-
-.book-card__badge--monografiya {
-  background: rgba(139, 92, 246, 0.85);
-}
-
-.book-card__badge--qollanma {
-  background: rgba(16, 185, 129, 0.85);
-}
-
-.book-card__badge--lugat {
-  background: rgba(245, 158, 11, 0.85);
-}
-
-.book-card__badge--boshqa {
-  background: rgba(107, 114, 128, 0.85);
-}
+/* Kategoriya badge ranglari (kalitlar app.js dagi CATEGORIES bilan bir xil) */
+.book-card__badge--it           { background: rgba(59, 130, 246, 0.9); }
+.book-card__badge--ai           { background: rgba(139, 92, 246, 0.9); }
+.book-card__badge--iqtisodiyot  { background: rgba(16, 185, 129, 0.9); }
+.book-card__badge--biznes       { background: rgba(245, 158, 11, 0.9); }
+.book-card__badge--salomatlik   { background: rgba(236, 72, 153, 0.9); }
+.book-card__badge--bogdorchilik { background: rgba(34, 197, 94, 0.9); }
+.book-card__badge--fandastur    { background: rgba(225, 29, 72, 0.9); }
+.book-card__badge--ai_darslar   { background: rgba(6, 182, 212, 0.9); }
+.book-card__badge--ai_agentlar  { background: rgba(99, 102, 241, 0.9); }
+.book-card__badge--boshqa       { background: rgba(107, 114, 128, 0.9); }
 
 .book-card__lang-badge {
   position: absolute;
@@ -832,7 +828,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 12px;
+  padding: 0;
   opacity: 0;
   visibility: hidden;
   transition: all var(--transition-normal);
@@ -844,17 +840,18 @@ body {
 }
 
 .flipbook-modal-content {
-  width: 100%;
-  max-width: 1200px;
-  height: 94vh;
+  width: 100vw;
+  max-width: none;
+  height: 100vh;
+  height: 100dvh;
   background: var(--bg-surface);
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-xl);
+  border: none;
+  border-radius: 0;
   overflow: hidden;
   display: flex;
   flex-direction: column;
   box-shadow: var(--shadow-modal);
-  transform: scale(0.92) translateY(20px);
+  transform: scale(0.96);
   transition: transform var(--transition-normal);
 }
 
@@ -1071,6 +1068,81 @@ body {
   box-shadow: 0 4px 16px rgba(102, 126, 234, 0.4);
 }
 
+/* ---------- PDF reader (bitta katta sahifa + zoom) ---------- */
+.reader-scroll {
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  display: flex;
+  align-items: safe center;
+  justify-content: safe center;
+  padding: 16px;
+  -webkit-overflow-scrolling: touch;
+}
+
+.reader-canvas {
+  display: block;
+  background: #fff;
+  border-radius: 4px;
+  box-shadow: 0 6px 30px rgba(0, 0, 0, 0.35);
+  max-width: none;
+  margin: auto;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-user-drag: none;
+  user-drag: none;
+  pointer-events: none;
+}
+
+/* Zoom paneli (pastda, markazda) */
+.flipbook-zoom {
+  position: absolute;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 6;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px;
+  background: var(--bg-glass-strong);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-full);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+}
+
+.flipbook-zoom__btn {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-full);
+  border: none;
+  background: var(--bg-input);
+  color: var(--text-primary);
+  font-size: 1.1rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-fast);
+}
+
+.flipbook-zoom__btn:hover {
+  background: var(--gradient-primary);
+  color: #fff;
+  transform: scale(1.1);
+}
+
+.flipbook-zoom__level {
+  min-width: 52px;
+  text-align: center;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  user-select: none;
+}
+
 /* ---------- Footer ---------- */
 .footer {
   padding: 40px 0;
@@ -1258,8 +1330,20 @@ body {
   }
 
   .flipbook-modal-content {
-    height: 97vh;
-    border-radius: var(--radius-lg);
+    width: 100vw;
+    height: 100vh;
+    height: 100dvh;
+    border-radius: 0;
+  }
+
+  .flipbook-zoom {
+    bottom: 12px;
+  }
+
+  .flipbook-zoom__btn {
+    width: 32px;
+    height: 32px;
+    font-size: 1rem;
   }
 
   .flipbook-header {
@@ -1350,7 +1434,8 @@ body {
 .book-card__qr-img,
 .flipbook-overlay,
 .flipbook-page,
-.flipbook-page canvas {
+.flipbook-page canvas,
+.reader-canvas {
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;

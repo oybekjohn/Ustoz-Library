@@ -11,7 +11,7 @@ CREATE TABLE books (
   title_en      TEXT,
   author        TEXT NOT NULL,
   year          INTEGER,
-  category      TEXT NOT NULL,          -- fandastur | darslik | monografiya | qollanma | lugat | boshqa
+  category      TEXT NOT NULL,          -- it | ai | iqtisodiyot | biznes | salomatlik | bogdorchilik | fandastur | ai_darslar | ai_agentlar | boshqa
   language      TEXT NOT NULL DEFAULT 'uz',
   pages         INTEGER,
   file_key      TEXT NOT NULL,          -- R2 dagi PDF kaliti

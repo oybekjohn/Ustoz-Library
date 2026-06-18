@@ -6,8 +6,10 @@ const $ = (s) => document.querySelector(s);
 let BOOKS = [];
 
 const CAT_NAMES = {
-  fandastur: 'Fan dasturi', darslik: 'Darslik', monografiya: 'Monografiya',
-  qollanma: "Qo'llanma", lugat: "Lug'at", boshqa: 'Boshqa',
+  it: 'IT', ai: "Sun'iy intellekt", iqtisodiyot: 'Iqtisodiyot',
+  biznes: 'Biznes va Tadbirkorlik', salomatlik: 'Salomatlik va Kosmetika',
+  bogdorchilik: "Bog'dorchilik", fandastur: 'Fan dasturlari',
+  ai_darslar: 'SI darslar', ai_agentlar: 'SI agentlar', boshqa: 'Boshqa',
 };
 
 // ---------- API yordamchisi ----------

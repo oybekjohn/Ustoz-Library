@@ -13,33 +13,13 @@ const translations = {
     heroContact: "Agar siz elektron kutubxonadagi biror bir kitobni yuklab olmoqchi bo'lsangiz, quyidagi kontaktlarga murojaat qiling:",
     searchPlaceholder: "Kitob nomini qidirish...",
     filterAll: "Barchasi",
-    filterFandastur: "📋 Fan dasturlar",
-    filterDarslik: "📘 Darsliklar",
-    filterMonografiya: "📕 Monografiyalar",
-    filterQollanma: "📗 Qo'llanmalar",
-    filterLugat: "📙 Lug'atlar",
-    filterBoshqa: "📓 Boshqa",
     statBooks: "Umumiy kitoblar",
-    statFandastur: "Fan dasturlar",
-    statDarslik: "Darsliklar",
-    statMonografiya: "Monografiyalar",
-    statQollanma: "Qo'llanmalar",
-    statLugat: "Lug'atlar",
-    statBoshqa: "Boshqalar",
     btnRead: "📖 O'qish",
     btnDownloadQr: "📱 QR yuklab olish",
     noResults: "Kitob topilmadi",
     noResultsDesc: "Boshqa kalit so'z bilan qidirib ko'ring",
     footerText: "Barcha huquqlar himoyalangan",
-    footerUniversity: "Renessans Ta'lim Universiteti — Axborot texnologiyalari kafedrasi",
-    categoryNames: {
-      fandastur: "Fan dastur",
-      darslik: "Darslik",
-      monografiya: "Monografiya",
-      qollanma: "Qo'llanma",
-      lugat: "Lug'at",
-      boshqa: "Boshqa"
-    }
+    footerUniversity: "Ushbu sayt mualliflari RTU AT kafedrasi o'qituvchilari Ravshan Ayupov va Oybek Xushvaqtov"
   },
   ru: {
     siteTitle: "DL-library.uz",
@@ -49,33 +29,13 @@ const translations = {
     heroContact: "Если вы хотите скачать книгу из электронной библиотеки, обратитесь по следующим контактам:",
     searchPlaceholder: "Поиск по названию книги...",
     filterAll: "Все",
-    filterFandastur: "📋 Учебные программы",
-    filterDarslik: "📘 Учебники",
-    filterMonografiya: "📕 Монографии",
-    filterQollanma: "📗 Пособия",
-    filterLugat: "📙 Словари",
-    filterBoshqa: "📓 Другие",
     statBooks: "Всего книг",
-    statFandastur: "Учебные программы",
-    statDarslik: "Учебники",
-    statMonografiya: "Монографии",
-    statQollanma: "Пособия",
-    statLugat: "Словари",
-    statBoshqa: "Другие",
     btnRead: "📖 Читать",
     btnDownloadQr: "📱 Скачать QR",
     noResults: "Книги не найдены",
     noResultsDesc: "Попробуйте другое ключевое слово",
     footerText: "Все права защищены",
-    footerUniversity: "Университет Ренессанс — Кафедра информационных технологий",
-    categoryNames: {
-      fandastur: "Учебная программа",
-      darslik: "Учебник",
-      monografiya: "Монография",
-      qollanma: "Пособие",
-      lugat: "Словарь",
-      boshqa: "Другое"
-    }
+    footerUniversity: "Авторы сайта — преподаватели кафедры ИТ RTU Равшан Аюпов и Ойбек Хушвактов"
   },
   en: {
     siteTitle: "DL-library.uz",
@@ -85,35 +45,37 @@ const translations = {
     heroContact: "If you would like to download a book from the digital library, please contact us via:",
     searchPlaceholder: "Search for a book...",
     filterAll: "All",
-    filterFandastur: "📋 Syllabi",
-    filterDarslik: "📘 Textbooks",
-    filterMonografiya: "📕 Monographs",
-    filterQollanma: "📗 Manuals",
-    filterLugat: "📙 Glossaries",
-    filterBoshqa: "📓 Other",
     statBooks: "Total Books",
-    statFandastur: "Syllabi",
-    statDarslik: "Textbooks",
-    statMonografiya: "Monographs",
-    statQollanma: "Manuals",
-    statLugat: "Glossaries",
-    statBoshqa: "Others",
     btnRead: "📖 Read",
     btnDownloadQr: "📱 Download QR",
     noResults: "No books found",
     noResultsDesc: "Try a different keyword",
     footerText: "All rights reserved",
-    footerUniversity: "Renaissance University of Education — IT Department",
-    categoryNames: {
-      fandastur: "Syllabus",
-      darslik: "Textbook",
-      monografiya: "Monograph",
-      qollanma: "Manual",
-      lugat: "Glossary",
-      boshqa: "Other"
-    }
+    footerUniversity: "Site authors — RTU IT Department lecturers Ravshan Ayupov and Oybek Xushvaqtov"
   }
 };
+
+// ---------- Kategoriyalar (YAGONA MANBA: filter, badge, stat shu yerdan) ----------
+// `stat: true` bo'lgan kategoriyalar bosh sahifa statistikasida ko'rsatiladi (umumiy + shular).
+// Yangi kategoriya qo'shish uchun shu ro'yxatga bitta qator qo'shing — qolgani avtomatik.
+const CATEGORIES = [
+  { key: 'it',           emoji: '💻', uz: 'IT',                      ru: 'IT',                           en: 'IT',                          stat: true  },
+  { key: 'ai',           emoji: '🤖', uz: "Sun'iy intellekt",        ru: 'Искусственный интеллект',      en: 'Artificial Intelligence',     stat: true  },
+  { key: 'iqtisodiyot',  emoji: '📈', uz: 'Iqtisodiyot',             ru: 'Экономика',                    en: 'Economics',                   stat: true  },
+  { key: 'biznes',       emoji: '💼', uz: 'Biznes va Tadbirkorlik',  ru: 'Бизнес и предпринимательство', en: 'Business & Entrepreneurship', stat: true  },
+  { key: 'salomatlik',   emoji: '💊', uz: 'Salomatlik va Kosmetika', ru: 'Здоровье и косметика',         en: 'Health & Cosmetics',          stat: false },
+  { key: 'bogdorchilik', emoji: '🌱', uz: "Bog'dorchilik",           ru: 'Садоводство',                  en: 'Gardening',                   stat: false },
+  { key: 'fandastur',    emoji: '📋', uz: 'Fan dasturlari',          ru: 'Учебные программы',            en: 'Syllabi',                     stat: false },
+  { key: 'ai_darslar',   emoji: '🎓', uz: 'SI darslar',              ru: 'Уроки ИИ',                     en: 'AI Lessons',                  stat: false },
+  { key: 'ai_agentlar',  emoji: '🧠', uz: 'SI agentlar',             ru: 'ИИ-агенты',                    en: 'AI Agents',                   stat: false },
+  { key: 'boshqa',       emoji: '📚', uz: 'Boshqa',                  ru: 'Другое',                       en: 'Other',                       stat: false }
+];
+
+// Kategoriya kalitidan joriy tildagi nomini qaytaradi
+function catName(key) {
+  const c = CATEGORIES.find(x => x.key === key);
+  return c ? c[state.currentLang] : key;
+}
 
 // ---------- Application State ----------
 const state = {
@@ -189,7 +151,7 @@ async function loadBooks() {
     state.books = data.books || [];
     state.filteredBooks = [...state.books];
     renderBooks();
-    updateStats();
+    renderStats();
 
     // Check URL param for QR code deep link
     if (typeof checkUrlBookParam === 'function') {
@@ -226,7 +188,7 @@ function renderBooks() {
   grid.innerHTML = state.filteredBooks.map((book, index) => {
     const title = book.title[state.currentLang] || book.title.uz;
     const desc = book.description[state.currentLang] || book.description.uz;
-    const catName = t.categoryNames[book.category] || book.category;
+    const catLabel = catName(book.category);
     const langLabel = book.language.toUpperCase();
     const qrSrc = (typeof bookQrDataUrl === 'function') ? bookQrDataUrl(book.id) : '';
     const escapedTitle = escapeAttr(title);
@@ -242,7 +204,7 @@ function renderBooks() {
             onerror="this.style.display='none'"
             draggable="false"
           />
-          <span class="book-card__badge book-card__badge--${book.category}">${catName}</span>
+          <span class="book-card__badge book-card__badge--${book.category}">${catLabel}</span>
           <span class="book-card__lang-badge">${langLabel}</span>
         </div>
         <div class="book-card__body">
@@ -290,7 +252,7 @@ function downloadQrById(id) {
   const book = state.books.find(b => b.id === id);
   if (!book) return;
   const title = book.title[state.currentLang] || book.title.uz;
-  const name = `QR_${title.replace(/[^a-zA-Z0-9\u0400-\u04FF\s]/g, '').replace(/\s+/g, '_').substring(0, 50)}.png`;
+  const name = `QR_${title.replace(/[^a-zA-Z0-9Ѐ-ӿ\s]/g, '').replace(/\s+/g, '_').substring(0, 50)}.png`;
   if (typeof downloadQr === 'function') downloadQr(book.id, name);
 }
 
@@ -302,9 +264,7 @@ function handleSearch(query) {
 
 function handleCategoryFilter(category) {
   state.currentCategory = category;
-  $$('.filter-btn[data-category]').forEach(btn => {
-    btn.classList.toggle('active', btn.dataset.category === category);
-  });
+  renderFilters();
   applyFilters();
 }
 
@@ -349,7 +309,6 @@ function setLanguage(lang) {
   state.currentLang = lang;
   applyLanguage();
   renderBooks();
-  updateStats();
   savePreferences();
 }
 
@@ -369,54 +328,65 @@ function applyLanguage() {
   setText('hero-title', t.heroTitle);
   setText('hero-bio', t.heroBio);
   setText('hero-contact-text', t.heroContact);
-  setText('stat-books-label', t.statBooks);
-  setText('stat-fandastur-label', t.statFandastur);
-  setText('stat-darslik-label', t.statDarslik);
-  setText('stat-monografiya-label', t.statMonografiya);
-  setText('stat-qollanma-label', t.statQollanma);
-  setText('stat-lugat-label', t.statLugat);
-  setText('stat-boshqa-label', t.statBoshqa);
   setText('footer-rights', t.footerText);
   setText('footer-university', t.footerUniversity);
 
   const searchInput = $('#search-input');
   if (searchInput) searchInput.placeholder = t.searchPlaceholder;
 
-  const filterMap = {
-    all: t.filterAll, fandastur: t.filterFandastur, darslik: t.filterDarslik,
-    monografiya: t.filterMonografiya, qollanma: t.filterQollanma,
-    lugat: t.filterLugat, boshqa: t.filterBoshqa
-  };
-  $$('.filter-btn[data-category]').forEach(btn => {
-    const cat = btn.dataset.category;
-    if (filterMap[cat]) btn.textContent = filterMap[cat];
-  });
+  // Filter va statistika kategoriyalardan dinamik quriladi (joriy tilga ko'ra)
+  renderFilters();
+  renderStats();
 
   document.title = `${t.siteTitle} — ${t.heroTitle}`;
 }
 
-// ---------- Stats ----------
-function updateStats() {
-  const books = state.books;
-  const totalBooks = books.length;
-  const totalFandastur = books.filter(b => b.category === 'fandastur').length;
-  const totalDarslik = books.filter(b => b.category === 'darslik').length;
-  const totalMonografiya = books.filter(b => b.category === 'monografiya').length;
-  const totalQollanma = books.filter(b => b.category === 'qollanma').length;
-  const totalLugat = books.filter(b => b.category === 'lugat').length;
-  const totalBoshqa = books.filter(b => b.category === 'boshqa').length;
+// ---------- Filterlarni qurish (Barchasi + kategoriyalar) ----------
+function renderFilters() {
+  const wrap = $('#filters');
+  if (!wrap) return;
+  const t = translations[state.currentLang];
 
-  animateNumber('stat-books-num', totalBooks);
-  animateNumber('stat-fandastur-num', totalFandastur);
-  animateNumber('stat-darslik-num', totalDarslik);
-  animateNumber('stat-monografiya-num', totalMonografiya);
-  animateNumber('stat-qollanma-num', totalQollanma);
-  animateNumber('stat-lugat-num', totalLugat);
-  animateNumber('stat-boshqa-num', totalBoshqa);
+  let html = `<button class="filter-btn ${state.currentCategory === 'all' ? 'active' : ''}" data-category="all">${t.filterAll}</button>`;
+  for (const c of CATEGORIES) {
+    const active = state.currentCategory === c.key ? 'active' : '';
+    html += `<button class="filter-btn ${active}" data-category="${c.key}">${c.emoji} ${c[state.currentLang]}</button>`;
+  }
+  wrap.innerHTML = html;
+
+  wrap.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => handleCategoryFilter(btn.dataset.category));
+  });
 }
 
-function animateNumber(id, target) {
-  const el = document.getElementById(id);
+// ---------- Statistika: umumiy + `stat: true` kategoriyalar ----------
+function renderStats() {
+  const wrap = $('#stats');
+  if (!wrap) return;
+  const t = translations[state.currentLang];
+
+  const cards = [{ num: state.books.length, label: t.statBooks }];
+  for (const c of CATEGORIES) {
+    if (!c.stat) continue;
+    cards.push({
+      num: state.books.filter(b => b.category === c.key).length,
+      label: c[state.currentLang]
+    });
+  }
+
+  wrap.innerHTML = cards.map(c => `
+    <div class="stat">
+      <div class="stat__number" data-target="${c.num}">0</div>
+      <div class="stat__label">${c.label}</div>
+    </div>
+  `).join('');
+
+  wrap.querySelectorAll('.stat__number').forEach(el => {
+    animateNumber(el, parseInt(el.dataset.target, 10) || 0);
+  });
+}
+
+function animateNumber(el, target) {
   if (!el) return;
   const duration = 800;
   const start = performance.now();
@@ -451,10 +421,7 @@ function setupEventListeners() {
     searchTimeout = setTimeout(() => handleSearch(e.target.value), 200);
   });
 
-  // Category filters
-  $$('.filter-btn[data-category]').forEach(btn => {
-    btn.addEventListener('click', () => handleCategoryFilter(btn.dataset.category));
-  });
+  // Category filter tugmalari renderFilters() ichida bog'lanadi (dinamik)
 
   // Language
   $$('.lang-btn').forEach(btn => {
@@ -491,7 +458,7 @@ function loadPreferences() {
     const prefs = JSON.parse(localStorage.getItem('dl_library_prefs'));
     if (prefs) {
       state.currentLang = prefs.lang || 'uz';
-      state.currentTheme = prefs.theme || 'dark';
+      state.currentTheme = prefs.theme || 'light';
     }
   } catch (e) {}
 }

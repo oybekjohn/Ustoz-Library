@@ -18,7 +18,8 @@
   <meta property="og:title" content="DL-library.uz — Raqamli Kutubxona">
   <meta property="og:description"
     content="Renessans Ta'lim Universiteti Axborot texnologiyalari kafedrasi elektron kutubxonasi">
-  <meta property="og:url" content="https://oybekjohn.github.io/Ustoz-Library/">
+  <meta property="og:url" content="https://dl-library.uz/">
+  <link rel="canonical" href="https://dl-library.uz/">
   <meta property="og:locale" content="uz_UZ">
 
   <!-- Favicon -->
@@ -34,9 +35,8 @@
     pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
   </script>
 
-  <!-- StPageFlip (page turn library) — cdnjs has no page-flip, use unpkg/jsdelivr -->
-  <script src="https://unpkg.com/page-flip@2.0.7/dist/js/page-flip.browser.js"
-    onerror="this.onerror=null;this.src='https://cdn.jsdelivr.net/npm/page-flip@2.0.7/dist/js/page-flip.browser.js';"></script>
+  <!-- Page-flip kutubxonasi olib tashlandi: endi bitta katta sahifa + zoom ko'rinishi -->
+
 
   <!-- QR code generator (avtomatik QR uchun) -->
   <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js"></script>
@@ -97,9 +97,9 @@
             <span class="contact-link__icon">✈️</span>
             <span>t.me/@RavshanHamdamovich</span>
           </a>
-          <a href="tel:+998909359628" class="contact-link">
+          <a href="tel:+998935962874" class="contact-link">
             <span class="contact-link__icon">📞</span>
-            <span>+99890 935-96-28-74</span>
+            <span>+998 93 596 28 74</span>
           </a>
           <a href="mailto:ayupovr1x1@gmail.com" class="contact-link">
             <span class="contact-link__icon">📧</span>
@@ -108,33 +108,8 @@
         </div>
       </div>
 
-      <!-- Stats -->
-      <div class="stats">
-        <div class="stat">
-          <div class="stat__number" id="stat-books-num">0</div>
-          <div class="stat__label" id="stat-books-label">Umumiy kitoblar</div>
-        </div>
-        <div class="stat">
-          <div class="stat__number" id="stat-fandastur-num">0</div>
-          <div class="stat__label" id="stat-fandastur-label">Fan dasturlar</div>
-        </div>
-        <div class="stat">
-          <div class="stat__number" id="stat-darslik-num">0</div>
-          <div class="stat__label" id="stat-darslik-label">Darsliklar</div>
-        </div>
-        <div class="stat">
-          <div class="stat__number" id="stat-monografiya-num">0</div>
-          <div class="stat__label" id="stat-monografiya-label">Monografiyalar</div>
-        </div>
-        <div class="stat">
-          <div class="stat__number" id="stat-qollanma-num">0</div>
-          <div class="stat__label" id="stat-qollanma-label">Qo'llanmalar</div>
-        </div>
-        <div class="stat">
-          <div class="stat__number" id="stat-lugat-num">0</div>
-          <div class="stat__label" id="stat-lugat-label">Lug'atlar</div>
-        </div>
-      </div>
+      <!-- Stats (JS tomonidan to'ldiriladi: umumiy + asosiy kategoriyalar) -->
+      <div class="stats" id="stats"></div>
     </div>
   </section>
 
@@ -147,15 +122,8 @@
           autocomplete="off" />
         <span class="search-count" id="search-count"></span>
       </div>
-      <div class="filters">
-        <button class="filter-btn active" data-category="all">Barchasi</button>
-        <button class="filter-btn" data-category="fandastur">📋 Fan dasturlar</button>
-        <button class="filter-btn" data-category="darslik">📘 Darsliklar</button>
-        <button class="filter-btn" data-category="monografiya">📕 Monografiyalar</button>
-        <button class="filter-btn" data-category="qollanma">📗 Qo'llanmalar</button>
-        <button class="filter-btn" data-category="lugat">📙 Lug'atlar</button>
-        <button class="filter-btn" data-category="boshqa">📓 Boshqa</button>
-      </div>
+      <!-- Filterlar (JS tomonidan to'ldiriladi: Barchasi + 10 kategoriya) -->
+      <div class="filters" id="filters"></div>
     </div>
   </section>
 
@@ -205,6 +173,14 @@
           <button class="flipbook-nav-btn" onclick="flipNext()" title="Keyingi ▶">▶</button>
         </div>
 
+        <!-- Zoom boshqaruvi -->
+        <div class="flipbook-zoom" id="flipbook-zoom">
+          <button class="flipbook-zoom__btn" onclick="zoomOut()" title="Kichiklashtirish" aria-label="Kichiklashtirish">−</button>
+          <span class="flipbook-zoom__level" id="flipbook-zoom-level">100%</span>
+          <button class="flipbook-zoom__btn" onclick="zoomIn()" title="Kattalashtirish" aria-label="Kattalashtirish">+</button>
+          <button class="flipbook-zoom__btn" onclick="zoomFit()" title="Ekranga moslash" aria-label="Ekranga moslash">⤢</button>
+        </div>
+
         <!-- QR Code -->
         <div class="flipbook-qr" id="flipbook-qr" style="display:none;"></div>
       </div>
@@ -218,7 +194,7 @@
         © 2026–2027 DL-library.uz — <span id="footer-rights">Barcha huquqlar himoyalangan</span>.
       </p>
       <p class="footer__text footer__text--sub">
-        <span id="footer-university">Ushbu loyihaning mualliflari RTU AT kafedrasi o’qituvchilari Ravshan Ayupov va Oybek Xushvaqtov</span>
+        <span id="footer-university">Ushbu sayt mualliflari RTU AT kafedrasi o’qituvchilari Ravshan Ayupov va Oybek Xushvaqtov</span>
       </p>
     </div>
   </footer>
