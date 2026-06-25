@@ -84,7 +84,9 @@ const state = {
   currentLang: 'uz',
   currentTheme: 'light',
   currentCategory: 'all',
-  searchQuery: ''
+  searchQuery: '',
+  currentPage: 1,
+  booksPerPage: 12
 };
 
 // ---------- DOM Helpers ----------
@@ -182,10 +184,22 @@ function renderBooks() {
       </div>
     `;
     updateSearchCount(0);
+    renderPagination();
     return;
   }
 
-  grid.innerHTML = state.filteredBooks.map((book, index) => {
+  // Pagination hisoblash
+  const total = state.filteredBooks.length;
+  const totalPages = Math.ceil(total / state.booksPerPage);
+  // Sahifa chegarasidan chiqib ketmasin
+  if (state.currentPage > totalPages) state.currentPage = totalPages;
+  if (state.currentPage < 1) state.currentPage = 1;
+
+  const start = (state.currentPage - 1) * state.booksPerPage;
+  const end = Math.min(start + state.booksPerPage, total);
+  const pageBooks = state.filteredBooks.slice(start, end);
+
+  grid.innerHTML = pageBooks.map((book, index) => {
     const title = book.title[state.currentLang] || book.title.uz;
     const desc = book.description[state.currentLang] || book.description.uz;
     const catLabel = catName(book.category);
@@ -194,7 +208,7 @@ function renderBooks() {
     const escapedTitle = escapeAttr(title);
 
     return `
-      <div class="book-card" style="animation-delay:${index * 0.08}s" data-book-id="${book.id}">
+      <div class="book-card" style="animation-delay:${index * 0.06}s" data-book-id="${book.id}">
         <div class="book-card__cover-wrapper" onclick="openBookById(${book.id})" title="${t.btnRead}">
           <img
             class="book-card__cover"
@@ -235,7 +249,90 @@ function renderBooks() {
     `;
   }).join('');
 
-  updateSearchCount(state.filteredBooks.length);
+  updateSearchCount(total);
+  renderPagination();
+}
+
+// ---------- Pagination ----------
+function renderPagination() {
+  const paginationEl = $('#pagination');
+  const infoEl = $('#pagination-info');
+  if (!paginationEl) return;
+
+  const total = state.filteredBooks.length;
+  const totalPages = Math.ceil(total / state.booksPerPage);
+
+  // Info matni
+  if (infoEl) {
+    if (total === 0) {
+      infoEl.textContent = '';
+    } else {
+      const start = (state.currentPage - 1) * state.booksPerPage + 1;
+      const end = Math.min(state.currentPage * state.booksPerPage, total);
+      infoEl.textContent = `${start}–${end} / ${total} ta kitob`;
+    }
+  }
+
+  // 1 sahifa bo'lsa pagination ko'rsatma
+  if (totalPages <= 1) {
+    paginationEl.innerHTML = '';
+    return;
+  }
+
+  const cp = state.currentPage;
+  let html = '';
+
+  // Oldingi tugma
+  html += `<button class="pagination__btn" onclick="goToPage(${cp - 1})" ${cp === 1 ? 'disabled' : ''} aria-label="Oldingi">‹</button>`;
+
+  // Sahifa raqamlari
+  const pages = getPaginationRange(cp, totalPages);
+  for (const p of pages) {
+    if (p === '...') {
+      html += `<span class="pagination__dots">…</span>`;
+    } else {
+      html += `<button class="pagination__btn ${p === cp ? 'active' : ''}" onclick="goToPage(${p})" aria-label="${p}-sahifa">${p}</button>`;
+    }
+  }
+
+  // Keyingi tugma
+  html += `<button class="pagination__btn" onclick="goToPage(${cp + 1})" ${cp === totalPages ? 'disabled' : ''} aria-label="Keyingi">›</button>`;
+
+  paginationEl.innerHTML = html;
+}
+
+// Delta window bilan pagination raqamlari (1 ... 4 5 6 ... 10)
+function getPaginationRange(current, total) {
+  if (total <= 7) {
+    return Array.from({ length: total }, (_, i) => i + 1);
+  }
+  const range = [];
+  const delta = 1; // joriy sahifa atrofida nechta raqam
+
+  range.push(1);
+  if (current - delta > 2) range.push('...');
+
+  for (let i = Math.max(2, current - delta); i <= Math.min(total - 1, current + delta); i++) {
+    range.push(i);
+  }
+
+  if (current + delta < total - 1) range.push('...');
+  range.push(total);
+
+  return range;
+}
+
+function goToPage(page) {
+  const totalPages = Math.ceil(state.filteredBooks.length / state.booksPerPage);
+  if (page < 1 || page > totalPages) return;
+  state.currentPage = page;
+  renderBooks();
+  // Kitoblar seksiyasiga scroll (controls qismining ostiga)
+  const booksSection = document.querySelector('.books-section');
+  if (booksSection) {
+    const offset = booksSection.getBoundingClientRect().top + window.scrollY - 100;
+    window.scrollTo({ top: offset, behavior: 'smooth' });
+  }
 }
 
 // ---------- Open Book by ID ----------
@@ -283,6 +380,8 @@ function applyFilters() {
     }
     return true;
   });
+  // Filter yoki qidiruv o'zgarganda 1-sahifaga qayt
+  state.currentPage = 1;
   renderBooks();
 }
 
@@ -307,6 +406,7 @@ function applyTheme() {
 // ---------- Language ----------
 function setLanguage(lang) {
   state.currentLang = lang;
+  state.currentPage = 1;
   applyLanguage();
   renderBooks();
   savePreferences();

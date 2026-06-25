@@ -57,9 +57,9 @@
   <!-- ========== NAVBAR ========== -->
   <nav class="navbar" id="navbar">
     <div class="container">
-      <a href="#" class="navbar__logo">
+      <a href="https://dl-library.uz" class="navbar__logo">
         <img src="pictures/RTU_logo.svg" alt="RTU" class="navbar__logo-img" />
-        <div class="navbar__logo-text"><span>DL-library.uz</span></div>
+        <div class="navbar__logo-text"><span>DL-library.uz </span></div>
       </a>
       <div class="navbar__actions">
         <div class="lang-switcher">
@@ -79,7 +79,7 @@
       <h1 class="hero__name" id="hero-name">DL-library.uz</h1>
       <p class="hero__title" id="hero-title">Renessans Ta'lim Universiteti — Raqamli Kutubxona</p>
       <p class="hero__bio" id="hero-bio">
-        Ushbu elektron kutubxona Renessans ta'lim universiteti Matematika va Iqtisod fakultetining
+             Ushbu elektron kutubxona Renessans ta'lim universiteti Matematika va Iqtisod fakultetining
         Axborot texnologiyalari kafedrasi jamoasi tomonidan yaratilgan bo'lib, uning asosiy maqsadi
         talabalarga fan dasturlarini, fanlar bo'yicha uslubiy qo'llanmalarni, o'quv qo'llanmalarni,
         darsliklarni va monografiyalarni taqdim etishdir. Undan tashqari saytga talabalar uchun qiziq
@@ -136,6 +136,9 @@
         <div class="book-card skeleton" style="height: 380px;"></div>
         <div class="book-card skeleton" style="height: 380px;"></div>
       </div>
+      <!-- Pagination -->
+      <div class="pagination__info" id="pagination-info"></div>
+      <div class="pagination" id="pagination"></div>
     </div>
   </section>
 
@@ -149,12 +152,13 @@
           <button class="flipbook-btn" onclick="flipPrev()" title="Oldingi sahifa">◀</button>
           <span class="flipbook-header__page-info" id="flipbook-page-info">—</span>
           <button class="flipbook-btn" onclick="flipNext()" title="Keyingi sahifa">▶</button>
+          <button class="flipbook-btn" id="toggle-toc-btn" onclick="toggleTocPanel()" title="Mundarija">📑</button>
           <button class="flipbook-btn" onclick="toggleFlipbookFullscreen()" title="To'liq ekran">⛶</button>
           <button class="flipbook-btn flipbook-btn--close" onclick="closeFlipbook()" title="Yopish">✕</button>
         </div>
       </div>
 
-      <!-- Body -->
+      <!-- Body: TOC sidebar + Reader -->
       <div class="flipbook-body" id="flipbook-body">
         <!-- Loading -->
         <div class="flipbook-loading" id="flipbook-loading">
@@ -162,27 +166,45 @@
           <div class="flipbook-loading__text">PDF yuklanmoqda...</div>
         </div>
 
-        <!-- Page flip container -->
-        <div id="flipbook-container"></div>
-
-        <!-- Navigation arrows -->
-        <div class="flipbook-nav flipbook-nav--prev">
-          <button class="flipbook-nav-btn" onclick="flipPrev()" title="◀ Oldingi">◀</button>
-        </div>
-        <div class="flipbook-nav flipbook-nav--next">
-          <button class="flipbook-nav-btn" onclick="flipNext()" title="Keyingi ▶">▶</button>
-        </div>
-
-        <!-- Zoom boshqaruvi -->
-        <div class="flipbook-zoom" id="flipbook-zoom">
-          <button class="flipbook-zoom__btn" onclick="zoomOut()" title="Kichiklashtirish" aria-label="Kichiklashtirish">−</button>
-          <span class="flipbook-zoom__level" id="flipbook-zoom-level">100%</span>
-          <button class="flipbook-zoom__btn" onclick="zoomIn()" title="Kattalashtirish" aria-label="Kattalashtirish">+</button>
-          <button class="flipbook-zoom__btn" onclick="zoomFit()" title="Ekranga moslash" aria-label="Ekranga moslash">⤢</button>
+        <!-- TOC Sidebar (chap) -->
+        <div class="flipbook-toc" id="flipbook-toc" style="display:none;">
+          <div class="flipbook-toc__header">
+            <h3 class="flipbook-toc__title">📑 Mundarija</h3>
+            <button class="flipbook-toc__close" onclick="toggleTocPanel()" aria-label="Yopish">×</button>
+          </div>
+          <div class="flipbook-toc__content" id="flipbook-toc-content">
+            <!-- PDF outline yoki custom TOC shu yerda chiqadi -->
+          </div>
+          <div class="flipbook-toc__manual">
+            <button class="flipbook-toc__set-btn" onclick="setCurrentPageAsToc()" title="Joriy sahifani mundarija qilib belgilash">
+              🔖 Joriy sahifani mundarija qilish
+            </button>
+          </div>
         </div>
 
-        <!-- QR Code -->
-        <div class="flipbook-qr" id="flipbook-qr" style="display:none;"></div>
+        <!-- Page flip container (o'ng) -->
+        <div class="flipbook-reader-wrapper">
+          <div id="flipbook-container"></div>
+
+          <!-- Navigation arrows -->
+          <div class="flipbook-nav flipbook-nav--prev">
+            <button class="flipbook-nav-btn" onclick="flipPrev()" title="◀ Oldingi">◀</button>
+          </div>
+          <div class="flipbook-nav flipbook-nav--next">
+            <button class="flipbook-nav-btn" onclick="flipNext()" title="Keyingi ▶">▶</button>
+          </div>
+
+          <!-- Zoom boshqaruvi -->
+          <div class="flipbook-zoom" id="flipbook-zoom">
+            <button class="flipbook-zoom__btn" onclick="zoomOut()" title="Kichiklashtirish" aria-label="Kichiklashtirish">−</button>
+            <span class="flipbook-zoom__level" id="flipbook-zoom-level">100%</span>
+            <button class="flipbook-zoom__btn" onclick="zoomIn()" title="Kattalashtirish" aria-label="Kattalashtirish">+</button>
+            <button class="flipbook-zoom__btn" onclick="zoomFit()" title="Ekranga moslash" aria-label="Ekranga moslash">⤢</button>
+          </div>
+
+          <!-- QR Code -->
+          <div class="flipbook-qr" id="flipbook-qr" style="display:none;"></div>
+        </div>
       </div>
     </div>
   </div>
@@ -194,7 +216,7 @@
         © 2026–2027 DL-library.uz — <span id="footer-rights">Barcha huquqlar himoyalangan</span>.
       </p>
       <p class="footer__text footer__text--sub">
-        <span id="footer-university">Ushbu sayt mualliflari RTU AT kafedrasi o’qituvchilari Ravshan Ayupov va Oybek Xushvaqtov</span>
+        <span id="footer-university">Ushbu sayt mualliflari RTU AT kafedrasi o‘qituvchilari Ravshan Ayupov va Oybek Xushvaqtov</span>
       </p>
     </div>
   </footer>
