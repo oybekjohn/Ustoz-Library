@@ -8,8 +8,12 @@
     "deploy": "wrangler pages deploy public",
     "db:init:local": "wrangler d1 execute ustoz-library-db --local --file=./schema.sql",
     "db:init:remote": "wrangler d1 execute ustoz-library-db --remote --file=./schema.sql",
+    "db:telegram:local": "wrangler d1 execute ustoz-library-db --local --file=./migrations/0001_telegram_bot.sql",
+    "db:telegram:remote": "wrangler d1 execute ustoz-library-db --remote --file=./migrations/0001_telegram_bot.sql",
     "migrate:local": "node scripts/migrate.mjs --local",
-    "migrate:remote": "node scripts/migrate.mjs --remote"
+    "migrate:remote": "node scripts/migrate.mjs --remote",
+    "telegram:webhook": "node scripts/telegram-webhook.mjs",
+    "test": "node --test"
   },
   "devDependencies": {
     "wrangler": "^4.0.0"

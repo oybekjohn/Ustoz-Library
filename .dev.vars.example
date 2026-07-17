@@ -4,3 +4,23 @@
 ADMIN_USERNAME = "admin"
 ADMIN_PASSWORD = "ParolniOzgartiring123!"
 SESSION_SECRET = "uzun-tasodifiy-maxfiy-satr-bu-yerga"
+
+# Telegram BotFather bergan token va setWebhook uchun alohida maxfiy satr.
+TELEGRAM_BOT_TOKEN = ""
+TELEGRAM_WEBHOOK_SECRET = ""
+TELEGRAM_ALLOWED_USER_IDS = "123456789"
+TELEGRAM_MAX_PDF_MB = "19"
+PUBLIC_SITE_URL = "http://127.0.0.1:8788"
+
+# mock | openai | gemini | anthropic
+AI_METADATA_PROVIDER = "mock"
+
+# Tanlangan provayder uchungina API key va model kerak.
+OPENAI_API_KEY = ""
+OPENAI_METADATA_MODEL = ""
+
+GEMINI_API_KEY = ""
+GEMINI_METADATA_MODEL = ""
+
+ANTHROPIC_API_KEY = ""
+ANTHROPIC_METADATA_MODEL = ""

@@ -14,6 +14,6 @@ database_id = "1797ec13-f6e6-4501-9504-8d71036667ce"
 binding = "BUCKET"
 bucket_name = "ustoz-library-files"
 
-# Maxfiy qiymatlar (ADMIN_USERNAME, ADMIN_PASSWORD, SESSION_SECRET) bu yerda EMAS,
+# Maxfiy qiymatlar (ADMIN_*, SESSION_SECRET, TELEGRAM_*, AI API key'lari) bu yerda EMAS,
 # balki Cloudflare dashboard > Pages > Settings > Environment variables (Secrets)
 # yoki lokal ishlash uchun .dev.vars faylida saqlanadi.

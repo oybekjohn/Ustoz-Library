@@ -1,6 +1,6 @@
 import { ok, error, rowToBook } from '../../_lib/http.js';
 import { requireAuth } from '../../_lib/auth.js';
-import { validateBook } from './index.js';
+import { validateBook } from '../../_lib/books.js';
 
 // GET /api/books/:id — bitta kitob (ommaviy)
 export async function onRequestGet({ params, env }) {

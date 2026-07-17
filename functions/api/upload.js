@@ -1,20 +1,11 @@
 import { ok, error } from '../_lib/http.js';
 import { requireAuth } from '../_lib/auth.js';
+import { createStorageKey, putObject } from '../_lib/storage.js';
 
 const LIMITS = {
   pdf: { max: 50 * 1024 * 1024, mimes: ['application/pdf'], dir: 'books', ext: 'pdf' },
   cover: { max: 8 * 1024 * 1024, mimes: ['image/png', 'image/jpeg', 'image/webp'], dir: 'covers', ext: null },
 };
-
-function slug(name) {
-  return (name || 'fayl')
-    .normalize('NFKD').replace(/[^\w.\- ]+/g, '')
-    .trim().replace(/\s+/g, '_').toLowerCase().slice(0, 60);
-}
-
-function extFromMime(mime) {
-  return { 'image/png': 'png', 'image/jpeg': 'jpg', 'image/webp': 'webp', 'application/pdf': 'pdf' }[mime] || 'bin';
-}
 
 // POST /api/upload  (multipart: file, type=pdf|cover) — faqat admin
 export async function onRequestPost({ request, env }) {
@@ -41,13 +32,8 @@ export async function onRequestPost({ request, env }) {
     return error(`Fayl turi noto'g'ri: ${file.type}`, 415);
   }
 
-  const ext = rule.ext || extFromMime(file.type);
-  const base = slug(file.name.replace(/\.[^.]+$/, ''));
-  const key = `${rule.dir}/${Date.now()}-${crypto.randomUUID().slice(0, 8)}-${base}.${ext}`;
-
-  await env.BUCKET.put(key, file.stream(), {
-    httpMetadata: { contentType: file.type },
-  });
+  const key = createStorageKey(rule.dir, file.name, file.type);
+  await putObject(env.BUCKET, key, file.stream(), file.type);
 
   return ok({ key, size: file.size, contentType: file.type });
 }
