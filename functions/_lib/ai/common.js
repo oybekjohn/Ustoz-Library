@@ -30,16 +30,26 @@ export const BOOK_METADATA_SCHEMA = {
   },
 };
 
-export function buildMetadataPrompt(categoryName) {
+export function buildMetadataPrompt(categoryName, options = {}) {
+  const pageLine = Number.isInteger(options.pageCount)
+    ? `- PDF sahifalar soni oldindan aniqlandi: ${options.pageCount}. JSON ichidagi pages qiymati aynan ${options.pageCount} bo'lsin.`
+    : "- PDF sahifalar soni oldindan aniqlanmagan bo'lsa, topilmasa null qaytaring.";
+  const sourceLine = options.sourceMode === 'first_pages_text'
+    ? '- Sizga PDFning faqat 1-2 sahifasidan olingan matn beriladi. Kitob nomi, muallif va yilni shu matndan ajrating.'
+    : '- Sizga PDF yoki uning tahlil qilingan sahifalari beriladi. Kitob nomi, muallif va yilni asosan titul/muqova sahifalaridan ajrating.';
+
   return `PDF kitobni tahlil qiling va faqat JSON qaytaring.
 
 Talablar:
+- JSON shakli aynan shunday bo'lsin: {"title":{"uz":"","ru":"","en":""},"author":"","year":null,"pages":null,"language":"uz","description":{"uz":"","ru":"","en":""}}
 - Kitob nomini o'zbek, rus va ingliz tillarida yozing. Asl nomni mazmunini buzmasdan tarjima qiling.
 - Barcha mualliflarni kitobda ko'rsatilgan tartibda bitta satrda yozing.
-- Nashr yilini va PDF sahifalar sonini aniqlang. Topilmasa null qaytaring.
+- Nashr yilini aniqlang. Topilmasa null qaytaring.
+- ${pageLine}
 - Asosiy tilni faqat uz, ru yoki en qiymatlaridan biri bilan belgilang.
-- 3 tildagi tavsif kitob mazmuniga tayansin, har biri 2-4 gap bo'lsin.
+- 3 tildagi tavsif kitob nomi va tanlangan kategoriya mazmuniga tayansin, har biri 2-3 gap bo'lsin.
 - Ma'lumot topilmasa taxmin qilmang; muallif uchun "Noma'lum" yozing.
+- ${sourceLine}
 - Tanlangan kategoriya: ${categoryName}. Kategoriyani o'zgartirmang.`;
 }
 

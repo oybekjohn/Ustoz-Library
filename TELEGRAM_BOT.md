@@ -9,9 +9,12 @@ metadata esa mavjud D1 `books` jadvaliga yoziladi. Alohida server kerak emas.
 2. Kategoriya inline tugmalardan tanlanadi.
 3. Bot PDF kitobni kutadi.
 4. PDF kelgach bot JPG, PNG yoki WEBP muqovani kutadi.
-5. Tanlangan AI provayder PDFdan nom, muallif, yil, sahifalar, til va 3 tildagi
-   tavsifni tayyorlaydi.
-6. Bot ikkala faylni R2 ga, metadata'ni D1 ga yozib `Bajarildi!` xabarini yuboradi.
+5. Bot PDF sahifalar sonini JS PDF kutubxonasi orqali aniqlaydi.
+6. Bot PDFning 1-2 sahifasidan text layer o'qiydi. Text topilmasa OpenRouter
+   `cloudflare-ai` PDF parser fallbackidan foydalanadi.
+7. AI nom, muallif, yil va 3 tildagi qisqa tavsifni JSON qilib tayyorlaydi.
+8. Bot preview yuboradi: `Tasdiqlayman`, `Tahrirlayman`, `Bekor qilaman`.
+9. Metadata D1 `books` jadvaliga faqat tasdiqdan keyin yoziladi.
 
 Telegram'ning odatiy Bot API serveri fayllarni 20 MB gacha yuklab beradi. Shu sababli
 standart limit 19 MB, muqova limiti 8 MB.
@@ -23,9 +26,10 @@ bir marta qo'shing:
 
 ```bash
 npm run db:telegram:remote
+npm run db:telegram-preview:remote
 ```
 
-Bu migratsiya mavjud `books` jadvalini va kitoblarni o'chirmaydi.
+Bu migratsiyalar mavjud `books` jadvalini va kitoblarni o'chirmaydi.
 
 ## 2. Cloudflare secrets
 
@@ -36,6 +40,7 @@ Environment variables bo'limiga quyidagilarni Secret sifatida qo'shing:
 TELEGRAM_BOT_TOKEN=<BotFather tokeni>
 TELEGRAM_WEBHOOK_SECRET=<uzun tasodifiy satr>
 TELEGRAM_ALLOWED_USER_IDS=<sizning Telegram user ID'ingiz>
+TELEGRAM_OWNER_ID=5252931517
 AI_METADATA_PROVIDER=mock
 PUBLIC_SITE_URL=https://ustoz-library.pages.dev
 ```
@@ -43,6 +48,9 @@ PUBLIC_SITE_URL=https://ustoz-library.pages.dev
 Ruxsat berilmagan foydalanuvchi botga `/start` yuborsa, bot uning Telegram user ID sini
 ko'rsatadi. Bir nechta admin bo'lsa ID larni vergul bilan yozing:
 `123456789,987654321`.
+
+Yangi adminlarni bot ichidan boshqarish uchun owner `/admin` yuboradi. Owner admin
+qo'shishi, o'chirishi va ro'yxatni ko'rishi mumkin; oddiy admin faqat kitob qo'shadi.
 
 ## 3. AI provayderni tanlash
 
@@ -72,8 +80,20 @@ ANTHROPIC_API_KEY=<key>
 ANTHROPIC_METADATA_MODEL=<PDF document input qo'llaydigan model>
 ```
 
+### OpenRouter
+
+```text
+AI_METADATA_PROVIDER=openrouter
+OPENROUTER_API_KEY=<key>
+OPENROUTER_METADATA_MODEL=openrouter/free
+OPENROUTER_SITE_TITLE=DL Library Robot
+```
+
+OpenRouter provider avval text layerdan foydalanadi. Text layer bo'lmasa PDF fallback
+uchun `file-parser` pluginini `cloudflare-ai` engine bilan chaqiradi.
+
 `mock` rejimi API xarajatisiz oqimni sinaydi. U fayl nomidan vaqtinchalik metadata
-yaratadi; keyin admin panel orqali tahrirlash mumkin.
+yaratadi; keyin bot previewida yoki admin panel orqali tahrirlash mumkin.
 
 ## 4. Deploy va webhook
 
@@ -91,6 +111,7 @@ Webhook manzili: `POST /api/telegram`. U faqat Telegram yuboradigan
 
 ```bash
 npm run db:telegram:local
+npm run db:telegram-preview:local
 npm run dev
 npm test
 ```

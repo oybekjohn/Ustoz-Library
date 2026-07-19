@@ -36,6 +36,10 @@ CREATE TABLE IF NOT EXISTS telegram_sessions (
   pdf_file_id  TEXT,
   pdf_name     TEXT,
   pdf_size     INTEGER,
+  pending_pdf_key TEXT,
+  pending_cover_key TEXT,
+  pending_metadata TEXT,
+  edit_field   TEXT,
   updated_at   TEXT NOT NULL DEFAULT (datetime('now'))
 );
 
@@ -49,3 +53,12 @@ CREATE TABLE IF NOT EXISTS telegram_updates (
 
 CREATE INDEX IF NOT EXISTS idx_telegram_updates_updated
   ON telegram_updates(updated_at DESC);
+
+CREATE TABLE IF NOT EXISTS telegram_admins (
+  user_id   TEXT PRIMARY KEY,
+  added_by  TEXT NOT NULL,
+  added_at  TEXT NOT NULL DEFAULT (datetime('now'))
+);
+
+CREATE INDEX IF NOT EXISTS idx_telegram_admins_added
+  ON telegram_admins(added_at DESC);

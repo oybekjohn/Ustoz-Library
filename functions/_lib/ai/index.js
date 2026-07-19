@@ -2,12 +2,14 @@ import { analyzeWithAnthropic } from './providers/anthropic.js';
 import { analyzeWithGemini } from './providers/gemini.js';
 import { analyzeWithMock } from './providers/mock.js';
 import { analyzeWithOpenAI } from './providers/openai.js';
+import { analyzeWithOpenRouter } from './providers/openrouter.js';
 
 const PROVIDERS = {
   anthropic: analyzeWithAnthropic,
   gemini: analyzeWithGemini,
   mock: analyzeWithMock,
   openai: analyzeWithOpenAI,
+  openrouter: analyzeWithOpenRouter,
 };
 
 export async function analyzeBookMetadata(input) {

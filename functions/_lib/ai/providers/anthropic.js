@@ -6,7 +6,7 @@ import {
   readJsonResponse,
 } from '../common.js';
 
-export async function analyzeWithAnthropic({ env, pdfBuffer, fileName, categoryName }) {
+export async function analyzeWithAnthropic({ env, pdfBuffer, fileName, categoryName, pageCount }) {
   if (!env.ANTHROPIC_API_KEY) throw new Error("ANTHROPIC_API_KEY sozlanmagan");
   const model = env.ANTHROPIC_METADATA_MODEL;
   if (!model) throw new Error("ANTHROPIC_METADATA_MODEL sozlanmagan");
@@ -34,7 +34,7 @@ export async function analyzeWithAnthropic({ env, pdfBuffer, fileName, categoryN
           },
           {
             type: 'text',
-            text: `${buildMetadataPrompt(categoryName)}\nJSON markdown blokisiz qaytarilsin.`,
+            text: `${buildMetadataPrompt(categoryName, { pageCount })}\nJSON markdown blokisiz qaytarilsin.`,
           },
         ],
       }],

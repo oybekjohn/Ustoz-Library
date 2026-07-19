@@ -10,6 +10,8 @@
     "db:init:remote": "wrangler d1 execute ustoz-library-db --remote --file=./schema.sql",
     "db:telegram:local": "wrangler d1 execute ustoz-library-db --local --file=./migrations/0001_telegram_bot.sql",
     "db:telegram:remote": "wrangler d1 execute ustoz-library-db --remote --file=./migrations/0001_telegram_bot.sql",
+    "db:telegram-preview:local": "wrangler d1 execute ustoz-library-db --local --file=./migrations/0002_telegram_preview_admins.sql",
+    "db:telegram-preview:remote": "wrangler d1 execute ustoz-library-db --remote --file=./migrations/0002_telegram_preview_admins.sql",
     "migrate:local": "node scripts/migrate.mjs --local",
     "migrate:remote": "node scripts/migrate.mjs --remote",
     "telegram:webhook": "node scripts/telegram-webhook.mjs",
@@ -17,5 +19,8 @@
   },
   "devDependencies": {
     "wrangler": "^4.0.0"
+  },
+  "dependencies": {
+    "pdfjs-dist": "^6.1.200"
   }
 }

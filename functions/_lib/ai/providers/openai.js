@@ -16,7 +16,7 @@ function outputText(response) {
   throw new Error("OpenAI matnli natija qaytarmadi");
 }
 
-export async function analyzeWithOpenAI({ env, pdfBuffer, fileName, categoryName }) {
+export async function analyzeWithOpenAI({ env, pdfBuffer, fileName, categoryName, pageCount }) {
   if (!env.OPENAI_API_KEY) throw new Error("OPENAI_API_KEY sozlanmagan");
   const model = env.OPENAI_METADATA_MODEL;
   if (!model) throw new Error("OPENAI_METADATA_MODEL sozlanmagan");
@@ -32,7 +32,7 @@ export async function analyzeWithOpenAI({ env, pdfBuffer, fileName, categoryName
       input: [{
         role: 'user',
         content: [
-          { type: 'input_text', text: buildMetadataPrompt(categoryName) },
+          { type: 'input_text', text: buildMetadataPrompt(categoryName, { pageCount }) },
           {
             type: 'input_file',
             filename: fileName,

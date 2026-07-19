@@ -19,7 +19,19 @@ class FakeDB {
           },
           async run() {
             if (!sql.includes('INSERT INTO telegram_sessions')) throw new Error(`Unexpected run: ${sql}`);
-            const [userId, chatId, state, category, pdfFileId, pdfName, pdfSize] = values;
+            const [
+              userId,
+              chatId,
+              state,
+              category,
+              pdfFileId,
+              pdfName,
+              pdfSize,
+              pendingPdfKey,
+              pendingCoverKey,
+              pendingMetadata,
+              editField,
+            ] = values;
             database.sessions.set(String(userId), {
               user_id: String(userId),
               chat_id: String(chatId),
@@ -28,6 +40,10 @@ class FakeDB {
               pdf_file_id: pdfFileId,
               pdf_name: pdfName,
               pdf_size: pdfSize,
+              pending_pdf_key: pendingPdfKey,
+              pending_cover_key: pendingCoverKey,
+              pending_metadata: pendingMetadata,
+              edit_field: editField,
             });
             return { success: true };
           },

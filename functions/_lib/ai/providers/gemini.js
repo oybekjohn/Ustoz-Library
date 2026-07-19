@@ -7,7 +7,7 @@ import {
   readJsonResponse,
 } from '../common.js';
 
-export async function analyzeWithGemini({ env, pdfBuffer, fileName, categoryName }) {
+export async function analyzeWithGemini({ env, pdfBuffer, fileName, categoryName, pageCount }) {
   if (!env.GEMINI_API_KEY) throw new Error("GEMINI_API_KEY sozlanmagan");
   const model = env.GEMINI_METADATA_MODEL;
   if (!model) throw new Error("GEMINI_METADATA_MODEL sozlanmagan");
@@ -22,7 +22,7 @@ export async function analyzeWithGemini({ env, pdfBuffer, fileName, categoryName
     body: JSON.stringify({
       contents: [{
         parts: [
-          { text: buildMetadataPrompt(categoryName) },
+          { text: buildMetadataPrompt(categoryName, { pageCount }) },
           { inlineData: { mimeType: 'application/pdf', data: arrayBufferToBase64(pdfBuffer) } },
         ],
       }],
