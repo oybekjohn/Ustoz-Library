@@ -35,8 +35,8 @@ export function buildMetadataPrompt(categoryName, options = {}) {
     ? `- PDF sahifalar soni oldindan aniqlandi: ${options.pageCount}. JSON ichidagi pages qiymati aynan ${options.pageCount} bo'lsin.`
     : "- PDF sahifalar soni oldindan aniqlanmagan bo'lsa, topilmasa null qaytaring.";
   const sourceLine = options.sourceMode === 'first_pages_text'
-    ? '- Sizga PDFning faqat 1-2 sahifasidan olingan matn beriladi. Kitob nomi, muallif va yilni shu matndan ajrating.'
-    : '- Sizga PDF yoki uning tahlil qilingan sahifalari beriladi. Kitob nomi, muallif va yilni asosan titul/muqova sahifalaridan ajrating.';
+    ? 'Sizga PDFning faqat 1-2 sahifasidan olingan matn beriladi. Kitob nomi, muallif va yilni shu matndan ajrating.'
+    : 'Sizga PDF yoki uning tahlil qilingan sahifalari beriladi. Kitob nomi, muallif va yilni asosan titul/muqova sahifalaridan ajrating.';
 
   return `PDF kitobni tahlil qiling va faqat JSON qaytaring.
 

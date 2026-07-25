@@ -7,10 +7,37 @@ import {
   readJsonResponse,
 } from '../common.js';
 
-export async function analyzeWithGemini({ env, pdfBuffer, fileName, categoryName, pageCount }) {
+export async function analyzeWithGemini({
+  env,
+  pdfBuffer,
+  firstPagesPdfBuffer,
+  firstPagesText,
+  fileName,
+  categoryName,
+  pageCount,
+}) {
   if (!env.GEMINI_API_KEY) throw new Error("GEMINI_API_KEY sozlanmagan");
   const model = env.GEMINI_METADATA_MODEL;
   if (!model) throw new Error("GEMINI_METADATA_MODEL sozlanmagan");
+
+  const hasTextLayer = Boolean(firstPagesText?.trim());
+  const parts = [{
+    text: [
+      buildMetadataPrompt(categoryName, {
+        pageCount,
+        sourceMode: hasTextLayer ? 'first_pages_text' : 'pdf_file',
+      }),
+      hasTextLayer ? `\nPDF 1-2 sahifa matni:\n${firstPagesText}` : '',
+    ].join('\n'),
+  }];
+  if (!hasTextLayer) {
+    parts.push({
+      inlineData: {
+        mimeType: 'application/pdf',
+        data: arrayBufferToBase64(firstPagesPdfBuffer || pdfBuffer),
+      },
+    });
+  }
 
   const url = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent`;
   const response = await fetch(url, {
@@ -21,10 +48,7 @@ export async function analyzeWithGemini({ env, pdfBuffer, fileName, categoryName
     },
     body: JSON.stringify({
       contents: [{
-        parts: [
-          { text: buildMetadataPrompt(categoryName, { pageCount }) },
-          { inlineData: { mimeType: 'application/pdf', data: arrayBufferToBase64(pdfBuffer) } },
-        ],
+        parts,
       }],
       generationConfig: {
         responseMimeType: 'application/json',

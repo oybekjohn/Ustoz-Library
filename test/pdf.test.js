@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 
-import { inspectPdfFirstPages } from '../functions/_lib/pdf.js';
+import { createFirstPagesPdf, inspectPdfFirstPages } from '../functions/_lib/pdf.js';
 
 test('PDF helper sahifa soni va birinchi sahifalar matnini oladi', async () => {
   const buffer = await readFile('books/kitob1 monografiya.pdf');
@@ -10,4 +10,13 @@ test('PDF helper sahifa soni va birinchi sahifalar matnini oladi', async () => {
 
   assert.equal(result.pageCount, 508);
   assert.match(result.firstPagesText, /RENESSANS TA'LIM UNIVERSITETI|RENESSANS TA’LIM UNIVERSITETI/);
+});
+
+test('Claude fallback uchun faqat dastlabki ikki sahifali PDF yaratiladi', async () => {
+  const buffer = await readFile('books/kitob1 monografiya.pdf');
+  const source = buffer.buffer.slice(buffer.byteOffset, buffer.byteOffset + buffer.byteLength);
+  const firstPages = await createFirstPagesPdf(source, 2);
+  const result = await inspectPdfFirstPages(firstPages, 2);
+
+  assert.equal(result.pageCount, 2);
 });

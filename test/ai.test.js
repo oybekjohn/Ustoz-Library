@@ -80,3 +80,81 @@ test('OpenRouter provider text layer bor bo\'lsa PDFni yubormaydi', async (conte
   assert.equal(book.title.uz, 'Algoritmlar');
   assert.doesNotMatch(JSON.stringify(requestBody.messages), /file_data|application\/pdf/);
 });
+
+test('Anthropic provider text layer bor bo\'lsa PDF document yubormaydi', async (context) => {
+  const originalFetch = globalThis.fetch;
+  let requestBody;
+  globalThis.fetch = async (_url, options) => {
+    requestBody = JSON.parse(options.body);
+    return new Response(JSON.stringify({
+      content: [{
+        type: 'text',
+        text: JSON.stringify({
+          title: { uz: 'Algoritmlar', ru: 'Algoritmlar', en: 'Algorithms' },
+          author: 'A. Muallif',
+          year: 2025,
+          pages: 120,
+          language: 'uz',
+          description: { uz: 'Tavsif.', ru: 'Opisanie.', en: 'Description.' },
+        }),
+      }],
+    }), { status: 200, headers: { 'Content-Type': 'application/json' } });
+  };
+  context.after(() => { globalThis.fetch = originalFetch; });
+
+  const book = await analyzeBookMetadata({
+    env: {
+      AI_METADATA_PROVIDER: 'anthropic',
+      ANTHROPIC_API_KEY: 'test-key',
+    },
+    pdfBuffer: new TextEncoder().encode('full PDF').buffer,
+    firstPagesPdfBuffer: new TextEncoder().encode('two pages').buffer,
+    firstPagesText: 'A. Muallif Algoritmlar 2025',
+    fileName: 'algoritmlar.pdf',
+    categoryName: 'IT',
+    pageCount: 120,
+  });
+
+  assert.equal(book.title.uz, 'Algoritmlar');
+  assert.equal(requestBody.model, 'claude-haiku-4-5');
+  assert.equal(requestBody.messages[0].content.some((item) => item.type === 'document'), false);
+});
+
+test('Anthropic skaner fallbackida faqat ikki sahifalik PDF yuboriladi', async (context) => {
+  const originalFetch = globalThis.fetch;
+  let requestBody;
+  globalThis.fetch = async (_url, options) => {
+    requestBody = JSON.parse(options.body);
+    return new Response(JSON.stringify({
+      content: [{
+        type: 'text',
+        text: JSON.stringify({
+          title: { uz: 'Skaner kitob', ru: 'Skaner kitob', en: 'Scanned book' },
+          author: "Noma'lum",
+          year: null,
+          pages: 10,
+          language: 'uz',
+          description: { uz: 'Tavsif.', ru: 'Opisanie.', en: 'Description.' },
+        }),
+      }],
+    }), { status: 200, headers: { 'Content-Type': 'application/json' } });
+  };
+  context.after(() => { globalThis.fetch = originalFetch; });
+
+  const firstPagesPdfBuffer = new TextEncoder().encode('only first two pages').buffer;
+  await analyzeBookMetadata({
+    env: {
+      AI_METADATA_PROVIDER: 'anthropic',
+      ANTHROPIC_API_KEY: 'test-key',
+    },
+    pdfBuffer: new TextEncoder().encode('full PDF must not be sent').buffer,
+    firstPagesPdfBuffer,
+    firstPagesText: '',
+    fileName: 'scan.pdf',
+    categoryName: 'Boshqa',
+    pageCount: 10,
+  });
+
+  const document = requestBody.messages[0].content.find((item) => item.type === 'document');
+  assert.equal(document.source.data, arrayBufferToBase64(firstPagesPdfBuffer));
+});

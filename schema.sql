@@ -40,6 +40,8 @@ CREATE TABLE IF NOT EXISTS telegram_sessions (
   pending_cover_key TEXT,
   pending_metadata TEXT,
   edit_field   TEXT,
+  active_book_id INTEGER,
+  list_page    INTEGER,
   updated_at   TEXT NOT NULL DEFAULT (datetime('now'))
 );
 

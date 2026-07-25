@@ -1,6 +1,6 @@
 {
   "name": "ustoz-library",
-  "version": "2.0.0",
+  "version": "3.0.0",
   "description": "DL-library.uz — Renessans Ta'lim Universiteti raqamli kutubxonasi (Cloudflare Pages + D1 + R2)",
   "type": "module",
   "scripts": {
@@ -12,6 +12,8 @@
     "db:telegram:remote": "wrangler d1 execute ustoz-library-db --remote --file=./migrations/0001_telegram_bot.sql",
     "db:telegram-preview:local": "wrangler d1 execute ustoz-library-db --local --file=./migrations/0002_telegram_preview_admins.sql",
     "db:telegram-preview:remote": "wrangler d1 execute ustoz-library-db --remote --file=./migrations/0002_telegram_preview_admins.sql",
+    "db:telegram-crud:local": "wrangler d1 execute ustoz-library-db --local --file=./migrations/0003_telegram_book_crud.sql",
+    "db:telegram-crud:remote": "wrangler d1 execute ustoz-library-db --remote --file=./migrations/0003_telegram_book_crud.sql",
     "migrate:local": "node scripts/migrate.mjs --local",
     "migrate:remote": "node scripts/migrate.mjs --remote",
     "telegram:webhook": "node scripts/telegram-webhook.mjs",
@@ -21,6 +23,7 @@
     "wrangler": "^4.0.0"
   },
   "dependencies": {
+    "pdf-lib": "^1.17.1",
     "pdfjs-dist": "^6.1.200"
   }
 }

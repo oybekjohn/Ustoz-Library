@@ -31,6 +31,8 @@ class FakeDB {
               pendingCoverKey,
               pendingMetadata,
               editField,
+              activeBookId,
+              listPage,
             ] = values;
             database.sessions.set(String(userId), {
               user_id: String(userId),
@@ -44,6 +46,8 @@ class FakeDB {
               pending_cover_key: pendingCoverKey,
               pending_metadata: pendingMetadata,
               edit_field: editField,
+              active_book_id: activeBookId,
+              list_page: listPage,
             });
             return { success: true };
           },
@@ -53,7 +57,7 @@ class FakeDB {
   }
 }
 
-test('kategoriya tanlangach PDF, undan keyin muqova kutiladi', async (context) => {
+test('kategoriya tanlangach PDF background tahliliga yuboriladi', async (context) => {
   const originalFetch = globalThis.fetch;
   const calls = [];
   globalThis.fetch = async (url, options) => {
@@ -83,7 +87,7 @@ test('kategoriya tanlangach PDF, undan keyin muqova kutiladi', async (context) =
   assert.equal(DB.sessions.get('42').state, 'awaiting_pdf');
   assert.equal(DB.sessions.get('42').category, 'it');
 
-  await handleTelegramUpdate(env, {
+  const result = await handleTelegramUpdate(env, {
     message: {
       from: { id: 42 },
       chat: { id: 100 },
@@ -97,7 +101,34 @@ test('kategoriya tanlangach PDF, undan keyin muqova kutiladi', async (context) =
   });
 
   const session = DB.sessions.get('42');
-  assert.equal(session.state, 'awaiting_cover');
-  assert.equal(session.pdf_file_id, 'pdf-file');
-  assert.match(calls.at(-1).body.text, /muqovasini/);
+  assert.equal(session.state, 'processing');
+  assert.equal(typeof result.background, 'function');
+});
+
+test('/start uchta asosiy boshqaruv tugmasini ko\'rsatadi', async (context) => {
+  const originalFetch = globalThis.fetch;
+  let requestBody;
+  globalThis.fetch = async (_url, options) => {
+    requestBody = JSON.parse(options.body);
+    return new Response(JSON.stringify({ ok: true, result: {} }), {
+      status: 200,
+      headers: { 'Content-Type': 'application/json' },
+    });
+  };
+  context.after(() => { globalThis.fetch = originalFetch; });
+
+  await handleTelegramUpdate({
+    DB: new FakeDB(),
+    TELEGRAM_ALLOWED_USER_IDS: '42',
+    TELEGRAM_BOT_TOKEN: 'test-token',
+  }, {
+    message: {
+      from: { id: 42 },
+      chat: { id: 100 },
+      text: '/start',
+    },
+  });
+
+  const labels = requestBody.reply_markup.keyboard.flat().map((button) => button.text);
+  assert.deepEqual(labels, ['Kitoblarni boshqarish', 'Adminlar', 'Bot haqida']);
 });

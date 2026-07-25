@@ -1,120 +1,120 @@
-# Telegram orqali kitob yuklash
+# Telegram orqali kutubxonani boshqarish
 
-Bot shu Cloudflare Pages Functions loyihasining ichida ishlaydi. PDF va muqova R2 ga,
-metadata esa mavjud D1 `books` jadvaliga yoziladi. Alohida server kerak emas.
+Bot Cloudflare Pages Functions ichida ishlaydi. PDF va muqovalar R2 ga, kitob
+metadata ma'lumotlari va bot session holatlari D1 ga yoziladi.
 
-## Bot oqimi
+## Asosiy menyu
 
-1. `Kitob yuklash` tugmasi bosiladi.
+- `Kitoblarni boshqarish`: create, list, search, read, update va delete.
+- `Adminlar`: faqat owner admin qo'shadi, ro'yxatni ko'radi va o'chiradi.
+- `Bot haqida`: versiya, sayt, faol AI provider/model va fayl limitlarini ko'rsatadi.
+
+## Yangi kitob qo'shish
+
+1. `Kitoblarni boshqarish` -> `Kitob yuklash` bosiladi.
 2. Kategoriya inline tugmalardan tanlanadi.
-3. Bot PDF kitobni kutadi.
-4. PDF kelgach bot JPG, PNG yoki WEBP muqovani kutadi.
-5. Bot PDF sahifalar sonini JS PDF kutubxonasi orqali aniqlaydi.
-6. Bot PDFning 1-2 sahifasidan text layer o'qiydi. Text topilmasa OpenRouter
-   `cloudflare-ai` PDF parser fallbackidan foydalanadi.
-7. AI nom, muallif, yil va 3 tildagi qisqa tavsifni JSON qilib tayyorlaydi.
-8. Bot preview yuboradi: `Tasdiqlayman`, `Tahrirlayman`, `Bekor qilaman`.
-9. Metadata D1 `books` jadvaliga faqat tasdiqdan keyin yoziladi.
+3. PDF yuboriladi.
+4. Sahifalar soni `pdfjs-dist` orqali, AI ishlatmasdan aniqlanadi.
+5. PDFning 1-2-sahifasidan text layer o'qiladi.
+6. Text topilsa AI'ga faqat shu text yuboriladi.
+7. Text topilmasa `pdf-lib` faqat dastlabki ikki sahifalik PDF yaratadi va vision
+   tahlil uchun AI'ga shu kichik PDF yuboriladi.
+8. AI uch tildagi nom va tavsif, mualliflar hamda yilni JSON ko'rinishida qaytaradi.
+9. Bot metadata va tayyor 1:1, 1024x1024 muqova promptini yuboradi.
+10. Admin promptni istalgan image AI'da ishlatib, muqovani botga yuboradi.
+11. Bot muqova va metadata previewini ko'rsatadi.
+12. `Tasdiqlayman`, `Tahrirlayman`, `Muqova prompti` yoki `Bekor qilaman`
+    orqali jarayon yakunlanadi.
 
-Telegram'ning odatiy Bot API serveri fayllarni 20 MB gacha yuklab beradi. Shu sababli
-standart limit 19 MB, muqova limiti 8 MB.
+Metadata D1 `books` jadvaliga faqat admin tasdiqlagandan keyin yoziladi.
 
-## 1. Bot va D1 ni tayyorlash
+## Kitob CRUD
 
-BotFather orqali bot yarating va tokenni oling. Production D1 bazasiga yangi jadvallarni
-bir marta qo'shing:
+`Kitoblarni boshqarish` bo'limida:
+
+- kitoblar sahifalangan ro'yxatda ko'rsatiladi;
+- ID, nom yoki muallif bo'yicha qidiriladi;
+- barcha nomlar, muallif, yil, sahifalar soni, kategoriya va tavsiflar tahrirlanadi;
+- PDF va muqova alohida almashtiriladi;
+- delete alohida tasdiqdan keyin bajariladi va D1 yozuvi bilan birga R2 fayllari
+  ham o'chiriladi.
+
+## Fayl limitlari
+
+Telegram Bot API orqali yuklab olinadigan PDF uchun standart limit 19 MB.
+Muqova JPG, PNG yoki WEBP bo'lishi va 8 MB dan oshmasligi kerak.
+
+## D1 migratsiyalari
+
+Yangi production baza uchun:
 
 ```bash
 npm run db:telegram:remote
 npm run db:telegram-preview:remote
+npm run db:telegram-crud:remote
 ```
 
-Bu migratsiyalar mavjud `books` jadvalini va kitoblarni o'chirmaydi.
+Mavjud production bazada dastlabki ikki migratsiya bajarilgan bo'lsa, faqat:
 
-## 2. Cloudflare secrets
+```bash
+npm run db:telegram-crud:remote
+```
+
+Migratsiyalar mavjud kitoblarni o'chirmaydi.
+
+## Cloudflare secrets
 
 Cloudflare Dashboard -> Workers & Pages -> `ustoz-library` -> Settings ->
-Environment variables bo'limiga quyidagilarni Secret sifatida qo'shing:
+Environment variables bo'limida:
 
 ```text
 TELEGRAM_BOT_TOKEN=<BotFather tokeni>
 TELEGRAM_WEBHOOK_SECRET=<uzun tasodifiy satr>
-TELEGRAM_ALLOWED_USER_IDS=<sizning Telegram user ID'ingiz>
+TELEGRAM_ALLOWED_USER_IDS=<vergul bilan ajratilgan Telegram ID lar>
 TELEGRAM_OWNER_ID=5252931517
-AI_METADATA_PROVIDER=mock
-PUBLIC_SITE_URL=https://ustoz-library.pages.dev
-```
-
-Ruxsat berilmagan foydalanuvchi botga `/start` yuborsa, bot uning Telegram user ID sini
-ko'rsatadi. Bir nechta admin bo'lsa ID larni vergul bilan yozing:
-`123456789,987654321`.
-
-Yangi adminlarni bot ichidan boshqarish uchun owner `/admin` yuboradi. Owner admin
-qo'shishi, o'chirishi va ro'yxatni ko'rishi mumkin; oddiy admin faqat kitob qo'shadi.
-
-## 3. AI provayderni tanlash
-
-Bot kodi o'zgarmaydi; `AI_METADATA_PROVIDER` qiymatini almashtirish kifoya.
-
-### OpenAI
-
-```text
-AI_METADATA_PROVIDER=openai
-OPENAI_API_KEY=<key>
-OPENAI_METADATA_MODEL=<PDF input va structured output qo'llaydigan model>
-```
-
-### Google Gemini
-
-```text
-AI_METADATA_PROVIDER=gemini
-GEMINI_API_KEY=<key>
-GEMINI_METADATA_MODEL=<PDF input va JSON output qo'llaydigan model>
-```
-
-### Anthropic Claude
-
-```text
 AI_METADATA_PROVIDER=anthropic
-ANTHROPIC_API_KEY=<key>
-ANTHROPIC_METADATA_MODEL=<PDF document input qo'llaydigan model>
+ANTHROPIC_API_KEY=<secret>
+ANTHROPIC_METADATA_MODEL=claude-haiku-4-5
+PUBLIC_SITE_URL=https://dl-library.uz
 ```
 
-### OpenRouter
+`ANTHROPIC_API_KEY` oddiy variable emas, Cloudflare encrypted secret sifatida
+saqlanishi kerak. Kalit kodga yoki Git repositoryga yozilmaydi.
+
+## Boshqa AI providerlar
+
+Provider adapterlari saqlangan. `AI_METADATA_PROVIDER` qiymatini va tegishli secret/model
+qiymatlarini almashtirish kifoya:
 
 ```text
 AI_METADATA_PROVIDER=openrouter
-OPENROUTER_API_KEY=<key>
-OPENROUTER_METADATA_MODEL=openrouter/free
-OPENROUTER_SITE_TITLE=DL Library Robot
+OPENROUTER_API_KEY=<secret>
+OPENROUTER_METADATA_MODEL=<model>
 ```
 
-OpenRouter provider avval text layerdan foydalanadi. Text layer bo'lmasa PDF fallback
-uchun `file-parser` pluginini `cloudflare-ai` engine bilan chaqiradi.
-
-`mock` rejimi API xarajatisiz oqimni sinaydi. U fayl nomidan vaqtinchalik metadata
-yaratadi; keyin bot previewida yoki admin panel orqali tahrirlash mumkin.
-
-## 4. Deploy va webhook
-
-GitHub'ga push qiling va Cloudflare deploy tugashini kuting. So'ng lokal terminalda
-token va webhook secretni environment variable qilib webhookni bir marta o'rnating:
-
-```bash
-npm run telegram:webhook -- https://ustoz-library.pages.dev
+```text
+AI_METADATA_PROVIDER=openai
+OPENAI_API_KEY=<secret>
+OPENAI_METADATA_MODEL=<model>
 ```
 
-Webhook manzili: `POST /api/telegram`. U faqat Telegram yuboradigan
-`X-Telegram-Bot-Api-Secret-Token` headerini qabul qiladi.
+```text
+AI_METADATA_PROVIDER=gemini
+GEMINI_API_KEY=<secret>
+GEMINI_METADATA_MODEL=<model>
+```
+
+Har bir provider text layer mavjud bo'lsa PDF faylini yubormaydi.
 
 ## Lokal tekshirish
 
 ```bash
 npm run db:telegram:local
 npm run db:telegram-preview:local
-npm run dev
+npm run db:telegram-crud:local
 npm test
+npm run dev
 ```
 
-Telegram public HTTPS webhook talab qiladi. Shu sabab lokal botni real Telegram bilan
-sinash uchun tunnel kerak; oddiy sayt va API testlari esa localhostda ishlaydi.
+Real Telegram webhook public HTTPS manzil talab qiladi. Production webhook:
+`POST /api/telegram`.

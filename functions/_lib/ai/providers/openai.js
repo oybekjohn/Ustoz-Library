@@ -16,10 +16,37 @@ function outputText(response) {
   throw new Error("OpenAI matnli natija qaytarmadi");
 }
 
-export async function analyzeWithOpenAI({ env, pdfBuffer, fileName, categoryName, pageCount }) {
+export async function analyzeWithOpenAI({
+  env,
+  pdfBuffer,
+  firstPagesPdfBuffer,
+  firstPagesText,
+  fileName,
+  categoryName,
+  pageCount,
+}) {
   if (!env.OPENAI_API_KEY) throw new Error("OPENAI_API_KEY sozlanmagan");
   const model = env.OPENAI_METADATA_MODEL;
   if (!model) throw new Error("OPENAI_METADATA_MODEL sozlanmagan");
+
+  const hasTextLayer = Boolean(firstPagesText?.trim());
+  const content = [{
+    type: 'input_text',
+    text: [
+      buildMetadataPrompt(categoryName, {
+        pageCount,
+        sourceMode: hasTextLayer ? 'first_pages_text' : 'pdf_file',
+      }),
+      hasTextLayer ? `\nPDF 1-2 sahifa matni:\n${firstPagesText}` : '',
+    ].join('\n'),
+  }];
+  if (!hasTextLayer) {
+    content.push({
+      type: 'input_file',
+      filename: fileName,
+      file_data: `data:application/pdf;base64,${arrayBufferToBase64(firstPagesPdfBuffer || pdfBuffer)}`,
+    });
+  }
 
   const response = await fetch('https://api.openai.com/v1/responses', {
     method: 'POST',
@@ -31,14 +58,7 @@ export async function analyzeWithOpenAI({ env, pdfBuffer, fileName, categoryName
       model,
       input: [{
         role: 'user',
-        content: [
-          { type: 'input_text', text: buildMetadataPrompt(categoryName, { pageCount }) },
-          {
-            type: 'input_file',
-            filename: fileName,
-            file_data: `data:application/pdf;base64,${arrayBufferToBase64(pdfBuffer)}`,
-          },
-        ],
+        content,
       }],
       text: {
         format: {

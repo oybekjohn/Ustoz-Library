@@ -6,10 +6,45 @@ import {
   readJsonResponse,
 } from '../common.js';
 
-export async function analyzeWithAnthropic({ env, pdfBuffer, fileName, categoryName, pageCount }) {
+export async function analyzeWithAnthropic({
+  env,
+  pdfBuffer,
+  firstPagesPdfBuffer,
+  firstPagesText,
+  fileName,
+  categoryName,
+  pageCount,
+}) {
   if (!env.ANTHROPIC_API_KEY) throw new Error("ANTHROPIC_API_KEY sozlanmagan");
-  const model = env.ANTHROPIC_METADATA_MODEL;
-  if (!model) throw new Error("ANTHROPIC_METADATA_MODEL sozlanmagan");
+  const model = env.ANTHROPIC_METADATA_MODEL || 'claude-haiku-4-5';
+  const hasTextLayer = Boolean(firstPagesText?.trim());
+  const content = [];
+
+  if (!hasTextLayer) {
+    const sourcePdf = firstPagesPdfBuffer || pdfBuffer;
+    content.push({
+      type: 'document',
+      source: {
+        type: 'base64',
+        media_type: 'application/pdf',
+        data: arrayBufferToBase64(sourcePdf),
+      },
+    });
+  }
+
+  content.push({
+    type: 'text',
+    text: [
+      buildMetadataPrompt(categoryName, {
+        pageCount,
+        sourceMode: hasTextLayer ? 'first_pages_text' : 'pdf_file',
+      }),
+      hasTextLayer
+        ? `\nPDF 1-2 sahifa matni:\n${firstPagesText}`
+        : '\nPDF matn layeri topilmadi. Yuborilgan 1-2 sahifani vizual tahlil qiling.',
+      '\nJSON markdown blokisiz qaytarilsin.',
+    ].join('\n'),
+  });
 
   const response = await fetch('https://api.anthropic.com/v1/messages', {
     method: 'POST',
@@ -20,23 +55,11 @@ export async function analyzeWithAnthropic({ env, pdfBuffer, fileName, categoryN
     },
     body: JSON.stringify({
       model,
-      max_tokens: 2500,
+      max_tokens: 1400,
+      temperature: 0.2,
       messages: [{
         role: 'user',
-        content: [
-          {
-            type: 'document',
-            source: {
-              type: 'base64',
-              media_type: 'application/pdf',
-              data: arrayBufferToBase64(pdfBuffer),
-            },
-          },
-          {
-            type: 'text',
-            text: `${buildMetadataPrompt(categoryName, { pageCount })}\nJSON markdown blokisiz qaytarilsin.`,
-          },
-        ],
+        content,
       }],
     }),
   });

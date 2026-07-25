@@ -15,6 +15,7 @@ function outputText(payload) {
 export async function analyzeWithOpenRouter({
   env,
   pdfBuffer,
+  firstPagesPdfBuffer,
   fileName,
   categoryName,
   pageCount,
@@ -42,7 +43,7 @@ export async function analyzeWithOpenRouter({
       type: 'file',
       file: {
         filename: fileName,
-        file_data: `data:application/pdf;base64,${arrayBufferToBase64(pdfBuffer)}`,
+        file_data: `data:application/pdf;base64,${arrayBufferToBase64(firstPagesPdfBuffer || pdfBuffer)}`,
       },
     });
   }

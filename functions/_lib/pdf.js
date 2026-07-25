@@ -68,3 +68,24 @@ export async function inspectPdfFirstPages(pdfBuffer, maxPages = 2) {
     firstPagesText: chunks.join('\n\n').slice(0, MAX_EXTRACTED_TEXT_CHARS),
   };
 }
+
+export async function createFirstPagesPdf(pdfBuffer, maxPages = 2) {
+  const { PDFDocument } = await import('pdf-lib');
+  const source = await PDFDocument.load(pdfBuffer, {
+    ignoreEncryption: true,
+    updateMetadata: false,
+  });
+  const pageIndexes = Array.from(
+    { length: Math.min(Math.max(1, maxPages), source.getPageCount()) },
+    (_, index) => index,
+  );
+  const target = await PDFDocument.create();
+  const pages = await target.copyPages(source, pageIndexes);
+  for (const page of pages) target.addPage(page);
+  const bytes = await target.save({
+    addDefaultPage: false,
+    useObjectStreams: false,
+    updateFieldAppearances: false,
+  });
+  return bytes.buffer.slice(bytes.byteOffset, bytes.byteOffset + bytes.byteLength);
+}
