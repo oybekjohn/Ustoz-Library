@@ -24,6 +24,6 @@
   },
   "dependencies": {
     "pdf-lib": "^1.17.1",
-    "pdfjs-dist": "^6.1.200"
+    "unpdf": "^1.8.0"
   }
 }

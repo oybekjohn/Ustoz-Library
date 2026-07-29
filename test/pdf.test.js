@@ -15,6 +15,11 @@ test('PDF helper sahifa soni va birinchi sahifalar matnini oladi', async () => {
 test('Claude fallback uchun faqat dastlabki ikki sahifali PDF yaratiladi', async () => {
   const buffer = await readFile('books/kitob1 monografiya.pdf');
   const source = buffer.buffer.slice(buffer.byteOffset, buffer.byteOffset + buffer.byteLength);
+  const originalByteLength = source.byteLength;
+
+  await inspectPdfFirstPages(source, 2);
+  assert.equal(source.byteLength, originalByteLength);
+
   const firstPages = await createFirstPagesPdf(source, 2);
   const result = await inspectPdfFirstPages(firstPages, 2);
 
