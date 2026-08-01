@@ -42,12 +42,20 @@ export function buildMetadataPrompt(categoryName, options = {}) {
 
 Talablar:
 - JSON shakli aynan shunday bo'lsin: {"title":{"uz":"","ru":"","en":""},"author":"","year":null,"pages":null,"language":"uz","description":{"uz":"","ru":"","en":""}}
-- Kitob nomini o'zbek, rus va ingliz tillarida yozing. Asl nomni mazmunini buzmasdan tarjima qiling.
+- title.uz kitob nomining grammatik va imlo jihatdan to'g'ri o'zbekcha tarjimasi bo'lsin. Faqat o'zbek lotin yozuvidan foydalaning, kirill harflarini ishlatmang.
+- title.ru kitob nomining grammatik va imlo jihatdan to'g'ri ruscha tarjimasi bo'lsin. Rus kirill yozuvidan foydalaning.
+- title.en kitob nomining tabiiy, grammatik va imlo jihatdan to'g'ri inglizcha tarjimasi bo'lsin.
+- Uch tildagi nomlarda asl ma'noni saqlang, so'zma-so'z noto'g'ri tarjima qilmang. Ismlar, familiyalar va maxsus nomlarni asossiz tarjima qilmang.
 - Barcha mualliflarni kitobda ko'rsatilgan tartibda bitta satrda yozing.
 - Nashr yilini aniqlang. Topilmasa null qaytaring.
 - ${pageLine}
 - Asosiy tilni faqat uz, ru yoki en qiymatlaridan biri bilan belgilang.
-- 3 tildagi tavsif kitob nomi va tanlangan kategoriya mazmuniga tayansin, har biri 2-3 gap bo'lsin.
+- description.uz grammatik va imlo jihatdan to'g'ri o'zbek lotin yozuvida bo'lsin.
+- description.ru grammatik va imlo jihatdan to'g'ri rus tilida, kirill yozuvida bo'lsin.
+- description.en grammatik va imlo jihatdan to'g'ri, tabiiy ingliz tilida bo'lsin.
+- Har bir tavsif alohida bitta tugallangan gapdan va 20-25 ta so'zdan iborat bo'lsin. 22 ta so'zni maqsad qiling, ro'yxat yoki sarlavha yozmang.
+- Tavsiflar kitob nomi va tanlangan kategoriya mazmuniga tayansin. Manbada yo'q aniq faktlar, natijalar yoki va'dalarni to'qib chiqarmang.
+- JSONni qaytarishdan oldin uch tildagi nom va tavsiflarni ichki ravishda qayta o'qib, grammatika, imlo va til yozuvini tekshiring.
 - Ma'lumot topilmasa taxmin qilmang; muallif uchun "Noma'lum" yozing.
 - ${sourceLine}
 - Tanlangan kategoriya: ${categoryName}. Kategoriyani o'zgartirmang.`;

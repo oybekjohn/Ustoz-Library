@@ -242,6 +242,15 @@ async function sendMessage(env, chatId, text, replyMarkup) {
   });
 }
 
+async function sendHtmlMessage(env, chatId, html, replyMarkup) {
+  return telegramApi(env, 'sendMessage', {
+    chat_id: chatId,
+    text: String(html || '').slice(0, 4096),
+    parse_mode: 'HTML',
+    ...(replyMarkup ? { reply_markup: replyMarkup } : {}),
+  });
+}
+
 async function sendPhoto(env, chatId, photo, caption) {
   return telegramApi(env, 'sendPhoto', {
     chat_id: chatId,
@@ -374,21 +383,33 @@ function shortText(value, maxLength = 700) {
   return text.length > maxLength ? `${text.slice(0, maxLength - 3)}...` : text;
 }
 
-function formatPreview(metadata, selectedCategory = metadata.category) {
+function escapeHtml(value) {
+  return String(value ?? '')
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;');
+}
+
+function previewValue(value, fallback = '-') {
+  return escapeHtml(shortText(value) || fallback);
+}
+
+export function formatPreview(metadata, selectedCategory = metadata.category) {
   return [
-    "Kitob ma'lumotlarini tekshiring:",
+    '<b>Kitob nomi</b>',
+    `uz - ${previewValue(metadata.title?.uz)}`,
+    `ru - ${previewValue(metadata.title?.ru)}`,
+    `en - ${previewValue(metadata.title?.en)}`,
     '',
-    `Nomi (uz): ${metadata.title?.uz || '-'}`,
-    `Nomi (ru): ${metadata.title?.ru || '-'}`,
-    `Nomi (en): ${metadata.title?.en || '-'}`,
-    `Muallif: ${metadata.author || '-'}`,
-    `Yil: ${metadata.year || '-'}`,
-    `Sahifalar: ${metadata.pages || '-'}`,
-    `Kategoriya: ${categoryLabel(selectedCategory)}`,
+    `<b>Muallif(lar):</b> - ${previewValue(metadata.author)}`,
+    `<b>Yil:</b> - ${previewValue(metadata.year)}`,
+    `<b>Sahifalar:</b> - ${previewValue(metadata.pages)}`,
+    `<b>Kategoriya:</b> - ${previewValue(categoryLabel(selectedCategory))}`,
     '',
-    `Tavsif (uz): ${shortText(metadata.description?.uz) || '-'}`,
-    `Tavsif (ru): ${shortText(metadata.description?.ru) || '-'}`,
-    `Tavsif (en): ${shortText(metadata.description?.en) || '-'}`,
+    `<b>Tavsiflar (20-25 ta so'z):</b>`,
+    `uz - ${previewValue(metadata.description?.uz)}`,
+    `ru - ${previewValue(metadata.description?.ru)}`,
+    `en - ${previewValue(metadata.description?.en)}`,
   ].join('\n').slice(0, 3900);
 }
 
@@ -441,8 +462,12 @@ function applyEdit(metadata, field, value) {
 }
 
 async function sendCoverPrompt(env, chatId, metadata) {
+  await sendHtmlMessage(env, chatId, formatCoverPromptMessage(metadata));
+}
+
+export function formatCoverPromptMessage(metadata) {
   const prompt = buildCoverPrompt(metadata, categoryLabel(metadata.category));
-  await sendMessage(env, chatId, `Muqova yaratish uchun tayyor prompt:\n\n${prompt}`);
+  return `<b>Muqova uchun prompt:</b>\n<pre>${escapeHtml(prompt)}</pre>`;
 }
 
 async function sendPreview(env, chatId, session) {
@@ -450,7 +475,7 @@ async function sendPreview(env, chatId, session) {
   if (metadata.cover_telegram_file_id) {
     await sendPhoto(env, chatId, metadata.cover_telegram_file_id, 'Muqova preview');
   }
-  await sendMessage(env, chatId, formatPreview(metadata, session.category), previewKeyboard());
+  await sendHtmlMessage(env, chatId, formatPreview(metadata, session.category), previewKeyboard());
 }
 
 async function sendBookManagementMenu(env, chatId) {
@@ -596,7 +621,7 @@ async function processCreatePdf({
     ].filter((key) => key && key !== uploadedPdfKey));
     committed = true;
 
-    await sendMessage(env, chatId, formatPreview(pendingMetadata, category.key));
+    await sendHtmlMessage(env, chatId, formatPreview(pendingMetadata, category.key));
     await sendCoverPrompt(env, chatId, pendingMetadata);
     await sendMessage(env, chatId, 'Prompt orqali muqovani tayyorlab, JPG, PNG yoki WEBP rasmni yuboring.');
   } catch (error) {

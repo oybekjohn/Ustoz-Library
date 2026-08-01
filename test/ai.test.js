@@ -2,7 +2,12 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 
 import { analyzeBookMetadata, supportedMetadataProviders } from '../functions/_lib/ai/index.js';
-import { arrayBufferToBase64, normalizeMetadata, parseJsonText } from '../functions/_lib/ai/common.js';
+import {
+  arrayBufferToBase64,
+  buildMetadataPrompt,
+  normalizeMetadata,
+  parseJsonText,
+} from '../functions/_lib/ai/common.js';
 
 test('AI providerlar ro\'yxati almashtiriladigan adapterlarni o\'z ichiga oladi', () => {
   assert.deepEqual([...supportedMetadataProviders].sort(), ['anthropic', 'gemini', 'mock', 'openai', 'openrouter']);
@@ -39,6 +44,19 @@ test('metadata bo\'sh tarjimalarni mavjud nom bilan to\'ldiradi', () => {
 test('JSON markdown bloki va base64 yordamchilari ishlaydi', () => {
   assert.deepEqual(parseJsonText('```json\n{"ok":true}\n```'), { ok: true });
   assert.equal(arrayBufferToBase64(new TextEncoder().encode('kitob').buffer), 'a2l0b2I=');
+});
+
+test('AI prompt uch til grammatikasi va 20-25 so\'zli tavsifni talab qiladi', () => {
+  const prompt = buildMetadataPrompt('IT', {
+    pageCount: 120,
+    sourceMode: 'first_pages_text',
+  });
+
+  assert.match(prompt, /o'zbek lotin yozuvida/);
+  assert.match(prompt, /rus tilida, kirill yozuvida/);
+  assert.match(prompt, /tabiiy ingliz tilida/);
+  assert.match(prompt, /20-25 ta so'zdan/);
+  assert.match(prompt, /22 ta so'zni maqsad qiling/);
 });
 
 test('OpenRouter provider text layer bor bo\'lsa PDFni yubormaydi', async (context) => {

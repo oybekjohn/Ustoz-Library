@@ -1,7 +1,11 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 
-import { handleTelegramUpdate } from '../functions/_lib/telegram.js';
+import {
+  formatCoverPromptMessage,
+  formatPreview,
+  handleTelegramUpdate,
+} from '../functions/_lib/telegram.js';
 
 class FakeDB {
   constructor() {
@@ -131,4 +135,42 @@ test('/start uchta asosiy boshqaruv tugmasini ko\'rsatadi', async (context) => {
 
   const labels = requestBody.reply_markup.keyboard.flat().map((button) => button.text);
   assert.deepEqual(labels, ['Kitoblarni boshqarish', 'Adminlar', 'Bot haqida']);
+});
+
+test('kitob preview talab qilingan uch tilli HTML formatda chiqadi', () => {
+  const preview = formatPreview({
+    title: {
+      uz: 'Algoritmlar & ma’lumotlar',
+      ru: 'Алгоритмы и данные',
+      en: 'Algorithms and Data',
+    },
+    author: 'A. Muallif',
+    year: 2026,
+    pages: 240,
+    category: 'it',
+    description: {
+      uz: 'O‘zbekcha tavsif.',
+      ru: 'Описание на русском языке.',
+      en: 'An English description.',
+    },
+  });
+
+  assert.match(preview, /^<b>Kitob nomi<\/b>/);
+  assert.match(preview, /uz - Algoritmlar &amp; ma’lumotlar/);
+  assert.match(preview, /<b>Muallif\(lar\):<\/b> - A\. Muallif/);
+  assert.match(preview, /<b>Tavsiflar \(20-25 ta so'z\):<\/b>/);
+  assert.match(preview, /ru - Описание на русском языке\./);
+});
+
+test('muqova prompti Telegram nusxalash kodi blokida chiqadi', () => {
+  const message = formatCoverPromptMessage({
+    title: { uz: 'AI & ta’lim' },
+    author: 'A. Muallif',
+    year: 2026,
+    category: 'ai',
+  });
+
+  assert.match(message, /^<b>Muqova uchun prompt:<\/b>\n<pre>/);
+  assert.match(message, /AI &amp; ta’lim/);
+  assert.match(message, /<\/pre>$/);
 });
