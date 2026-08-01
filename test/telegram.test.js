@@ -10,6 +10,7 @@ import {
 class FakeDB {
   constructor() {
     this.sessions = new Map();
+    this.admins = new Map([['42', { user_id: '42', role: 'library' }]]);
   }
 
   prepare(sql) {
@@ -18,10 +19,38 @@ class FakeDB {
       bind(...values) {
         return {
           async first() {
-            if (!sql.includes('SELECT * FROM telegram_sessions')) throw new Error(`Unexpected first: ${sql}`);
-            return database.sessions.get(String(values[0])) || null;
+            if (sql.includes('SELECT * FROM telegram_sessions')) {
+              return database.sessions.get(String(values[0])) || null;
+            }
+            if (sql.includes('SELECT * FROM telegram_admins')) {
+              return database.admins.get(String(values[0])) || null;
+            }
+            throw new Error(`Unexpected first: ${sql}`);
           },
           async run() {
+            if (sql.includes('UPDATE telegram_admins SET username')) {
+              const admin = database.admins.get(String(values[2]));
+              if (admin) {
+                admin.username = values[0];
+                admin.first_name = values[1];
+              }
+              return { success: true, meta: { changes: admin ? 1 : 0 } };
+            }
+            if (sql.includes('UPDATE telegram_group_moderators SET enabled = 0')) {
+              return { success: true, meta: { changes: 0 } };
+            }
+            if (sql.includes('INSERT INTO telegram_admins')) {
+              const [targetId, addedBy, role, username, firstName, groupChatId] = values;
+              database.admins.set(String(targetId), {
+                user_id: String(targetId),
+                added_by: String(addedBy),
+                role,
+                username,
+                first_name: firstName,
+                group_chat_id: groupChatId,
+              });
+              return { success: true, meta: { changes: 1 } };
+            }
             if (!sql.includes('INSERT INTO telegram_sessions')) throw new Error(`Unexpected run: ${sql}`);
             const [
               userId,
@@ -124,6 +153,7 @@ test('/start asosiy boshqaruv tugmalarini ko\'rsatadi', async (context) => {
   await handleTelegramUpdate({
     DB: new FakeDB(),
     TELEGRAM_ALLOWED_USER_IDS: '42',
+    TELEGRAM_OWNER_ID: '42',
     TELEGRAM_BOT_TOKEN: 'test-token',
   }, {
     message: {
@@ -135,6 +165,124 @@ test('/start asosiy boshqaruv tugmalarini ko\'rsatadi', async (context) => {
 
   const labels = requestBody.reply_markup.keyboard.flat().map((button) => button.text);
   assert.deepEqual(labels, ['Kitoblarni boshqarish', 'Guruh boshqaruvi', 'Adminlar', 'Bot haqida']);
+});
+
+test('DL Library admini faqat kitob yuklash menyusini ko‘radi', async (context) => {
+  const originalFetch = globalThis.fetch;
+  let requestBody;
+  globalThis.fetch = async (_url, options) => {
+    requestBody = JSON.parse(options.body);
+    return new Response(JSON.stringify({ ok: true, result: {} }), {
+      status: 200,
+      headers: { 'Content-Type': 'application/json' },
+    });
+  };
+  context.after(() => { globalThis.fetch = originalFetch; });
+
+  await handleTelegramUpdate({
+    DB: new FakeDB(),
+    TELEGRAM_ALLOWED_USER_IDS: '42',
+    TELEGRAM_OWNER_ID: '5252931517',
+    TELEGRAM_BOT_TOKEN: 'test-token',
+  }, {
+    message: {
+      from: { id: 42, first_name: 'Admin' },
+      chat: { id: 100 },
+      text: '/start',
+    },
+  });
+
+  const labels = requestBody.reply_markup.keyboard.flat().map((button) => button.text);
+  assert.deepEqual(labels, ['Kitob yuklash', 'Bot haqida']);
+});
+
+test('DL Library admini eski callback orqali kitoblar ro‘yxatini ko‘ra olmaydi', async (context) => {
+  const originalFetch = globalThis.fetch;
+  const calls = [];
+  globalThis.fetch = async (_url, options) => {
+    calls.push(JSON.parse(options.body));
+    return new Response(JSON.stringify({ ok: true, result: {} }), {
+      status: 200,
+      headers: { 'Content-Type': 'application/json' },
+    });
+  };
+  context.after(() => { globalThis.fetch = originalFetch; });
+
+  await handleTelegramUpdate({
+    DB: new FakeDB(),
+    TELEGRAM_ALLOWED_USER_IDS: '42',
+    TELEGRAM_OWNER_ID: '5252931517',
+    TELEGRAM_BOT_TOKEN: 'test-token',
+  }, {
+    callback_query: {
+      id: 'callback-books-list',
+      data: 'books:list:0',
+      from: { id: 42, first_name: 'Admin' },
+      message: { chat: { id: 100 } },
+    },
+  });
+
+  assert.match(calls.at(-1).text, /faqat owner uchun/);
+});
+
+test('owner yangi admin uchun DL Library rolini tanlaydi va profil saqlanadi', async (context) => {
+  const originalFetch = globalThis.fetch;
+  const calls = [];
+  globalThis.fetch = async (url, options) => {
+    const body = JSON.parse(options.body);
+    calls.push({ url, body });
+    const result = String(url).endsWith('/getChat')
+      ? { id: 7777, username: 'ali_admin', first_name: 'Ali' }
+      : {};
+    return new Response(JSON.stringify({ ok: true, result }), {
+      status: 200,
+      headers: { 'Content-Type': 'application/json' },
+    });
+  };
+  context.after(() => { globalThis.fetch = originalFetch; });
+
+  const DB = new FakeDB();
+  const env = {
+    DB,
+    TELEGRAM_OWNER_ID: '42',
+    TELEGRAM_BOT_TOKEN: 'test-token',
+  };
+
+  await handleTelegramUpdate(env, {
+    callback_query: {
+      id: 'admin-add',
+      data: 'admin:add',
+      from: { id: 42, first_name: 'Owner' },
+      message: { chat: { id: 100 } },
+    },
+  });
+  await handleTelegramUpdate(env, {
+    message: {
+      from: { id: 42, first_name: 'Owner' },
+      chat: { id: 100 },
+      text: '7777',
+    },
+  });
+  assert.equal(DB.sessions.get('42').state, 'awaiting_admin_role');
+  assert.match(calls.at(-1).body.text, /@ali_admin/);
+
+  await handleTelegramUpdate(env, {
+    callback_query: {
+      id: 'admin-role',
+      data: 'admin:role:library',
+      from: { id: 42, first_name: 'Owner' },
+      message: { chat: { id: 100 } },
+    },
+  });
+
+  assert.deepEqual(DB.admins.get('7777'), {
+    user_id: '7777',
+    added_by: '42',
+    role: 'library',
+    username: 'ali_admin',
+    first_name: 'Ali',
+    group_chat_id: null,
+  });
 });
 
 test('kitob preview talab qilingan uch tilli HTML formatda chiqadi', () => {

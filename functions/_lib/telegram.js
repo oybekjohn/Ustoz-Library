@@ -9,6 +9,10 @@ import {
 import { buildCoverPrompt } from './cover-prompt.js';
 import { createFirstPagesPdf, inspectPdfFirstPages } from './pdf.js';
 import { createStorageKey, deleteObjects, putObject } from './storage.js';
+import {
+  addGroupModerator,
+  disableGroupModeratorEverywhere,
+} from './group/repository.js';
 
 export const TELEGRAM_CATEGORIES = [
   { key: 'it', label: 'IT' },
@@ -26,7 +30,7 @@ export const TELEGRAM_CATEGORIES = [
 const IMAGE_MIMES = ['image/jpeg', 'image/png', 'image/webp'];
 const DEFAULT_MAX_PDF_BYTES = 19 * 1024 * 1024;
 const DEFAULT_OWNER_ID = '5252931517';
-const BOT_VERSION = '3.1.0';
+const BOT_VERSION = '3.2.0';
 const BOOKS_PAGE_SIZE = 6;
 
 const EDIT_FIELDS = {
@@ -49,7 +53,22 @@ function categoryLabel(key) {
   return categoryByKey(key)?.label || key || 'Boshqa';
 }
 
-function mainKeyboard() {
+function mainKeyboard(role = 'owner') {
+  if (role === 'library') {
+    return {
+      keyboard: [
+        [{ text: 'Kitob yuklash' }],
+        [{ text: 'Bot haqida' }],
+      ],
+      resize_keyboard: true,
+    };
+  }
+  if (role === 'group') {
+    return {
+      keyboard: [[{ text: 'Guruh boshqaruvi' }]],
+      resize_keyboard: true,
+    };
+  }
   return {
     keyboard: [
       [{ text: 'Kitoblarni boshqarish' }],
@@ -57,6 +76,16 @@ function mainKeyboard() {
       [{ text: 'Adminlar' }, { text: 'Bot haqida' }],
     ],
     resize_keyboard: true,
+  };
+}
+
+function adminRoleKeyboard() {
+  return {
+    inline_keyboard: [
+      [{ text: 'DL Library admini', callback_data: 'admin:role:library' }],
+      [{ text: 'Guruh admini', callback_data: 'admin:role:group' }],
+      [{ text: 'Bekor qilish', callback_data: 'cancel' }],
+    ],
   };
 }
 
@@ -162,13 +191,6 @@ function adminKeyboard() {
   };
 }
 
-function allowedUserIds(env) {
-  return new Set(String(env.TELEGRAM_ALLOWED_USER_IDS || '')
-    .split(',')
-    .map((value) => value.trim())
-    .filter(Boolean));
-}
-
 function ownerId(env) {
   return String(env.TELEGRAM_OWNER_ID || DEFAULT_OWNER_ID).trim();
 }
@@ -177,30 +199,38 @@ function isOwner(env, userId) {
   return String(userId) === ownerId(env);
 }
 
-async function isTelegramAdmin(env, userId) {
+async function getTelegramAccess(env, userId) {
   const id = String(userId);
-  if (isOwner(env, id) || allowedUserIds(env).has(id)) return true;
+  if (isOwner(env, id)) return { user_id: id, role: 'owner' };
   try {
-    const admin = await env.DB.prepare('SELECT user_id FROM telegram_admins WHERE user_id = ?')
+    const admin = await env.DB.prepare('SELECT * FROM telegram_admins WHERE user_id = ?')
       .bind(id)
       .first();
-    return Boolean(admin);
-  } catch {
-    return false;
-  }
+    if (admin) return admin;
+  } catch {}
+  return null;
 }
 
-async function addTelegramAdmin(env, userId, addedBy) {
+async function addTelegramAdmin(env, admin, addedBy) {
   await env.DB.prepare(`
-    INSERT INTO telegram_admins (user_id, added_by, added_at)
-    VALUES (?, ?, datetime('now'))
+    INSERT INTO telegram_admins
+      (user_id, added_by, added_at, role, username, first_name, group_chat_id)
+    VALUES (?, ?, datetime('now'), ?, ?, ?, ?)
     ON CONFLICT(user_id) DO UPDATE SET
       added_by=excluded.added_by,
-      added_at=datetime('now')
-  `).bind(String(userId), String(addedBy)).run();
+      added_at=datetime('now'),
+      role=excluded.role,
+      username=COALESCE(excluded.username, telegram_admins.username),
+      first_name=COALESCE(excluded.first_name, telegram_admins.first_name),
+      group_chat_id=excluded.group_chat_id
+  `).bind(
+    String(admin.userId), String(addedBy), admin.role,
+    admin.username || null, admin.firstName || null, admin.groupChatId || null,
+  ).run();
 }
 
 async function removeTelegramAdmin(env, userId) {
+  await disableGroupModeratorEverywhere(env, userId);
   await env.DB.prepare('DELETE FROM telegram_admins WHERE user_id = ?')
     .bind(String(userId))
     .run();
@@ -208,9 +238,54 @@ async function removeTelegramAdmin(env, userId) {
 
 async function listTelegramAdmins(env) {
   const { results = [] } = await env.DB.prepare(
-    'SELECT user_id, added_by, added_at FROM telegram_admins ORDER BY added_at DESC',
+    `SELECT user_id, role, username, first_name, group_chat_id, added_by, added_at
+     FROM telegram_admins ORDER BY added_at DESC`,
   ).all();
   return results;
+}
+
+async function refreshTelegramAdminProfiles(env, admins) {
+  await Promise.all(admins.map(async (admin) => {
+    if (admin.username && admin.first_name) return;
+    const profile = await getTelegramProfile(env, admin.user_id);
+    if (!profile.username && !profile.firstName) return;
+    admin.username = profile.username || admin.username;
+    admin.first_name = profile.firstName || admin.first_name;
+    await env.DB.prepare(`
+      UPDATE telegram_admins SET username = ?, first_name = ? WHERE user_id = ?
+    `).bind(admin.username || null, admin.first_name || null, String(admin.user_id)).run();
+  }));
+}
+
+async function listConfiguredGroups(env) {
+  const { results = [] } = await env.DB.prepare(`
+    SELECT chat_id, title FROM telegram_group_configs WHERE enabled = 1 ORDER BY title
+  `).all();
+  return results;
+}
+
+async function getTelegramProfile(env, userId) {
+  try {
+    const chat = await telegramApi(env, 'getChat', { chat_id: String(userId) });
+    return {
+      username: chat?.username || null,
+      firstName: chat?.first_name || null,
+    };
+  } catch {
+    return { username: null, firstName: null };
+  }
+}
+
+async function syncTelegramAdminProfile(env, user) {
+  if (!user?.id) return;
+  await env.DB.prepare(`
+    UPDATE telegram_admins SET username = ?, first_name = ? WHERE user_id = ?
+  `).bind(user.username || null, user.first_name || null, String(user.id)).run();
+}
+
+async function mainKeyboardForUser(env, userId) {
+  const access = await getTelegramAccess(env, userId);
+  return mainKeyboard(access?.role || 'library');
 }
 
 function maxPdfBytes(env) {
@@ -379,6 +454,14 @@ function parsePendingMetadata(session) {
   return JSON.parse(session.pending_metadata);
 }
 
+function parseJson(value, fallback = null) {
+  try {
+    return JSON.parse(value || '');
+  } catch {
+    return fallback;
+  }
+}
+
 function shortText(value, maxLength = 700) {
   const text = String(value || '').replace(/\s+/g, ' ').trim();
   return text.length > maxLength ? `${text.slice(0, maxLength - 3)}...` : text;
@@ -540,7 +623,7 @@ async function cancelCreate(env, chatId, userId) {
   const session = await getSession(env, userId);
   await cleanupSessionFiles(env, session);
   await resetSession(env, userId, chatId);
-  await sendMessage(env, chatId, "Kitob qo'shish bekor qilindi.", mainKeyboard());
+  await sendMessage(env, chatId, "Kitob qo'shish bekor qilindi.", await mainKeyboardForUser(env, userId));
 }
 
 async function prepareMetadataFromPdf(env, pdfBuffer, fileName, category) {
@@ -775,7 +858,7 @@ async function handleCreateCallback(env, callback, chatId, userId, data) {
       `Yil: ${book.year || '-'}`,
       `Sahifalar: ${book.pages || '-'}`,
       bookUrl,
-    ].join('\n'), mainKeyboard());
+    ].join('\n'), await mainKeyboardForUser(env, userId));
     return true;
   }
   if (data === 'create:category') {
@@ -975,10 +1058,99 @@ async function handleAdminCallback(env, chatId, userId, data) {
     );
     return true;
   }
+  if (action === 'role:library' || action === 'role:group') {
+    const session = await getSession(env, userId);
+    if (session.state !== 'awaiting_admin_role') {
+      await sendMessage(env, chatId, 'Admin qo‘shish sessiyasi tugagan. Qaytadan boshlang.', adminKeyboard());
+      return true;
+    }
+    const pending = parseJson(session.pending_metadata, {});
+    if (!/^\d{4,20}$/.test(String(pending.userId || ''))) {
+      await resetSession(env, userId, chatId);
+      await sendMessage(env, chatId, 'Admin ID topilmadi. Qaytadan boshlang.', adminKeyboard());
+      return true;
+    }
+    if (action === 'role:library') {
+      await disableGroupModeratorEverywhere(env, pending.userId);
+      await addTelegramAdmin(env, {
+        ...pending,
+        role: 'library',
+        groupChatId: null,
+      }, userId);
+      await resetSession(env, userId, chatId);
+      await sendMessage(
+        env,
+        chatId,
+        `DL Library admini qo‘shildi: ${pending.firstName || pending.username || pending.userId}`,
+        mainKeyboard('owner'),
+      );
+      return true;
+    }
+
+    const groups = await listConfiguredGroups(env);
+    if (!groups.length) {
+      await sendMessage(env, chatId, 'Avval botni guruhga admin qilib, guruh ichida /guruh_ulash buyrug‘ini yuboring.');
+      return true;
+    }
+    await saveSession(env, { ...session, state: 'awaiting_admin_group' });
+    await sendMessage(env, chatId, 'Admin qaysi guruhga biriktiriladi?', {
+      inline_keyboard: [
+        ...groups.map((group) => [{
+          text: group.title,
+          callback_data: `admin:group:${group.chat_id}`,
+        }]),
+        [{ text: 'Bekor qilish', callback_data: 'cancel' }],
+      ],
+    });
+    return true;
+  }
+  if (action.startsWith('group:')) {
+    const session = await getSession(env, userId);
+    const groupChatId = action.slice('group:'.length);
+    const pending = parseJson(session.pending_metadata, {});
+    const groups = await listConfiguredGroups(env);
+    const group = groups.find((item) => String(item.chat_id) === String(groupChatId));
+    if (session.state !== 'awaiting_admin_group' || !group || !pending.userId) {
+      await sendMessage(env, chatId, 'Guruh adminini qo‘shish sessiyasi tugagan. Qaytadan boshlang.', adminKeyboard());
+      return true;
+    }
+    await disableGroupModeratorEverywhere(env, pending.userId);
+    await addTelegramAdmin(env, {
+      ...pending,
+      role: 'group',
+      groupChatId,
+    }, userId);
+    await addGroupModerator(env, {
+      chatId: groupChatId,
+      userId: pending.userId,
+      displayName: pending.firstName || pending.username || pending.userId,
+      username: pending.username,
+      firstName: pending.firstName,
+      addedBy: userId,
+    });
+    await resetSession(env, userId, chatId);
+    await sendMessage(
+      env,
+      chatId,
+      `Guruh admini qo‘shildi: ${pending.firstName || pending.username || pending.userId}\nGuruh: ${group.title}`,
+      mainKeyboard('owner'),
+    );
+    return true;
+  }
   if (action === 'list') {
     const admins = await listTelegramAdmins(env);
+    await refreshTelegramAdminProfiles(env, admins);
+    const groups = await listConfiguredGroups(env);
+    const groupNames = new Map(groups.map((group) => [String(group.chat_id), group.title]));
     const lines = admins.length
-      ? admins.map((admin) => `- ${admin.user_id} (qo'shgan: ${admin.added_by}, ${admin.added_at || '-'})`)
+      ? admins.map((admin) => {
+          const name = admin.first_name || (admin.username ? `@${admin.username}` : admin.user_id);
+          const username = admin.username ? `@${admin.username}` : 'username yo‘q';
+          const role = admin.role === 'group'
+            ? `Guruh admini — ${groupNames.get(String(admin.group_chat_id)) || admin.group_chat_id || '-'}`
+            : 'DL Library admini';
+          return `- ${name} | ${username} | ID: ${admin.user_id} | ${role}`;
+        })
       : ["Hozircha qo'shimcha admin yo'q."];
     await sendMessage(env, chatId, [`Owner: ${ownerId(env)}`, ...lines].join('\n'), adminKeyboard());
     return true;
@@ -1009,8 +1181,16 @@ export async function handleTelegramUpdate(env, update) {
   const chatId = message?.chat?.id || callback?.message?.chat?.id;
   if (!from || !chatId) return { background: null };
 
-  if (!(await isTelegramAdmin(env, from.id))) {
+  const access = await getTelegramAccess(env, from.id);
+  if (!access) {
     await sendMessage(env, chatId, `Bu botga kirishga ruxsat yo'q. Telegram user ID: ${from.id}`);
+    return { background: null };
+  }
+  await syncTelegramAdminProfile(env, from).catch(() => null);
+
+  if (access.role === 'group') {
+    if (callback) await answerCallback(env, callback.id, 'Faqat guruh boshqaruvi uchun ruxsat berilgan.');
+    await sendMessage(env, chatId, 'Sizga faqat guruh boshqaruvi uchun ruxsat berilgan.', mainKeyboard('group'));
     return { background: null };
   }
 
@@ -1021,11 +1201,16 @@ export async function handleTelegramUpdate(env, update) {
       const session = await getSession(env, from.id);
       await cleanupSessionFiles(env, session);
       await resetSession(env, from.id, chatId);
-      await sendMessage(env, chatId, 'Jarayon bekor qilindi.', mainKeyboard());
+      await sendMessage(env, chatId, 'Jarayon bekor qilindi.', mainKeyboard(access.role));
       return { background: null };
     }
     if (data.startsWith('create:') || data.startsWith('create-field:') || data.startsWith('create-category:')) {
       await handleCreateCallback(env, callback, chatId, from.id, data);
+      return { background: null };
+    }
+    if (!isOwner(env, from.id)
+        && (data.startsWith('books:list:') || data === 'books:search' || data.startsWith('manage'))) {
+      await sendMessage(env, chatId, 'Kitoblar ro‘yxati va boshqaruvi faqat owner uchun.');
       return { background: null };
     }
     if (await handleBooksCallback(env, chatId, from.id, data)) return { background: null };
@@ -1061,7 +1246,7 @@ export async function handleTelegramUpdate(env, update) {
       env,
       chatId,
       text === '/cancel' ? 'Jarayon bekor qilindi.' : 'DL Library boshqaruv botiga xush kelibsiz.',
-      mainKeyboard(),
+      mainKeyboard(access.role),
     );
     return { background: null };
   }
@@ -1070,7 +1255,11 @@ export async function handleTelegramUpdate(env, update) {
     if (text === 'Kitob yuklash') {
       await startCreate(env, chatId, from.id);
     } else {
-      await sendBookManagementMenu(env, chatId);
+      if (!isOwner(env, from.id)) {
+        await sendMessage(env, chatId, 'Kitoblar ro‘yxati va boshqaruvi faqat owner uchun.', mainKeyboard(access.role));
+      } else {
+        await sendBookManagementMenu(env, chatId);
+      }
     }
     return { background: null };
   }
@@ -1097,7 +1286,7 @@ export async function handleTelegramUpdate(env, update) {
       `PDF limiti: ${Math.floor(maxPdfBytes(env) / 1024 / 1024)} MB`,
       'PDF sahifalar soni AI ishlatmasdan aniqlanadi.',
       "Muqova rasmi admin tomonidan tayyorlanadi.",
-    ].join('\n'), mainKeyboard());
+    ].join('\n'), mainKeyboard(access.role));
     return { background: null };
   }
 
@@ -1118,9 +1307,27 @@ export async function handleTelegramUpdate(env, update) {
       return { background: null };
     }
     if (session.state === 'awaiting_admin_add') {
-      await addTelegramAdmin(env, text, from.id);
-      await resetSession(env, from.id, chatId);
-      await sendMessage(env, chatId, `Admin qo'shildi: ${text}`, mainKeyboard());
+      if (text === ownerId(env)) {
+        await sendMessage(env, chatId, 'Ownerni qayta admin qilib qo‘shish shart emas.');
+        return { background: null };
+      }
+      const profile = await getTelegramProfile(env, text);
+      await saveSession(env, {
+        ...session,
+        state: 'awaiting_admin_role',
+        pending_metadata: JSON.stringify({
+          userId: text,
+          username: profile.username,
+          firstName: profile.firstName,
+        }),
+      });
+      await sendMessage(env, chatId, [
+        `Admin: ${profile.firstName || profile.username || text}`,
+        profile.username ? `Username: @${profile.username}` : 'Username: topilmadi',
+        `ID: ${text}`,
+        '',
+        'Admin turini tanlang:',
+      ].join('\n'), adminRoleKeyboard());
       return { background: null };
     }
     if (text === ownerId(env)) {
@@ -1129,11 +1336,16 @@ export async function handleTelegramUpdate(env, update) {
     }
     await removeTelegramAdmin(env, text);
     await resetSession(env, from.id, chatId);
-    await sendMessage(env, chatId, `Admin o'chirildi: ${text}`, mainKeyboard());
+    await sendMessage(env, chatId, `Admin o'chirildi: ${text}`, mainKeyboard('owner'));
     return { background: null };
   }
 
   if (session.state === 'awaiting_book_search') {
+    if (!isOwner(env, from.id)) {
+      await resetSession(env, from.id, chatId);
+      await sendMessage(env, chatId, 'Kitob qidirish faqat owner uchun.', mainKeyboard(access.role));
+      return { background: null };
+    }
     if (!text) {
       await sendMessage(env, chatId, 'Qidirish uchun ID, kitob nomi yoki muallifni yuboring.');
       return { background: null };
@@ -1162,6 +1374,11 @@ export async function handleTelegramUpdate(env, update) {
   }
 
   if (session.state === 'awaiting_manage_edit') {
+    if (!isOwner(env, from.id)) {
+      await resetSession(env, from.id, chatId);
+      await sendMessage(env, chatId, 'Kitoblarni tahrirlash faqat owner uchun.', mainKeyboard(access.role));
+      return { background: null };
+    }
     try {
       const book = await getBook(env, session.active_book_id);
       if (!book) throw new Error('Kitob topilmadi');
@@ -1220,6 +1437,11 @@ export async function handleTelegramUpdate(env, update) {
   }
 
   if (session.state === 'awaiting_manage_pdf') {
+    if (!isOwner(env, from.id)) {
+      await resetSession(env, from.id, chatId);
+      await sendMessage(env, chatId, 'Kitob PDFini almashtirish faqat owner uchun.', mainKeyboard(access.role));
+      return { background: null };
+    }
     const document = getPdf(message);
     if (!document) {
       await sendMessage(env, chatId, 'Yangi PDF faylini yuboring.');
@@ -1242,6 +1464,11 @@ export async function handleTelegramUpdate(env, update) {
   }
 
   if (session.state === 'awaiting_manage_cover') {
+    if (!isOwner(env, from.id)) {
+      await resetSession(env, from.id, chatId);
+      await sendMessage(env, chatId, 'Kitob muqovasini almashtirish faqat owner uchun.', mainKeyboard(access.role));
+      return { background: null };
+    }
     const cover = getCover(message);
     if (!cover) {
       await sendMessage(env, chatId, 'Yangi muqova rasmini yuboring (JPG, PNG yoki WEBP).');
@@ -1255,6 +1482,6 @@ export async function handleTelegramUpdate(env, update) {
     return { background: null };
   }
 
-  await sendMessage(env, chatId, 'Kerakli bo‘limni menyudan tanlang.', mainKeyboard());
+  await sendMessage(env, chatId, 'Kerakli bo‘limni menyudan tanlang.', mainKeyboard(access.role));
   return { background: null };
 }

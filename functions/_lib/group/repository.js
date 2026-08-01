@@ -1,4 +1,4 @@
-import { normalizeSearchText } from './utils.js';
+import { displayName, normalizeSearchText } from './utils.js';
 
 function parseRequest(row) {
   if (!row) return null;
@@ -40,14 +40,74 @@ export async function setTelCommandEnabled(env, chatId, enabled) {
   return getGroupConfig(env, chatId);
 }
 
-export async function addGroupModerator(env, { chatId, userId, displayName, addedBy }) {
+export async function addGroupModerator(env, {
+  chatId,
+  userId,
+  displayName,
+  username,
+  firstName,
+  addedBy,
+}) {
   await env.DB.prepare(`
     INSERT INTO telegram_group_moderators
-      (chat_id, user_id, display_name, enabled, added_by)
-    VALUES (?, ?, ?, 1, ?)
+      (chat_id, user_id, display_name, username, first_name, enabled, added_by)
+    VALUES (?, ?, ?, ?, ?, 1, ?)
     ON CONFLICT(chat_id, user_id) DO UPDATE SET
-      display_name=excluded.display_name, enabled=1, added_by=excluded.added_by
-  `).bind(String(chatId), String(userId), displayName || null, String(addedBy)).run();
+      display_name=excluded.display_name,
+      username=COALESCE(excluded.username, telegram_group_moderators.username),
+      first_name=COALESCE(excluded.first_name, telegram_group_moderators.first_name),
+      enabled=1,
+      added_by=excluded.added_by
+  `).bind(
+    String(chatId), String(userId), displayName || null,
+    username || null, firstName || null, String(addedBy),
+  ).run();
+}
+
+export async function upsertGroupRoleAdmin(env, {
+  userId,
+  username,
+  firstName,
+  chatId,
+  addedBy,
+}) {
+  await env.DB.prepare(`
+    INSERT INTO telegram_admins
+      (user_id, added_by, added_at, role, username, first_name, group_chat_id)
+    VALUES (?, ?, datetime('now'), 'group', ?, ?, ?)
+    ON CONFLICT(user_id) DO UPDATE SET
+      added_by=excluded.added_by,
+      added_at=datetime('now'),
+      role='group',
+      username=COALESCE(excluded.username, telegram_admins.username),
+      first_name=COALESCE(excluded.first_name, telegram_admins.first_name),
+      group_chat_id=excluded.group_chat_id
+  `).bind(
+    String(userId), String(addedBy), username || null, firstName || null, String(chatId),
+  ).run();
+}
+
+export async function syncGroupAdminProfile(env, user) {
+  if (!user?.id) return;
+  const name = user.first_name || user.username || String(user.id);
+  await env.DB.batch([
+    env.DB.prepare(`
+      UPDATE telegram_group_moderators
+      SET display_name = ?, username = ?, first_name = ?
+      WHERE user_id = ? AND enabled = 1
+    `).bind(displayName(user), user.username || null, name, String(user.id)),
+    env.DB.prepare(`
+      UPDATE telegram_admins
+      SET username = ?, first_name = ?
+      WHERE user_id = ? AND role = 'group'
+    `).bind(user.username || null, name, String(user.id)),
+  ]);
+}
+
+export async function disableGroupModeratorEverywhere(env, userId) {
+  await env.DB.prepare(`
+    UPDATE telegram_group_moderators SET enabled = 0 WHERE user_id = ?
+  `).bind(String(userId)).run();
 }
 
 export async function removeGroupModerator(env, chatId, userId) {
@@ -55,6 +115,14 @@ export async function removeGroupModerator(env, chatId, userId) {
     UPDATE telegram_group_moderators SET enabled = 0
     WHERE chat_id = ? AND user_id = ?
   `).bind(String(chatId), String(userId)).run();
+  await env.DB.prepare(`
+    DELETE FROM telegram_admins
+    WHERE user_id = ? AND role = 'group'
+      AND NOT EXISTS (
+        SELECT 1 FROM telegram_group_moderators
+        WHERE user_id = ? AND enabled = 1
+      )
+  `).bind(String(userId), String(userId)).run();
 }
 
 export async function listGroupModerators(env, chatId) {

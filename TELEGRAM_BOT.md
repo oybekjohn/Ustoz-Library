@@ -5,9 +5,13 @@ metadata ma'lumotlari va bot session holatlari D1 ga yoziladi.
 
 ## Asosiy menyu
 
-- `Kitoblarni boshqarish`: create, list, search, read, update va delete.
-- `Adminlar`: faqat owner admin qo'shadi, ro'yxatni ko'radi va o'chiradi.
+- `Kitoblarni boshqarish`: faqat owner create, list, search, read, update va delete qiladi.
+- `Adminlar`: faqat owner admin qo'shadi, rol belgilaydi, ro'yxatni ko'radi va o'chiradi.
 - `Bot haqida`: versiya, sayt, faol AI provider/model va fayl limitlarini ko'rsatadi.
+
+`DL Library admini` faqat yangi kitob yuklaydi va o'zi yuklayotgan kitob previewini
+ko'radi. U mavjud kitoblar, qidiruv, tahrirlash va adminlar ro'yxatiga kira olmaydi.
+`Guruh admini` esa faqat guruh boshqaruvi funksiyalariga kira oladi.
 
 ## Yangi kitob qo'shish
 

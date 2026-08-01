@@ -9,7 +9,7 @@ qidirish va tarixni import qilishda AI API ishlatilmaydi.
 2. `Invite Users` va `Ban Users` huquqlarini yoqing.
 3. Owner guruh ichida `/guruh_ulash` buyrug'ini yuboradi.
 4. Telefon raqamlar topigi ichida `/telefon_topik` buyrug'ini yuboradi.
-5. Moderator qo'shish: `/moderator_qosh TELEGRAM_ID Ism`.
+5. Owner botning shaxsiy chatidagi `Adminlar` bo'limidan `Guruh admini` rolini tanlaydi.
 6. Har bir moderator botning shaxsiy chatida `/start` bosadi.
 
 Yangi a'zolarni moderator tasdiqlashi uchun guruhga kirish havolasi `Join Request`

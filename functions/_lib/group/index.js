@@ -28,7 +28,9 @@ import {
   saveRequestMessage,
   setPhoneTopic,
   setTelCommandEnabled,
+  syncGroupAdminProfile,
   updateGroupContact,
+  upsertGroupRoleAdmin,
   upsertGroupConfig,
   upsertGroupContact,
   voteGroupContact,
@@ -41,6 +43,7 @@ import {
   deleteGroupMessage,
   downloadTelegramFile,
   escapeHtml,
+  groupTelegramApi,
   sendGroupPhoto,
   sendGroupText,
   unbanGroupMember,
@@ -115,11 +118,11 @@ function contactVoteKeyboard(contactId) {
 
 async function isLibraryAdmin(env, userId) {
   if (isOwner(env, userId)) return true;
-  const configured = new Set(String(env.TELEGRAM_ALLOWED_USER_IDS || '')
-    .split(',').map((item) => item.trim()).filter(Boolean));
-  if (configured.has(String(userId))) return true;
   try {
-    const row = await env.DB.prepare('SELECT 1 AS allowed FROM telegram_admins WHERE user_id = ?')
+    const row = await env.DB.prepare(`
+      SELECT 1 AS allowed FROM telegram_admins
+      WHERE user_id = ? AND role = 'library'
+    `)
       .bind(String(userId)).first();
     return Boolean(row?.allowed);
   } catch {
@@ -708,10 +711,21 @@ async function handleGroupCommands(env, message, config) {
       return true;
     }
     if (command === '/moderator_qosh') {
+      let profile = null;
+      try { profile = await groupTelegramApi(env, 'getChat', { chat_id: targetId }); } catch {}
       await addGroupModerator(env, {
         chatId,
         userId: targetId,
-        displayName: nameParts.join(' ') || null,
+        displayName: nameParts.join(' ') || (profile ? displayName(profile) : targetId),
+        username: profile?.username || null,
+        firstName: profile?.first_name || nameParts.join(' ') || null,
+        addedBy: userId,
+      });
+      await upsertGroupRoleAdmin(env, {
+        userId: targetId,
+        username: profile?.username || null,
+        firstName: profile?.first_name || nameParts.join(' ') || null,
+        chatId,
         addedBy: userId,
       });
       await sendGroupText(env, chatId, `Moderator qo‘shildi: <code>${targetId}</code>. U bot lichkasida /start bosishi kerak.`, { replyTo: message.message_id });
@@ -763,6 +777,9 @@ async function sendDenied(env, message, text = 'Bu amal uchun moderator ruxsati 
 async function handlePrivateMessage(env, message) {
   const text = String(message.text || '').trim();
   const userId = message.from.id;
+  if (await isAnyGroupModerator(env, userId, ownerId(env))) {
+    await syncGroupAdminProfile(env, message.from).catch(() => null);
+  }
   const session = await getModeratorSession(env, userId);
   if (session) {
     const sessionResult = await handleModeratorSession(env, message, session);

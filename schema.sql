@@ -59,11 +59,17 @@ CREATE INDEX IF NOT EXISTS idx_telegram_updates_updated
 CREATE TABLE IF NOT EXISTS telegram_admins (
   user_id   TEXT PRIMARY KEY,
   added_by  TEXT NOT NULL,
-  added_at  TEXT NOT NULL DEFAULT (datetime('now'))
+  added_at  TEXT NOT NULL DEFAULT (datetime('now')),
+  role      TEXT NOT NULL DEFAULT 'library',
+  username  TEXT,
+  first_name TEXT,
+  group_chat_id TEXT
 );
 
 CREATE INDEX IF NOT EXISTS idx_telegram_admins_added
   ON telegram_admins(added_at DESC);
+CREATE INDEX IF NOT EXISTS idx_telegram_admins_role
+  ON telegram_admins(role, added_at DESC);
 
 -- Telegram guruh moderatsiyasi. Production bazaga
 -- migrations/0004_group_management.sql orqali qo'shiladi.
@@ -82,6 +88,8 @@ CREATE TABLE IF NOT EXISTS telegram_group_moderators (
   chat_id TEXT NOT NULL,
   user_id TEXT NOT NULL,
   display_name TEXT,
+  username TEXT,
+  first_name TEXT,
   enabled INTEGER NOT NULL DEFAULT 1,
   added_by TEXT NOT NULL,
   created_at TEXT NOT NULL DEFAULT (datetime('now')),
