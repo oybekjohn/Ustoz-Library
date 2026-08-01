@@ -26,7 +26,7 @@ export const TELEGRAM_CATEGORIES = [
 const IMAGE_MIMES = ['image/jpeg', 'image/png', 'image/webp'];
 const DEFAULT_MAX_PDF_BYTES = 19 * 1024 * 1024;
 const DEFAULT_OWNER_ID = '5252931517';
-const BOT_VERSION = '3.0.0';
+const BOT_VERSION = '3.1.0';
 const BOOKS_PAGE_SIZE = 6;
 
 const EDIT_FIELDS = {
@@ -53,6 +53,7 @@ function mainKeyboard() {
   return {
     keyboard: [
       [{ text: 'Kitoblarni boshqarish' }],
+      [{ text: 'Guruh boshqaruvi' }],
       [{ text: 'Adminlar' }, { text: 'Bot haqida' }],
     ],
     resize_keyboard: true,

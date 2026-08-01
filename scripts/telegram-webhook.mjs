@@ -21,7 +21,7 @@ const response = await fetch(`https://api.telegram.org/bot${token}/setWebhook`, 
   body: JSON.stringify({
     url: `${siteUrl}/api/telegram`,
     secret_token: secret,
-    allowed_updates: ['message', 'callback_query'],
+    allowed_updates: ['message', 'callback_query', 'chat_join_request', 'chat_member'],
   }),
 });
 

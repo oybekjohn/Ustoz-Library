@@ -109,7 +109,7 @@ test('kategoriya tanlangach PDF background tahliliga yuboriladi', async (context
   assert.equal(typeof result.background, 'function');
 });
 
-test('/start uchta asosiy boshqaruv tugmasini ko\'rsatadi', async (context) => {
+test('/start asosiy boshqaruv tugmalarini ko\'rsatadi', async (context) => {
   const originalFetch = globalThis.fetch;
   let requestBody;
   globalThis.fetch = async (_url, options) => {
@@ -134,7 +134,7 @@ test('/start uchta asosiy boshqaruv tugmasini ko\'rsatadi', async (context) => {
   });
 
   const labels = requestBody.reply_markup.keyboard.flat().map((button) => button.text);
-  assert.deepEqual(labels, ['Kitoblarni boshqarish', 'Adminlar', 'Bot haqida']);
+  assert.deepEqual(labels, ['Kitoblarni boshqarish', 'Guruh boshqaruvi', 'Adminlar', 'Bot haqida']);
 });
 
 test('kitob preview talab qilingan uch tilli HTML formatda chiqadi', () => {
