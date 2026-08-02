@@ -7,6 +7,7 @@ import {
   extractRequestedName,
   formatContactLine,
   formatContactsListPages,
+  normalizePhone,
   rankContacts,
 } from '../functions/_lib/group/utils.js';
 
@@ -15,6 +16,12 @@ test('telefon raqamlari +998 formatiga keltiriladi', () => {
     extractPhones('Oybek: 90 123 45 67, shifokor +998 (91) 765-43-21'),
     ['+998901234567', '+998917654321'],
   );
+});
+
+test('+7 va qisqa xizmat raqamlari saqlanadi', () => {
+  assert.equal(normalizePhone('+7 920 140 39 41'), '+79201403941');
+  assert.equal(normalizePhone('8 (920) 140-39-41'), '+79201403941');
+  assert.equal(normalizePhone('1154'), '1154');
 });
 
 test('telefon so‘rovidan ism yoki kasb ajratiladi', () => {
@@ -30,12 +37,17 @@ test('bir xil va o‘xshash ismli barcha kontaktlar saralanadi', () => {
   ];
   assert.deepEqual(rankContacts(contacts, 'Oybek').map((item) => item.id), [1, 2]);
   assert.deepEqual(rankContacts(contacts, 'Oybekk').map((item) => item.id), [1, 2]);
+  assert.deepEqual(rankContacts(contacts, 'Ойбек').map((item) => item.id), [1, 2]);
 });
 
 test('kontakt javobi talab qilingan ko‘rinishda chiqadi', () => {
   assert.equal(
-    formatContactLine({ full_name: 'Bolalar shifokori', phone: '+998901234567' }),
-    'Bolalar shifokori: +998901234567',
+    formatContactLine({
+      full_name: 'Bolalar shifokori',
+      phone: '+998901234567',
+      secondary_phone: '+998907654321',
+    }),
+    'Bolalar shifokori  +998901234567, +998907654321',
   );
 });
 

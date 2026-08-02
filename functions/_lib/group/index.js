@@ -8,6 +8,7 @@ import {
   createGroupRequest,
   deleteGroupContact,
   finishGroupRequest,
+  findIncorrectGroupContact,
   getGroupConfig,
   getGroupContact,
   getGroupImport,
@@ -23,6 +24,7 @@ import {
   listRequestMessages,
   removeGroupModerator,
   reopenGroupRequest,
+  replaceIncorrectGroupContact,
   resolveGroupImport,
   saveModeratorSession,
   saveRequestMessage,
@@ -116,6 +118,35 @@ function contactVoteKeyboard(contactId) {
   };
 }
 
+async function correctionDetails(env, chatId, fullName) {
+  const contact = await findIncorrectGroupContact(env, chatId, fullName);
+  if (!contact) return {};
+  return {
+    correctionContactId: contact.id,
+    correctionFullName: contact.full_name,
+    correctionPhone: contact.phone,
+    correctionSecondaryPhone: contact.secondary_phone || null,
+  };
+}
+
+async function saveApprovedRequestContact(env, request, values, approvedBy) {
+  const contact = {
+    chatId: request.chat_id,
+    fullName: values.fullName,
+    phone: values.phone,
+    secondaryPhone: values.secondaryPhone || null,
+    sourceUserId: request.source_user_id,
+    sourceMessageId: request.source_message_id,
+    approvedBy,
+  };
+  const correctionId = Number(request.payload?.correctionContactId || 0);
+  if (correctionId) {
+    const replaced = await replaceIncorrectGroupContact(env, correctionId, contact);
+    if (replaced) return { contact: replaced, corrected: true };
+  }
+  return { contact: await upsertGroupContact(env, contact), corrected: false };
+}
+
 async function isLibraryAdmin(env, userId) {
   if (isOwner(env, userId)) return true;
   try {
@@ -159,12 +190,21 @@ async function notifyModerators(env, request) {
       } else {
         let text = '';
         if (request.kind === 'contact') {
+          const correction = payload.correctionContactId
+            ? `${escapeHtml(formatContactLine({
+                full_name: payload.correctionFullName,
+                phone: payload.correctionPhone,
+                secondary_phone: payload.correctionSecondaryPhone,
+              }))}\n↓\n${escapeHtml(formatContactLine({ full_name: payload.fullName, phone: payload.phone }))}`
+            : escapeHtml(formatContactLine({ full_name: payload.fullName, phone: payload.phone }));
           text = [
-            '<b>Yangi kontakt topildi</b>',
+            payload.correctionContactId
+              ? '<b>Noto‘g‘ri kontakt uchun yangi ma’lumot topildi</b>'
+              : '<b>Yangi kontakt topildi</b>',
             `Guruh: ${escapeHtml(payload.groupTitle || request.chat_id)}`,
             `Yubordi: ${escapeHtml(payload.senderName || request.source_user_id || '-')}`,
             '',
-            escapeHtml(formatContactLine({ full_name: payload.fullName, phone: payload.phone })),
+            correction,
           ].join('\n');
         } else if (request.kind === 'join') {
           text = [
@@ -344,10 +384,7 @@ async function sendContactSearchResults(env, message, contacts) {
     return;
   }
   for (const contact of contacts.slice(0, 12)) {
-    await sendGroupText(env, message.chat.id, [
-      `<b>${escapeHtml(formatContactLine(contact))}</b>`,
-      `To‘g‘ri: ${contact.correct_votes || 0} | Noto‘g‘ri: ${contact.wrong_votes || 0}`,
-    ].join('\n'), {
+    await sendGroupText(env, message.chat.id, escapeHtml(formatContactLine(contact)), {
       threadId: message.message_thread_id,
       replyTo: message.message_id,
       replyMarkup: contactVoteKeyboard(contact.id),
@@ -370,13 +407,14 @@ async function handlePhoneTopicMessage(env, message, config) {
     const phone = normalizePhone(message.contact.phone_number);
     if (phone) {
       const fullName = [message.contact.first_name, message.contact.last_name].filter(Boolean).join(' ').trim() || sender;
+      const correction = await correctionDetails(env, message.chat.id, fullName);
       await createAndNotifyRequest(env, {
         chatId: message.chat.id,
         topicId: message.message_thread_id,
         kind: 'contact',
         sourceUserId: message.from?.id,
         sourceMessageId: message.message_id,
-        payload: { fullName, phone, senderName: sender, groupTitle: config.title },
+        payload: { fullName, phone, senderName: sender, groupTitle: config.title, ...correction },
       });
     }
     return;
@@ -385,13 +423,14 @@ async function handlePhoneTopicMessage(env, message, config) {
   const phones = extractPhones(text);
   for (const phone of phones) {
     const fullName = extractContactName(text, phone) || sender;
+    const correction = await correctionDetails(env, message.chat.id, fullName);
     await createAndNotifyRequest(env, {
       chatId: message.chat.id,
       topicId: message.message_thread_id,
       kind: 'contact',
       sourceUserId: message.from?.id,
       sourceMessageId: message.message_id,
-      payload: { fullName, phone, senderName: sender, groupTitle: config.title },
+      payload: { fullName, phone, senderName: sender, groupTitle: config.title, ...correction },
     });
   }
   if (phones.length) return;
@@ -461,14 +500,7 @@ async function processRequestCallback(env, callback, requestId, action) {
     if (action !== 'a') throw new Error('Noma’lum amal');
 
     if (request.kind === 'contact') {
-      await upsertGroupContact(env, {
-        chatId: request.chat_id,
-        fullName: payload.fullName,
-        phone: payload.phone,
-        sourceUserId: request.source_user_id,
-        sourceMessageId: request.source_message_id,
-        approvedBy: callback.from.id,
-      });
+      await saveApprovedRequestContact(env, request, payload, callback.from.id);
     } else if (request.kind === 'join') {
       await approveGroupJoinRequest(env, request.chat_id, payload.userId);
     } else if (request.kind === 'bot') {
@@ -555,14 +587,19 @@ async function handleModeratorSession(env, message, session) {
         });
       } else {
         const request = session.request_id ? await getGroupRequest(env, session.request_id) : null;
-        await upsertGroupContact(env, {
-          chatId: session.chat_id,
-          fullName: session.draft_name,
-          phone,
-          sourceUserId: request?.source_user_id,
-          sourceMessageId: request?.source_message_id,
-          approvedBy: message.from.id,
-        });
+        if (request) {
+          await saveApprovedRequestContact(env, request, {
+            fullName: session.draft_name,
+            phone,
+          }, message.from.id);
+        } else {
+          await upsertGroupContact(env, {
+            chatId: session.chat_id,
+            fullName: session.draft_name,
+            phone,
+            approvedBy: message.from.id,
+          });
+        }
         if (request) {
           await finishGroupRequest(env, request.id, 'approved', message.from.id, {
             ...request.payload,
@@ -679,9 +716,9 @@ async function handleGroupCommands(env, message, config) {
     });
     return true;
   }
-  if (command === '/tel_yoq' || command === '/tel_toxtat') {
+  if (['/tel_yoq', '/tel_toxtat', '/start_tel', '/stop_tel'].includes(command)) {
     if (!moderator) return sendDenied(env, message);
-    const enabled = command === '/tel_yoq';
+    const enabled = command === '/tel_yoq' || command === '/start_tel';
     await setTelCommandEnabled(env, chatId, enabled);
     await sendGroupText(env, chatId, `/tel ${enabled ? 'yoqildi' : 'to‘xtatildi'}.`, { replyTo: message.message_id });
     return true;
@@ -838,7 +875,7 @@ async function handleGroupCallback(env, callback) {
       callback.id,
       Number(match[2]) === 1
         ? `Rahmat. To‘g‘ri deb tasdiqlandi (${voted.correct_votes}).`
-        : `Rahmat. Noto‘g‘ri deb belgilandi (${voted.wrong_votes}).`,
+        : `Noto‘g‘ri deb belgilandi (${voted.wrong_votes}). Keyingi mos kontakt moderator tasdig‘idan so‘ng yangilanadi.`,
     );
     return;
   }

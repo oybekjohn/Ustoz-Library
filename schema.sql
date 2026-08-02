@@ -105,6 +105,7 @@ CREATE TABLE IF NOT EXISTS telegram_group_contacts (
   normalized_name TEXT NOT NULL,
   aliases_json TEXT NOT NULL DEFAULT '[]',
   phone TEXT NOT NULL,
+  secondary_phone TEXT,
   note TEXT,
   source_user_id TEXT,
   source_message_id TEXT,

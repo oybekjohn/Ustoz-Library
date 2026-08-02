@@ -20,6 +20,7 @@ class GroupFakeDB {
         normalized_name: 'oybek shifokor',
         aliases_json: '[]',
         phone: '+998901234567',
+        secondary_phone: '+998907654321',
         correct_votes: 0,
         wrong_votes: 0,
       },
@@ -47,6 +48,9 @@ class GroupFakeDB {
         throw new Error(`Unexpected all query: ${sql}`);
       },
       async run() {
+        if (sql.includes('SET tel_command_enabled')) {
+          database.config.tel_command_enabled = Number(this._values[0]);
+        }
         return { meta: { changes: 1 } };
       },
     };
@@ -90,7 +94,7 @@ test('ism so‘ralganda bot kontaktni shu xabarga reply qilib baholash tugmalari
   });
 
   assert.equal(result.handled, true);
-  assert.match(calls[0].text, /Oybek Shifokor: \+998901234567/);
+  assert.match(calls[0].text, /Oybek Shifokor  \+998901234567, \+998907654321/);
   assert.equal(calls[0].message_thread_id, 77);
   assert.equal(calls[0].reply_parameters.message_id, 55);
   assert.deepEqual(
@@ -118,6 +122,28 @@ test('/tel barcha kontaktlarni oddiy matn ko‘rinishida chiqaradi', async (cont
   assert.match(calls[0].text, /Oybek Shifokor  \+998901234567/);
 });
 
+test('owner /stop_tel va /start_tel orqali /tel ni boshqaradi', async (context) => {
+  const calls = mockTelegram(context);
+  const DB = new GroupFakeDB();
+  const baseMessage = {
+    message_id: 61,
+    chat: { id: -1001, type: 'supergroup' },
+    from: { id: 5252931517, first_name: 'Owner' },
+  };
+
+  await handleGroupUpdate({ DB, TELEGRAM_BOT_TOKEN: 'test-token' }, {
+    message: { ...baseMessage, text: '/stop_tel' },
+  });
+  assert.equal(DB.config.tel_command_enabled, 0);
+  assert.match(calls.at(-1).text, /to‘xtatildi/);
+
+  await handleGroupUpdate({ DB, TELEGRAM_BOT_TOKEN: 'test-token' }, {
+    message: { ...baseMessage, message_id: 62, text: '/start_tel' },
+  });
+  assert.equal(DB.config.tel_command_enabled, 1);
+  assert.match(calls.at(-1).text, /yoqildi/);
+});
+
 test('kontakt bahosi foydalanuvchi ID si bilan yangilanadi', async (context) => {
   const calls = mockTelegram(context);
   const DB = new GroupFakeDB();
@@ -132,4 +158,20 @@ test('kontakt bahosi foydalanuvchi ID si bilan yangilanadi', async (context) => 
 
   assert.equal(DB.contacts[0].correct_votes, 1);
   assert.match(calls[0].text, /To‘g‘ri deb tasdiqlandi/);
+});
+
+test('noto‘g‘ri bahodan keyin yangilanish tartibi aytiladi', async (context) => {
+  const calls = mockTelegram(context);
+  const DB = new GroupFakeDB();
+  await handleGroupUpdate({ DB, TELEGRAM_BOT_TOKEN: 'test-token' }, {
+    callback_query: {
+      id: 'vote-2',
+      data: 'grp:vote:1:-1',
+      from: { id: 45, first_name: 'Vali' },
+      message: { chat: { id: -1001, type: 'supergroup' } },
+    },
+  });
+
+  assert.equal(DB.contacts[0].wrong_votes, 1);
+  assert.match(calls[0].text, /Keyingi mos kontakt moderator tasdig‘idan so‘ng yangilanadi/);
 });

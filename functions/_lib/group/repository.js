@@ -178,16 +178,26 @@ export async function getGroupContact(env, contactId) {
     .bind(Number(contactId)).first();
 }
 
+export async function findIncorrectGroupContact(env, chatId, fullName) {
+  return env.DB.prepare(`
+    SELECT * FROM telegram_group_contacts
+    WHERE chat_id = ? AND normalized_name = ? AND wrong_votes > 0
+    ORDER BY wrong_votes DESC, updated_at DESC, id DESC
+    LIMIT 1
+  `).bind(String(chatId), normalizeSearchText(fullName)).first();
+}
+
 export async function upsertGroupContact(env, contact) {
   await env.DB.prepare(`
     INSERT INTO telegram_group_contacts
-      (chat_id, full_name, normalized_name, aliases_json, phone, note,
+      (chat_id, full_name, normalized_name, aliases_json, phone, secondary_phone, note,
        source_user_id, source_message_id, approved_by, updated_at)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, datetime('now'))
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, datetime('now'))
     ON CONFLICT(chat_id, phone) DO UPDATE SET
       full_name=excluded.full_name,
       normalized_name=excluded.normalized_name,
       aliases_json=excluded.aliases_json,
+      secondary_phone=COALESCE(excluded.secondary_phone, telegram_group_contacts.secondary_phone),
       note=excluded.note,
       approved_by=excluded.approved_by,
       updated_at=datetime('now')
@@ -197,6 +207,7 @@ export async function upsertGroupContact(env, contact) {
     normalizeSearchText(contact.fullName),
     JSON.stringify(contact.aliases || []),
     contact.phone,
+    contact.secondaryPhone || null,
     contact.note || null,
     contact.sourceUserId ? String(contact.sourceUserId) : null,
     contact.sourceMessageId ? String(contact.sourceMessageId) : null,
@@ -211,18 +222,54 @@ export async function upsertGroupContact(env, contact) {
 export async function updateGroupContact(env, contactId, contact) {
   await env.DB.prepare(`
     UPDATE telegram_group_contacts
-    SET full_name = ?, normalized_name = ?, phone = ?, note = ?,
+    SET full_name = ?, normalized_name = ?, phone = ?,
+        secondary_phone = COALESCE(?, secondary_phone), note = ?,
         approved_by = ?, updated_at = datetime('now')
     WHERE id = ? AND chat_id = ?
   `).bind(
     contact.fullName,
     normalizeSearchText(contact.fullName),
     contact.phone,
+    contact.secondaryPhone || null,
     contact.note || null,
     String(contact.approvedBy),
     Number(contactId),
     String(contact.chatId),
   ).run();
+  return getGroupContact(env, contactId);
+}
+
+export async function replaceIncorrectGroupContact(env, contactId, contact) {
+  const existing = await getGroupContact(env, contactId);
+  if (!existing
+      || String(existing.chat_id) !== String(contact.chatId)
+      || existing.normalized_name !== normalizeSearchText(contact.fullName)
+      || Number(existing.wrong_votes) < 1) {
+    return null;
+  }
+  await env.DB.batch([
+    env.DB.prepare(`
+      UPDATE telegram_group_contacts
+      SET full_name = ?, normalized_name = ?, phone = ?, secondary_phone = ?, note = ?,
+          source_user_id = ?, source_message_id = ?, approved_by = ?,
+          correct_votes = 0, wrong_votes = 0, last_verified_at = NULL,
+          updated_at = datetime('now')
+      WHERE id = ? AND chat_id = ? AND wrong_votes > 0
+    `).bind(
+      contact.fullName,
+      normalizeSearchText(contact.fullName),
+      contact.phone,
+      contact.secondaryPhone || null,
+      contact.note || null,
+      contact.sourceUserId ? String(contact.sourceUserId) : null,
+      contact.sourceMessageId ? String(contact.sourceMessageId) : null,
+      String(contact.approvedBy),
+      Number(contactId),
+      String(contact.chatId),
+    ),
+    env.DB.prepare('DELETE FROM telegram_group_contact_votes WHERE contact_id = ?')
+      .bind(Number(contactId)),
+  ]);
   return getGroupContact(env, contactId);
 }
 

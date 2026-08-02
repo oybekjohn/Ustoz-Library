@@ -1,4 +1,4 @@
-const PHONE_PATTERN = /(?:\+?998[\s().-]*)?(?:\d[\s().-]*){9}/g;
+const PHONE_PATTERN = /(?:\+?998[\s().-]*(?:\d[\s().-]*){9}|\+?7[\s().-]*(?:\d[\s().-]*){10}|8[\s().-]*(?:\d[\s().-]*){10}|(?<!\d)(?:\d[\s().-]*){9}(?!\d))/g;
 
 const CYRILLIC_TO_LATIN = {
   а: 'a', б: 'b', в: 'v', г: 'g', д: 'd', е: 'e', ё: 'yo', ж: 'j', з: 'z',
@@ -49,6 +49,9 @@ export function normalizePhone(value) {
   const digits = String(value || '').replace(/\D/g, '');
   if (digits.length === 9) return `+998${digits}`;
   if (digits.length === 12 && digits.startsWith('998')) return `+${digits}`;
+  if (digits.length === 11 && digits.startsWith('7')) return `+${digits}`;
+  if (digits.length === 11 && digits.startsWith('8')) return `+7${digits.slice(1)}`;
+  if (digits.length >= 3 && digits.length <= 6) return digits;
   return null;
 }
 
@@ -158,7 +161,8 @@ export function displayName(user) {
 
 export function formatContactLine(contact) {
   const label = String(contact?.full_name || contact?.note || "Noma'lum").trim();
-  return `${label}: ${contact?.phone || '-'}`;
+  const phones = [contact?.phone, contact?.secondary_phone].filter(Boolean).join(', ') || '-';
+  return `${label}  ${phones}`;
 }
 
 export function formatContactsListPages(contacts, maxLength = 3500) {
@@ -168,7 +172,7 @@ export function formatContactsListPages(contacts, maxLength = 3500) {
   ));
   if (!sorted.length) return ['Telefonlar bazasi bo‘sh.'];
 
-  const rows = sorted.map((contact) => `${contact.full_name}  ${contact.phone}`);
+  const rows = sorted.map(formatContactLine);
   const pages = [];
   let pageRows = [];
   for (const row of rows) {

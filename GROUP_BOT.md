@@ -19,8 +19,9 @@ so'rovlarni moderatorlarga yuboradi.
 ## Guruh buyruqlari
 
 - `/tel` - barcha kontaktlarni alifbo tartibidagi oddiy ro'yxatda chiqaradi; hamma ishlata oladi.
-- `/tel_yoq` - `/tel` buyrug'ini yoqadi; moderatorlar uchun.
-- `/tel_toxtat` - `/tel` buyrug'ini vaqtincha to'xtatadi.
+- `/start_tel` - `/tel` buyrug'ini yoqadi; moderatorlar uchun.
+- `/stop_tel` - `/tel` buyrug'ini vaqtincha to'xtatadi; moderatorlar uchun.
+- `/tel_yoq` va `/tel_toxtat` - eski, ishlashda davom etadigan buyruq nomlari.
 - `/kontakt_qosh Ism yoki kasb | +998901234567` - kontakt qo'shadi.
 - `/kontakt_ochir KONTAKT_ID` - kontaktni o'chiradi.
 - `/moderatorlar` - guruh moderatorlarini ko'rsatadi.
@@ -35,11 +36,13 @@ Bot ism yoki kasb bo'yicha telefon so'ralganini lokal qoidalar bilan aniqlaydi.
 Mos kontaktlarning har birini so'rov xabariga reply qiladi:
 
 ```text
-Oybek shifokor: +998901234567
+Oybek shifokor  +998901234567, +998907654321
 ```
 
 Javob ostidagi `To'g'ri` va `Noto'g'ri` tugmalari kontakt ishonchliligini saqlaydi.
 Bir foydalanuvchining bitta kontakt uchun faqat oxirgi bahosi hisoblanadi.
+`Noto'g'ri` deb belgilangan ism uchun keyin yangi raqam yuborilsa, moderatorga eski va
+yangi ma'lumot ko'rsatiladi. Moderator tasdiqlagach eski kontakt yangisiga almashtiriladi.
 
 Yangi telefon, Telegram kontakti yoki rasm yuborilsa, barcha moderatorlarga shaxsiy
 tasdiqlash kartasi boradi. Birinchi qaror bergan moderator so'rovni yakunlaydi va

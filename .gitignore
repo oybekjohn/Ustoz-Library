@@ -222,4 +222,5 @@ node_modules/
 .wrangler/
 .dev.vars
 _migrate_tmp.sql
+contact-import-*.txt
 npm-debug.log*
