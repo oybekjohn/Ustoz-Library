@@ -1,6 +1,6 @@
 {
   "name": "ustoz-library",
-  "version": "3.3.3",
+  "version": "3.4.0",
   "description": "DL-library.uz — Renessans Ta'lim Universiteti raqamli kutubxonasi (Cloudflare Pages + D1 + R2)",
   "type": "module",
   "scripts": {
@@ -14,12 +14,8 @@
     "db:telegram-preview:remote": "wrangler d1 execute ustoz-library-db --remote --file=./migrations/0002_telegram_preview_admins.sql",
     "db:telegram-crud:local": "wrangler d1 execute ustoz-library-db --local --file=./migrations/0003_telegram_book_crud.sql",
     "db:telegram-crud:remote": "wrangler d1 execute ustoz-library-db --remote --file=./migrations/0003_telegram_book_crud.sql",
-    "db:group:local": "wrangler d1 execute ustoz-library-db --local --file=./migrations/0004_group_management.sql",
-    "db:group:remote": "wrangler d1 execute ustoz-library-db --remote --file=./migrations/0004_group_management.sql",
-    "db:admin-roles:local": "wrangler d1 execute ustoz-library-db --local --file=./migrations/0005_admin_roles.sql",
-    "db:admin-roles:remote": "wrangler d1 execute ustoz-library-db --remote --file=./migrations/0005_admin_roles.sql",
-    "db:group-contact-phone:local": "wrangler d1 execute ustoz-library-db --local --file=./migrations/0006_group_contact_secondary_phone.sql",
-    "db:group-contact-phone:remote": "wrangler d1 execute ustoz-library-db --remote --file=./migrations/0006_group_contact_secondary_phone.sql",
+    "db:remove-group:local": "wrangler d1 execute ustoz-library-db --local --file=./migrations/0004_remove_group_management.sql",
+    "db:remove-group:remote": "wrangler d1 execute ustoz-library-db --remote --file=./migrations/0004_remove_group_management.sql",
     "migrate:local": "node scripts/migrate.mjs --local",
     "migrate:remote": "node scripts/migrate.mjs --remote",
     "postinstall": "node scripts/patch-unpdf.mjs",

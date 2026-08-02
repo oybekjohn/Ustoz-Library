@@ -9,10 +9,6 @@ import {
 import { buildCoverPrompt } from './cover-prompt.js';
 import { createFirstPagesPdf, inspectPdfFirstPages } from './pdf.js';
 import { createStorageKey, deleteObjects, putObject } from './storage.js';
-import {
-  addGroupModerator,
-  disableGroupModeratorEverywhere,
-} from './group/repository.js';
 
 export const TELEGRAM_CATEGORIES = [
   { key: 'it', label: 'IT' },
@@ -30,7 +26,7 @@ export const TELEGRAM_CATEGORIES = [
 const IMAGE_MIMES = ['image/jpeg', 'image/png', 'image/webp'];
 const DEFAULT_MAX_PDF_BYTES = 19 * 1024 * 1024;
 const DEFAULT_OWNER_ID = '5252931517';
-const BOT_VERSION = '3.3.3';
+const BOT_VERSION = '3.4.0';
 const BOOKS_PAGE_SIZE = 6;
 
 const EDIT_FIELDS = {
@@ -63,29 +59,12 @@ function mainKeyboard(role = 'owner') {
       resize_keyboard: true,
     };
   }
-  if (role === 'group') {
-    return {
-      keyboard: [[{ text: 'Guruh boshqaruvi' }]],
-      resize_keyboard: true,
-    };
-  }
   return {
     keyboard: [
       [{ text: 'Kitoblarni boshqarish' }],
-      [{ text: 'Guruh boshqaruvi' }],
       [{ text: 'Adminlar' }, { text: 'Bot haqida' }],
     ],
     resize_keyboard: true,
-  };
-}
-
-function adminRoleKeyboard() {
-  return {
-    inline_keyboard: [
-      [{ text: 'DL Library admini', callback_data: 'admin:role:library' }],
-      [{ text: 'Guruh admini', callback_data: 'admin:role:group' }],
-      [{ text: 'Bekor qilish', callback_data: 'cancel' }],
-    ],
   };
 }
 
@@ -203,10 +182,13 @@ async function getTelegramAccess(env, userId) {
   const id = String(userId);
   if (isOwner(env, id)) return { user_id: id, role: 'owner' };
   try {
-    const admin = await env.DB.prepare('SELECT * FROM telegram_admins WHERE user_id = ?')
+    const admin = await env.DB.prepare(`
+      SELECT user_id, added_by, added_at, username, first_name
+      FROM telegram_admins WHERE user_id = ?
+    `)
       .bind(id)
       .first();
-    if (admin) return admin;
+    return admin ? { ...admin, role: 'library' } : null;
   } catch {}
   return null;
 }
@@ -214,23 +196,20 @@ async function getTelegramAccess(env, userId) {
 async function addTelegramAdmin(env, admin, addedBy) {
   await env.DB.prepare(`
     INSERT INTO telegram_admins
-      (user_id, added_by, added_at, role, username, first_name, group_chat_id)
-    VALUES (?, ?, datetime('now'), ?, ?, ?, ?)
+      (user_id, added_by, added_at, username, first_name)
+    VALUES (?, ?, datetime('now'), ?, ?)
     ON CONFLICT(user_id) DO UPDATE SET
       added_by=excluded.added_by,
       added_at=datetime('now'),
-      role=excluded.role,
       username=COALESCE(excluded.username, telegram_admins.username),
-      first_name=COALESCE(excluded.first_name, telegram_admins.first_name),
-      group_chat_id=excluded.group_chat_id
+      first_name=COALESCE(excluded.first_name, telegram_admins.first_name)
   `).bind(
-    String(admin.userId), String(addedBy), admin.role,
-    admin.username || null, admin.firstName || null, admin.groupChatId || null,
+    String(admin.userId), String(addedBy),
+    admin.username || null, admin.firstName || null,
   ).run();
 }
 
 async function removeTelegramAdmin(env, userId) {
-  await disableGroupModeratorEverywhere(env, userId);
   await env.DB.prepare('DELETE FROM telegram_admins WHERE user_id = ?')
     .bind(String(userId))
     .run();
@@ -238,7 +217,7 @@ async function removeTelegramAdmin(env, userId) {
 
 async function listTelegramAdmins(env) {
   const { results = [] } = await env.DB.prepare(
-    `SELECT user_id, role, username, first_name, group_chat_id, added_by, added_at
+    `SELECT user_id, username, first_name, added_by, added_at
      FROM telegram_admins ORDER BY added_at DESC`,
   ).all();
   return results;
@@ -255,13 +234,6 @@ async function refreshTelegramAdminProfiles(env, admins) {
       UPDATE telegram_admins SET username = ?, first_name = ? WHERE user_id = ?
     `).bind(admin.username || null, admin.first_name || null, String(admin.user_id)).run();
   }));
-}
-
-async function listConfiguredGroups(env) {
-  const { results = [] } = await env.DB.prepare(`
-    SELECT chat_id, title FROM telegram_group_configs WHERE enabled = 1 ORDER BY title
-  `).all();
-  return results;
 }
 
 async function getTelegramProfile(env, userId) {
@@ -1058,98 +1030,14 @@ async function handleAdminCallback(env, chatId, userId, data) {
     );
     return true;
   }
-  if (action === 'role:library' || action === 'role:group') {
-    const session = await getSession(env, userId);
-    if (session.state !== 'awaiting_admin_role') {
-      await sendMessage(env, chatId, 'Admin qo‘shish sessiyasi tugagan. Qaytadan boshlang.', adminKeyboard());
-      return true;
-    }
-    const pending = parseJson(session.pending_metadata, {});
-    if (!/^\d{4,20}$/.test(String(pending.userId || ''))) {
-      await resetSession(env, userId, chatId);
-      await sendMessage(env, chatId, 'Admin ID topilmadi. Qaytadan boshlang.', adminKeyboard());
-      return true;
-    }
-    if (action === 'role:library') {
-      await disableGroupModeratorEverywhere(env, pending.userId);
-      await addTelegramAdmin(env, {
-        ...pending,
-        role: 'library',
-        groupChatId: null,
-      }, userId);
-      await resetSession(env, userId, chatId);
-      await sendMessage(
-        env,
-        chatId,
-        `DL Library admini qo‘shildi: ${pending.firstName || pending.username || pending.userId}`,
-        mainKeyboard('owner'),
-      );
-      return true;
-    }
-
-    const groups = await listConfiguredGroups(env);
-    if (!groups.length) {
-      await sendMessage(env, chatId, 'Avval botni guruhga admin qilib, guruh ichida /guruh_ulash buyrug‘ini yuboring.');
-      return true;
-    }
-    await saveSession(env, { ...session, state: 'awaiting_admin_group' });
-    await sendMessage(env, chatId, 'Admin qaysi guruhga biriktiriladi?', {
-      inline_keyboard: [
-        ...groups.map((group) => [{
-          text: group.title,
-          callback_data: `admin:group:${group.chat_id}`,
-        }]),
-        [{ text: 'Bekor qilish', callback_data: 'cancel' }],
-      ],
-    });
-    return true;
-  }
-  if (action.startsWith('group:')) {
-    const session = await getSession(env, userId);
-    const groupChatId = action.slice('group:'.length);
-    const pending = parseJson(session.pending_metadata, {});
-    const groups = await listConfiguredGroups(env);
-    const group = groups.find((item) => String(item.chat_id) === String(groupChatId));
-    if (session.state !== 'awaiting_admin_group' || !group || !pending.userId) {
-      await sendMessage(env, chatId, 'Guruh adminini qo‘shish sessiyasi tugagan. Qaytadan boshlang.', adminKeyboard());
-      return true;
-    }
-    await disableGroupModeratorEverywhere(env, pending.userId);
-    await addTelegramAdmin(env, {
-      ...pending,
-      role: 'group',
-      groupChatId,
-    }, userId);
-    await addGroupModerator(env, {
-      chatId: groupChatId,
-      userId: pending.userId,
-      displayName: pending.firstName || pending.username || pending.userId,
-      username: pending.username,
-      firstName: pending.firstName,
-      addedBy: userId,
-    });
-    await resetSession(env, userId, chatId);
-    await sendMessage(
-      env,
-      chatId,
-      `Guruh admini qo‘shildi: ${pending.firstName || pending.username || pending.userId}\nGuruh: ${group.title}`,
-      mainKeyboard('owner'),
-    );
-    return true;
-  }
   if (action === 'list') {
     const admins = await listTelegramAdmins(env);
     await refreshTelegramAdminProfiles(env, admins);
-    const groups = await listConfiguredGroups(env);
-    const groupNames = new Map(groups.map((group) => [String(group.chat_id), group.title]));
     const lines = admins.length
       ? admins.map((admin) => {
           const name = admin.first_name || (admin.username ? `@${admin.username}` : admin.user_id);
           const username = admin.username ? `@${admin.username}` : 'username yo‘q';
-          const role = admin.role === 'group'
-            ? `Guruh admini — ${groupNames.get(String(admin.group_chat_id)) || admin.group_chat_id || '-'}`
-            : 'DL Library admini';
-          return `- ${name} | ${username} | ID: ${admin.user_id} | ${role}`;
+          return `- ${name} | ${username} | ID: ${admin.user_id}`;
         })
       : ["Hozircha qo'shimcha admin yo'q."];
     await sendMessage(env, chatId, [`Owner: ${ownerId(env)}`, ...lines].join('\n'), adminKeyboard());
@@ -1178,8 +1066,10 @@ export async function handleTelegramUpdate(env, update) {
   const message = update.message;
   const callback = update.callback_query;
   const from = message?.from || callback?.from;
-  const chatId = message?.chat?.id || callback?.message?.chat?.id;
+  const chat = message?.chat || callback?.message?.chat;
+  const chatId = chat?.id;
   if (!from || !chatId) return { background: null };
+  if (chat.type && chat.type !== 'private') return { background: null };
 
   const access = await getTelegramAccess(env, from.id);
   if (!access) {
@@ -1187,12 +1077,6 @@ export async function handleTelegramUpdate(env, update) {
     return { background: null };
   }
   await syncTelegramAdminProfile(env, from).catch(() => null);
-
-  if (access.role === 'group') {
-    if (callback) await answerCallback(env, callback.id, 'Faqat guruh boshqaruvi uchun ruxsat berilgan.');
-    await sendMessage(env, chatId, 'Sizga faqat guruh boshqaruvi uchun ruxsat berilgan.', mainKeyboard('group'));
-    return { background: null };
-  }
 
   if (callback) {
     await answerCallback(env, callback.id);
@@ -1312,22 +1196,18 @@ export async function handleTelegramUpdate(env, update) {
         return { background: null };
       }
       const profile = await getTelegramProfile(env, text);
-      await saveSession(env, {
-        ...session,
-        state: 'awaiting_admin_role',
-        pending_metadata: JSON.stringify({
-          userId: text,
-          username: profile.username,
-          firstName: profile.firstName,
-        }),
-      });
-      await sendMessage(env, chatId, [
-        `Admin: ${profile.firstName || profile.username || text}`,
-        profile.username ? `Username: @${profile.username}` : 'Username: topilmadi',
-        `ID: ${text}`,
-        '',
-        'Admin turini tanlang:',
-      ].join('\n'), adminRoleKeyboard());
+      await addTelegramAdmin(env, {
+        userId: text,
+        username: profile.username,
+        firstName: profile.firstName,
+      }, from.id);
+      await resetSession(env, from.id, chatId);
+      await sendMessage(
+        env,
+        chatId,
+        `DL Library admini qo‘shildi: ${profile.firstName || profile.username || text}`,
+        mainKeyboard('owner'),
+      );
       return { background: null };
     }
     if (text === ownerId(env)) {

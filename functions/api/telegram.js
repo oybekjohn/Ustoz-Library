@@ -4,7 +4,6 @@ import {
   finishTelegramUpdate,
   handleTelegramUpdate,
 } from '../_lib/telegram.js';
-import { handleGroupUpdate } from '../_lib/group/index.js';
 
 function safeEqual(left, right) {
   if (!left || !right || left.length !== right.length) return false;
@@ -31,8 +30,7 @@ export async function onRequestPost({ request, env, waitUntil }) {
   if (!claimed) return ok({ duplicate: true });
 
   try {
-    const groupResult = await handleGroupUpdate(env, update);
-    const result = groupResult.handled ? groupResult : await handleTelegramUpdate(env, update);
+    const result = await handleTelegramUpdate(env, update);
     if (result.background) {
       waitUntil((async () => {
         try {

@@ -6,12 +6,12 @@ metadata ma'lumotlari va bot session holatlari D1 ga yoziladi.
 ## Asosiy menyu
 
 - `Kitoblarni boshqarish`: faqat owner create, list, search, read, update va delete qiladi.
-- `Adminlar`: faqat owner admin qo'shadi, rol belgilaydi, ro'yxatni ko'radi va o'chiradi.
+- `Adminlar`: faqat owner admin qo'shadi, ro'yxatni ko'radi va o'chiradi.
 - `Bot haqida`: versiya, sayt, faol AI provider/model va fayl limitlarini ko'rsatadi.
 
 `DL Library admini` faqat yangi kitob yuklaydi va o'zi yuklayotgan kitob previewini
 ko'radi. U mavjud kitoblar, qidiruv, tahrirlash va adminlar ro'yxatiga kira olmaydi.
-`Guruh admini` esa faqat guruh boshqaruvi funksiyalariga kira oladi.
+Bot guruh chatlaridagi xabarlarni qayta ishlamaydi va faqat shaxsiy chatda ishlaydi.
 
 ## Yangi kitob qo'shish
 
@@ -65,6 +65,15 @@ npm run db:telegram-crud:remote
 ```
 
 Migratsiyalar mavjud kitoblarni o'chirmaydi.
+
+Oldingi guruh boshqaruvi o'rnatilgan production bazani bir marta tozalash uchun:
+
+```bash
+npm run db:remove-group:remote
+```
+
+Bu buyruq guruh sozlamalari, kontaktlari, so'rovlari va eski guruh adminlarini
+o'chiradi. Kitoblar va DL Library adminlari saqlanadi.
 
 ## Cloudflare secrets
 

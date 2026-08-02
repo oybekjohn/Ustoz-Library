@@ -10,7 +10,7 @@ import {
 class FakeDB {
   constructor() {
     this.sessions = new Map();
-    this.admins = new Map([['42', { user_id: '42', role: 'library' }]]);
+    this.admins = new Map([['42', { user_id: '42' }]]);
   }
 
   prepare(sql) {
@@ -22,7 +22,7 @@ class FakeDB {
             if (sql.includes('SELECT * FROM telegram_sessions')) {
               return database.sessions.get(String(values[0])) || null;
             }
-            if (sql.includes('SELECT * FROM telegram_admins')) {
+            if (sql.includes('FROM telegram_admins WHERE user_id')) {
               return database.admins.get(String(values[0])) || null;
             }
             throw new Error(`Unexpected first: ${sql}`);
@@ -36,18 +36,13 @@ class FakeDB {
               }
               return { success: true, meta: { changes: admin ? 1 : 0 } };
             }
-            if (sql.includes('UPDATE telegram_group_moderators SET enabled = 0')) {
-              return { success: true, meta: { changes: 0 } };
-            }
             if (sql.includes('INSERT INTO telegram_admins')) {
-              const [targetId, addedBy, role, username, firstName, groupChatId] = values;
+              const [targetId, addedBy, username, firstName] = values;
               database.admins.set(String(targetId), {
                 user_id: String(targetId),
                 added_by: String(addedBy),
-                role,
                 username,
                 first_name: firstName,
-                group_chat_id: groupChatId,
               });
               return { success: true, meta: { changes: 1 } };
             }
@@ -164,7 +159,7 @@ test('/start asosiy boshqaruv tugmalarini ko\'rsatadi', async (context) => {
   });
 
   const labels = requestBody.reply_markup.keyboard.flat().map((button) => button.text);
-  assert.deepEqual(labels, ['Kitoblarni boshqarish', 'Guruh boshqaruvi', 'Adminlar', 'Bot haqida']);
+  assert.deepEqual(labels, ['Kitoblarni boshqarish', 'Adminlar', 'Bot haqida']);
 });
 
 test('DL Library admini faqat kitob yuklash menyusini ko‘radi', async (context) => {
@@ -225,7 +220,7 @@ test('DL Library admini eski callback orqali kitoblar ro‘yxatini ko‘ra olmay
   assert.match(calls.at(-1).text, /faqat owner uchun/);
 });
 
-test('owner yangi admin uchun DL Library rolini tanlaydi va profil saqlanadi', async (context) => {
+test('owner yangi DL Library adminini qo‘shadi va profil saqlanadi', async (context) => {
   const originalFetch = globalThis.fetch;
   const calls = [];
   globalThis.fetch = async (url, options) => {
@@ -263,26 +258,40 @@ test('owner yangi admin uchun DL Library rolini tanlaydi va profil saqlanadi', a
       text: '7777',
     },
   });
-  assert.equal(DB.sessions.get('42').state, 'awaiting_admin_role');
-  assert.match(calls.at(-1).body.text, /@ali_admin/);
-
-  await handleTelegramUpdate(env, {
-    callback_query: {
-      id: 'admin-role',
-      data: 'admin:role:library',
-      from: { id: 42, first_name: 'Owner' },
-      message: { chat: { id: 100 } },
-    },
-  });
+  assert.equal(DB.sessions.get('42').state, 'idle');
+  assert.match(calls.at(-1).body.text, /Ali/);
 
   assert.deepEqual(DB.admins.get('7777'), {
     user_id: '7777',
     added_by: '42',
-    role: 'library',
     username: 'ali_admin',
     first_name: 'Ali',
-    group_chat_id: null,
   });
+});
+
+test('bot guruh chatidagi xabarlarni e’tiborsiz qoldiradi', async (context) => {
+  const originalFetch = globalThis.fetch;
+  let called = false;
+  globalThis.fetch = async () => {
+    called = true;
+    return new Response(JSON.stringify({ ok: true, result: {} }));
+  };
+  context.after(() => { globalThis.fetch = originalFetch; });
+
+  const result = await handleTelegramUpdate({
+    DB: new FakeDB(),
+    TELEGRAM_OWNER_ID: '42',
+    TELEGRAM_BOT_TOKEN: 'test-token',
+  }, {
+    message: {
+      from: { id: 42 },
+      chat: { id: -1001, type: 'supergroup' },
+      text: '/start',
+    },
+  });
+
+  assert.equal(result.background, null);
+  assert.equal(called, false);
 });
 
 test('kitob preview talab qilingan uch tilli HTML formatda chiqadi', () => {
