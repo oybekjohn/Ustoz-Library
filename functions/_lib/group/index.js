@@ -112,8 +112,8 @@ function requestKeyboard(requestId, kind) {
 function contactVoteKeyboard(contactId) {
   return {
     inline_keyboard: [[
-      { text: 'To‘g‘ri', callback_data: `grp:vote:${contactId}:1` },
-      { text: 'Noto‘g‘ri', callback_data: `grp:vote:${contactId}:-1` },
+      { text: '✅', callback_data: `grp:vote:${contactId}:1` },
+      { text: '❌', callback_data: `grp:vote:${contactId}:-1` },
     ]],
   };
 }
@@ -376,20 +376,25 @@ async function sendTelDirectory(env, message, config) {
 }
 
 async function sendContactSearchResults(env, message, contacts) {
-  if (!contacts.length) {
-    await sendGroupText(env, message.chat.id, 'Bazadan mos telefon raqami topilmadi.', {
-      threadId: message.message_thread_id,
-      replyTo: message.message_id,
-    });
-    return;
-  }
-  for (const contact of contacts.slice(0, 12)) {
+  if (!contacts.length) return;
+  if (contacts.length === 1) {
+    const [contact] = contacts;
     await sendGroupText(env, message.chat.id, escapeHtml(formatContactLine(contact)), {
       threadId: message.message_thread_id,
       replyTo: message.message_id,
       replyMarkup: contactVoteKeyboard(contact.id),
     });
+    return;
   }
+  await sendGroupText(
+    env,
+    message.chat.id,
+    contacts.map((contact) => escapeHtml(formatContactLine(contact))).join('\n'),
+    {
+      threadId: message.message_thread_id,
+      replyTo: message.message_id,
+    },
+  );
 }
 
 async function handlePhoneTopicMessage(env, message, config) {

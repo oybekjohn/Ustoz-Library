@@ -39,7 +39,9 @@ Mos kontaktlarning har birini so'rov xabariga reply qiladi:
 Oybek shifokor  +998901234567, +998907654321
 ```
 
-Javob ostidagi `To'g'ri` va `Noto'g'ri` tugmalari kontakt ishonchliligini saqlaydi.
+Faqat bitta kontakt topilsa, javob ostidagi `✅` va `❌` tugmalari kontakt
+ishonchliligini saqlaydi. Bir nechta kontakt topilsa, barchasi bitta reply xabarda
+qator qilib, tugmalarsiz yuboriladi. Mos kontakt topilmasa bot javob bermaydi.
 Bir foydalanuvchining bitta kontakt uchun faqat oxirgi bahosi hisoblanadi.
 `Noto'g'ri` deb belgilangan ism uchun keyin yangi raqam yuborilsa, moderatorga eski va
 yangi ma'lumot ko'rsatiladi. Moderator tasdiqlagach eski kontakt yangisiga almashtiriladi.

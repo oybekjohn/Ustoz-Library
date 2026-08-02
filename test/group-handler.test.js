@@ -99,8 +99,58 @@ test('ism so‘ralganda bot kontaktni shu xabarga reply qilib baholash tugmalari
   assert.equal(calls[0].reply_parameters.message_id, 55);
   assert.deepEqual(
     calls[0].reply_markup.inline_keyboard[0].map((button) => button.text),
-    ['To‘g‘ri', 'Noto‘g‘ri'],
+    ['✅', '❌'],
   );
+});
+
+test('bir nechta mos kontakt bitta reply xabarda tugmalarsiz chiqadi', async (context) => {
+  const calls = mockTelegram(context);
+  const DB = new GroupFakeDB();
+  DB.contacts.push({
+    id: 2,
+    chat_id: '-1001',
+    full_name: 'Oybek Usta',
+    normalized_name: 'oybek usta',
+    aliases_json: '[]',
+    phone: '+998909876543',
+    secondary_phone: null,
+    correct_votes: 0,
+    wrong_votes: 0,
+  });
+
+  await handleGroupUpdate({ DB, TELEGRAM_BOT_TOKEN: 'test-token' }, {
+    message: {
+      message_id: 56,
+      message_thread_id: 77,
+      chat: { id: -1001, type: 'supergroup' },
+      from: { id: 42, first_name: 'Ali' },
+      text: 'Oybekning telefon nomeri kimda bor?',
+    },
+  });
+
+  assert.equal(calls.length, 1);
+  assert.match(calls[0].text, /Oybek Shifokor  \+998901234567, \+998907654321/);
+  assert.match(calls[0].text, /Oybek Usta  \+998909876543/);
+  assert.equal(calls[0].reply_parameters.message_id, 56);
+  assert.equal(calls[0].reply_markup, undefined);
+});
+
+test('telefon so‘rovi bazaga mos kelmasa bot javob bermaydi', async (context) => {
+  const calls = mockTelegram(context);
+  await handleGroupUpdate({
+    DB: new GroupFakeDB(),
+    TELEGRAM_BOT_TOKEN: 'test-token',
+  }, {
+    message: {
+      message_id: 57,
+      message_thread_id: 77,
+      chat: { id: -1001, type: 'supergroup' },
+      from: { id: 42, first_name: 'Ali' },
+      text: 'Veterinarning telefon nomeri kimda bor?',
+    },
+  });
+
+  assert.equal(calls.length, 0);
 });
 
 test('/tel barcha kontaktlarni oddiy matn ko‘rinishida chiqaradi', async (context) => {
