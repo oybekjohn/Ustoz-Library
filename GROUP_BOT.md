@@ -18,7 +18,7 @@ so'rovlarni moderatorlarga yuboradi.
 
 ## Guruh buyruqlari
 
-- `/tel` - barcha kontaktlarni alifbo tartibida chiqaradi; hamma ishlata oladi.
+- `/tel` - barcha kontaktlarni alifbo tartibidagi oddiy ro'yxatda chiqaradi; hamma ishlata oladi.
 - `/tel_yoq` - `/tel` buyrug'ini yoqadi; moderatorlar uchun.
 - `/tel_toxtat` - `/tel` buyrug'ini vaqtincha to'xtatadi.
 - `/kontakt_qosh Ism yoki kasb | +998901234567` - kontakt qo'shadi.

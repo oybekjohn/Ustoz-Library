@@ -6,7 +6,7 @@ import {
   extractPhones,
   extractRequestedName,
   formatContactLine,
-  formatContactsTablePages,
+  formatContactsListPages,
   rankContacts,
 } from '../functions/_lib/group/utils.js';
 
@@ -39,13 +39,13 @@ test('kontakt javobi talab qilingan ko‘rinishda chiqadi', () => {
   );
 });
 
-test('/tel jadvali kontaktlarni alifbo tartibida chiqaradi', () => {
-  const [page] = formatContactsTablePages([
+test('/tel oddiy kontaktlarni alifbo tartibida chiqaradi', () => {
+  const [page] = formatContactsListPages([
     { full_name: 'Zafar Usta', phone: '+998902222222' },
     { full_name: 'Akmal Doktor', phone: '+998901111111' },
   ]);
   assert.ok(page.indexOf('Akmal Doktor') < page.indexOf('Zafar Usta'));
-  assert.match(page, /Ism yoki kasb\s+Telefon/);
+  assert.match(page, /Akmal Doktor  \+998901111111/);
 });
 
 test('Telegram JSON eksportidan kontaktlar deduplikatsiya qilinadi', () => {

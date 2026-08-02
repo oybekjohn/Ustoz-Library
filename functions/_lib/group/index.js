@@ -55,7 +55,7 @@ import {
   extractPhones,
   extractRequestedName,
   formatContactLine,
-  formatContactsTablePages,
+  formatContactsListPages,
   normalizePhone,
   rankContacts,
 } from './utils.js';
@@ -324,12 +324,13 @@ async function sendTelDirectory(env, message, config) {
     return;
   }
   const contacts = await listGroupContacts(env, message.chat.id);
-  const pages = formatContactsTablePages(contacts);
+  const pages = formatContactsListPages(contacts);
   for (let index = 0; index < pages.length; index += 1) {
     const pageLabel = pages.length > 1 ? ` (${index + 1}/${pages.length})` : '';
     await sendGroupText(env, message.chat.id, [
       `<b>Telefonlar bazasi${pageLabel}</b>`,
-      `<pre>${escapeHtml(pages[index])}</pre>`,
+      '',
+      escapeHtml(pages[index]),
     ].join('\n'), { threadId: message.message_thread_id });
   }
 }

@@ -99,7 +99,7 @@ test('ism so‘ralganda bot kontaktni shu xabarga reply qilib baholash tugmalari
   );
 });
 
-test('/tel barcha kontaktlarni jadval ko‘rinishida chiqaradi', async (context) => {
+test('/tel barcha kontaktlarni oddiy matn ko‘rinishida chiqaradi', async (context) => {
   const calls = mockTelegram(context);
   await handleGroupUpdate({
     DB: new GroupFakeDB(),
@@ -114,8 +114,8 @@ test('/tel barcha kontaktlarni jadval ko‘rinishida chiqaradi', async (context)
     },
   });
 
-  assert.match(calls[0].text, /<pre>/);
-  assert.match(calls[0].text, /Oybek Shifokor/);
+  assert.doesNotMatch(calls[0].text, /<pre>/);
+  assert.match(calls[0].text, /Oybek Shifokor  \+998901234567/);
 });
 
 test('kontakt bahosi foydalanuvchi ID si bilan yangilanadi', async (context) => {

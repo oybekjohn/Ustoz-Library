@@ -161,36 +161,26 @@ export function formatContactLine(contact) {
   return `${label}: ${contact?.phone || '-'}`;
 }
 
-function truncateCell(value, width) {
-  const text = String(value || '');
-  if (text.length <= width) return text.padEnd(width, ' ');
-  return `${text.slice(0, Math.max(1, width - 1))}…`;
-}
-
-export function formatContactsTablePages(contacts, maxLength = 3800) {
+export function formatContactsListPages(contacts, maxLength = 3500) {
   const sorted = [...contacts].sort((left, right) => (
     normalizeSearchText(left.full_name).localeCompare(normalizeSearchText(right.full_name), 'uz')
       || String(left.phone).localeCompare(String(right.phone))
   ));
   if (!sorted.length) return ['Telefonlar bazasi bo‘sh.'];
 
-  const header = ' #   Ism yoki kasb             Telefon';
-  const divider = '---  ------------------------  -------------';
-  const rows = sorted.map((contact, index) => (
-    `${String(index + 1).padStart(3, ' ')}  ${truncateCell(contact.full_name, 24)}  ${contact.phone}`
-  ));
+  const rows = sorted.map((contact) => `${contact.full_name}  ${contact.phone}`);
   const pages = [];
   let pageRows = [];
   for (const row of rows) {
-    const candidate = [header, divider, ...pageRows, row].join('\n');
+    const candidate = [...pageRows, row].join('\n');
     if (candidate.length > maxLength && pageRows.length) {
-      pages.push([header, divider, ...pageRows].join('\n'));
+      pages.push(pageRows.join('\n'));
       pageRows = [row];
     } else {
       pageRows.push(row);
     }
   }
-  if (pageRows.length) pages.push([header, divider, ...pageRows].join('\n'));
+  if (pageRows.length) pages.push(pageRows.join('\n'));
   return pages;
 }
 
