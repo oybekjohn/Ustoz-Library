@@ -25,3 +25,16 @@ test('Claude fallback uchun faqat dastlabki ikki sahifali PDF yaratiladi', async
 
   assert.equal(result.pageCount, 2);
 });
+
+test('PDF.js yuklanmasa sahifa soni pdf-lib orqali olinadi', async () => {
+  const buffer = await readFile('books/kitob1 monografiya.pdf');
+  const source = buffer.buffer.slice(buffer.byteOffset, buffer.byteOffset + buffer.byteLength);
+  const result = await inspectPdfFirstPages(source, 2, {
+    parserLoader: async () => {
+      throw new Error('Cloudflare PDF.js import xatosi');
+    },
+  });
+
+  assert.equal(result.pageCount, 508);
+  assert.equal(result.firstPagesText, '');
+});

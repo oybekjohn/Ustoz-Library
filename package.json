@@ -1,6 +1,6 @@
 {
   "name": "ustoz-library",
-  "version": "3.3.2",
+  "version": "3.3.3",
   "description": "DL-library.uz — Renessans Ta'lim Universiteti raqamli kutubxonasi (Cloudflare Pages + D1 + R2)",
   "type": "module",
   "scripts": {
@@ -22,6 +22,8 @@
     "db:group-contact-phone:remote": "wrangler d1 execute ustoz-library-db --remote --file=./migrations/0006_group_contact_secondary_phone.sql",
     "migrate:local": "node scripts/migrate.mjs --local",
     "migrate:remote": "node scripts/migrate.mjs --remote",
+    "postinstall": "node scripts/patch-unpdf.mjs",
+    "test:pdf-worker": "wrangler dev scripts/pdf-worker-smoke.js --local --port 8799",
     "telegram:webhook": "node scripts/telegram-webhook.mjs",
     "test": "node --test"
   },
@@ -30,6 +32,6 @@
   },
   "dependencies": {
     "pdf-lib": "^1.17.1",
-    "unpdf": "^1.8.0"
+    "unpdf": "1.8.0"
   }
 }

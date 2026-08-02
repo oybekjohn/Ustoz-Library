@@ -27,9 +27,9 @@ function ensureMathSumPrecise() {
   });
 }
 
-export async function inspectPdfFirstPages(pdfBuffer, maxPages = 2) {
+async function inspectTextLayer(pdfBuffer, maxPages, parserLoader) {
   ensureMathSumPrecise();
-  const { getDocumentProxy } = await import('unpdf');
+  const { getDocumentProxy } = await parserLoader();
   let document;
 
   try {
@@ -59,12 +59,40 @@ export async function inspectPdfFirstPages(pdfBuffer, maxPages = 2) {
       pageCount,
       firstPagesText: chunks.join('\n\n').slice(0, MAX_EXTRACTED_TEXT_CHARS),
     };
-  } catch (error) {
-    throw new Error(`PDF parser xatosi: ${error?.message || 'noma’lum xatolik'}`, {
-      cause: error,
-    });
   } finally {
     await document?.loadingTask?.destroy?.();
+  }
+}
+
+async function pageCountWithPdfLib(pdfBuffer) {
+  const { PDFDocument } = await import('pdf-lib');
+  const document = await PDFDocument.load(pdfBuffer, {
+    ignoreEncryption: true,
+    updateMetadata: false,
+  });
+  return document.getPageCount();
+}
+
+export async function inspectPdfFirstPages(pdfBuffer, maxPages = 2, options = {}) {
+  const parserLoader = options.parserLoader || (() => import('unpdf'));
+  try {
+    return await inspectTextLayer(pdfBuffer, maxPages, parserLoader);
+  } catch (parserError) {
+    try {
+      const pageCount = await pageCountWithPdfLib(pdfBuffer);
+      console.warn(JSON.stringify({
+        event: 'pdf_text_parser_fallback',
+        error: parserError?.message || String(parserError),
+        pageCount,
+      }));
+      return { pageCount, firstPagesText: '' };
+    } catch (fallbackError) {
+      throw new Error(
+        `PDF parser xatosi: ${parserError?.message || 'noma’lum xatolik'}; `
+        + `sahifa soni ham olinmadi: ${fallbackError?.message || 'noma’lum xatolik'}`,
+        { cause: fallbackError },
+      );
+    }
   }
 }
 
