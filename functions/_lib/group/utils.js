@@ -7,6 +7,17 @@ const CYRILLIC_TO_LATIN = {
   ъ: '', ы: 'i', ь: '', э: 'e', ю: 'yu', я: 'ya', қ: 'q', ғ: 'g', ҳ: 'h', ў: 'o',
 };
 
+const SEARCH_TERM_GROUPS = [
+  {
+    canonical: 'doktor',
+    pattern: /^(?:doktor|duxtir|duktir|duhtir|doktir|dohtir|doxtir|doxtor|shifokor|vrach)(?:lar)?(?:ning|ni)?$/,
+  },
+];
+
+function canonicalizeSearchToken(token) {
+  return SEARCH_TERM_GROUPS.find((group) => group.pattern.test(token))?.canonical || token;
+}
+
 const REQUEST_PHRASES = [
   'telefon nomeri', 'telefon raqami', 'telefonini', 'telefoni', 'telefon',
   'nomeri', 'nomerini', 'raqami', 'raqamini', 'kontakti', 'kontakt',
@@ -38,11 +49,12 @@ export function normalizeSearchText(value) {
     .replace(/[’‘`ʻʼ]/g, "'");
   let transliterated = '';
   for (const char of lower) transliterated += CYRILLIC_TO_LATIN[char] ?? char;
-  return transliterated
+  const cleaned = transliterated
     .replace(/[^a-z0-9'\s]/g, ' ')
     .replace(/'/g, '')
     .replace(/\s+/g, ' ')
     .trim();
+  return cleaned.split(' ').map(canonicalizeSearchToken).join(' ');
 }
 
 export function normalizePhone(value) {

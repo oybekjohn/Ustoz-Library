@@ -153,6 +153,59 @@ test('telefon so‘rovi bazaga mos kelmasa bot javob bermaydi', async (context) 
   assert.equal(calls.length, 0);
 });
 
+test('duxtir so‘rovi barcha doktor kontaktlarini bitta xabarda chiqaradi', async (context) => {
+  const calls = mockTelegram(context);
+  const DB = new GroupFakeDB();
+  DB.contacts = [
+    {
+      id: 10,
+      chat_id: '-1001',
+      full_name: 'Akbar Duktir',
+      normalized_name: 'akbar duktir',
+      aliases_json: '[]',
+      phone: '+998901111111',
+      correct_votes: 0,
+      wrong_votes: 0,
+    },
+    {
+      id: 11,
+      chat_id: '-1001',
+      full_name: 'Olim Doktor',
+      normalized_name: 'olim doktor',
+      aliases_json: '[]',
+      phone: '+998902222222',
+      correct_votes: 0,
+      wrong_votes: 0,
+    },
+    {
+      id: 12,
+      chat_id: '-1001',
+      full_name: 'Hamroz Sartarosh',
+      normalized_name: 'hamroz sartarosh',
+      aliases_json: '[]',
+      phone: '+998903333333',
+      correct_votes: 0,
+      wrong_votes: 0,
+    },
+  ];
+
+  await handleGroupUpdate({ DB, TELEGRAM_BOT_TOKEN: 'test-token' }, {
+    message: {
+      message_id: 58,
+      message_thread_id: 77,
+      chat: { id: -1001, type: 'supergroup' },
+      from: { id: 42, first_name: 'Ali' },
+      text: 'Duxtirlarning telefon nomeri kimda bor?',
+    },
+  });
+
+  assert.equal(calls.length, 1);
+  assert.match(calls[0].text, /Akbar Duktir  \+998901111111/);
+  assert.match(calls[0].text, /Olim Doktor  \+998902222222/);
+  assert.doesNotMatch(calls[0].text, /Hamroz Sartarosh/);
+  assert.equal(calls[0].reply_markup, undefined);
+});
+
 test('/tel barcha kontaktlarni oddiy matn ko‘rinishida chiqaradi', async (context) => {
   const calls = mockTelegram(context);
   await handleGroupUpdate({

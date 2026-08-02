@@ -33,6 +33,8 @@ so'rovlarni moderatorlarga yuboradi.
 ## Telefon topigi
 
 Bot ism yoki kasb bo'yicha telefon so'ralganini lokal qoidalar bilan aniqlaydi.
+`doktor`, `duxtir`, `duktir`, `do'ktir`, `shifokor`, `vrach` va ularning
+ko'plik-kelishik shakllari bitta `doktor` qidiruv tushunchasi sifatida ishlaydi.
 Mos kontaktlarning har birini so'rov xabariga reply qiladi:
 
 ```text

@@ -8,6 +8,7 @@ import {
   formatContactLine,
   formatContactsListPages,
   normalizePhone,
+  normalizeSearchText,
   rankContacts,
 } from '../functions/_lib/group/utils.js';
 
@@ -27,6 +28,22 @@ test('+7 va qisqa xizmat raqamlari saqlanadi', () => {
 test('telefon so‘rovidan ism yoki kasb ajratiladi', () => {
   assert.equal(extractRequestedName('Oybekning telefon nomeri kimda bor?'), 'oybek');
   assert.equal(extractRequestedName('Shashlikchining nomerini tashlanglar'), 'shashlikchi');
+});
+
+test('doktor kasbining imloviy va grammatik variantlari bir xil qidiriladi', () => {
+  for (const value of [
+    'doktor', 'duxtir', 'duktir', "do'ktir", 'doxtir', 'shifokor', 'vrach',
+    'doktorlar', 'duxtirning', 'шифокорларнинг',
+  ]) {
+    assert.equal(normalizeSearchText(value), 'doktor');
+  }
+
+  const contacts = [
+    { id: 1, full_name: 'Akbar Duktir', normalized_name: 'akbar duktir', phone: '+998901111111' },
+    { id: 2, full_name: 'Olim Doktor', normalized_name: 'olim doktor', phone: '+998902222222' },
+    { id: 3, full_name: 'Hamroz Sartarosh', normalized_name: 'hamroz sartarosh', phone: '+998903333333' },
+  ];
+  assert.deepEqual(rankContacts(contacts, 'do‘ktirlar').map((item) => item.id), [1, 2]);
 });
 
 test('bir xil va o‘xshash ismli barcha kontaktlar saralanadi', () => {
