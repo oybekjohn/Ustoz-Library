@@ -57,17 +57,29 @@
   <!-- ========== NAVBAR ========== -->
   <nav class="navbar" id="navbar">
     <div class="container">
-      <a href="https://dl-library.uz" class="navbar__logo">
+      <a href="/" class="navbar__logo" id="nav-logo-btn">
         <img src="pictures/RTU_logo.svg" alt="RTU" class="navbar__logo-img" />
         <div class="navbar__logo-text"><span>DL-library.uz </span></div>
       </a>
+
+      <!-- Main Navigation Tabs -->
+      <div class="navbar__nav-links" id="navbar-nav-links">
+        <button class="nav-tab-btn active" data-view="books">📚 Kitoblar</button>
+        <button class="nav-tab-btn" data-view="presentations">📊 Taqdimotlar</button>
+        <button class="nav-tab-btn" data-view="videos">🎥 Videolar</button>
+        <button class="nav-tab-btn" data-view="tests">📝 Testlar</button>
+      </div>
+
       <div class="navbar__actions">
         <div class="lang-switcher">
           <button class="lang-btn active" data-lang="uz">UZ</button>
           <button class="lang-btn" data-lang="ru">RU</button>
           <button class="lang-btn" data-lang="en">EN</button>
         </div>
-        <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">🌙</button>
+        <button class="theme-toggle" id="theme-toggle-btn" aria-label="Toggle theme">🌙</button>
+        <div id="user-auth-slot" class="user-auth-slot">
+          <button id="btn-google-login" class="btn btn-sm btn-outline-google">Google orqali kirish</button>
+        </div>
       </div>
     </div>
   </nav>
@@ -128,7 +140,7 @@
   </section>
 
   <!-- ========== BOOKS GRID ========== -->
-  <section class="books-section">
+  <section class="books-section" id="books-section-view">
     <div class="container">
       <div class="books-grid" id="books-grid">
         <!-- Books will be rendered by JavaScript -->
@@ -139,6 +151,13 @@
       <!-- Pagination -->
       <div class="pagination__info" id="pagination-info"></div>
       <div class="pagination" id="pagination"></div>
+    </div>
+  </section>
+
+  <!-- ========== DYNAMIC VIEW SECTION (Presentations, Videos, Tests, Profile) ========== -->
+  <section class="dynamic-view-section" id="dynamic-view-section" style="display: none;">
+    <div class="container" id="dynamic-view-container">
+      <!-- Dynamic view content renders here -->
     </div>
   </section>
 
@@ -228,7 +247,7 @@
   <script src="js/neural-bg.js"></script>
   <script src="js/qr.js"></script>
   <script src="js/flipbook.js"></script>
-  <script src="js/app.js"></script>
+  <script type="module" src="js/app.js"></script>
 
 </body>
 
