@@ -1,8 +1,4 @@
-/**
- * /api/tests
- * GET: List published tests (without correct answers)
- * POST: Create new test with parsed questions (Admin)
- */
+import { requireAuth } from '../../_lib/auth.js';
 
 export async function onRequestGet(context) {
   const { env, request } = context;
@@ -52,6 +48,10 @@ export async function onRequestGet(context) {
 
 export async function onRequestPost(context) {
   const { env, request } = context;
+  const session = await requireAuth(request, env);
+  if (!session) {
+    return new Response(JSON.stringify({ error: 'Avtorizatsiya talab qilinadi' }), { status: 401 });
+  }
 
   try {
     const body = await request.json();

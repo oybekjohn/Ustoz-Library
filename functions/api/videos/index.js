@@ -3,6 +3,8 @@
  * GET: List published videos
  * POST: Create new video (Admin)
  */
+
+import { requireAuth } from '../../_lib/auth.js';
 import { validateVideoInput } from '../../_lib/videos.js';
 
 export async function onRequestGet(context) {
@@ -10,6 +12,8 @@ export async function onRequestGet(context) {
   const url = new URL(request.url);
   const category = url.searchParams.get('category');
   const language = url.searchParams.get('language');
+  const all = url.searchParams.get('all') === '1';
+  const session = all ? await requireAuth(request, env) : null;
 
   let sql = `SELECT * FROM videos WHERE published = 1`;
   const params = [];
@@ -38,6 +42,10 @@ export async function onRequestGet(context) {
 
 export async function onRequestPost(context) {
   const { env, request } = context;
+  const session = await requireAuth(request, env);
+  if (!session) {
+    return new Response(JSON.stringify({ error: 'Avtorizatsiya talab qilinadi' }), { status: 401 });
+  }
 
   try {
     const body = await request.json();
@@ -74,3 +82,4 @@ export async function onRequestPost(context) {
     return new Response(JSON.stringify({ error: err.message }), { status: 500 });
   }
 }
+
