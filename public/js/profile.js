@@ -6,10 +6,15 @@ import { currentUser, logoutUser } from './auth.js';
 export async function initProfilePage(containerEl) {
   if (!currentUser) {
     containerEl.innerHTML = `
-      <div class="profile-card text-center">
-        <h2>Profilga kirilmagan</h2>
-        <p>Tarix va progressni saqlash uchun profilga kiring.</p>
-        <button class="btn btn-primary" onclick="window.location.href='/api/user-auth/google/start'">Google orqali kirish</button>
+      <div class="profile-card text-center" style="padding: 3rem;">
+        <h2 style="margin-bottom: 1rem;">👤 Profil</h2>
+        <p style="color: var(--text-muted); max-width: 400px; margin: 0 auto 1.5rem;">
+          Profil sahifasi keyingi versiyada Google akkaunt orqali kirganingizda faollashadi.
+          Hozircha barcha materiallar (kitoblar, prezentatsiyalar, videolar va testlar) profilsiz ishlatilishi mumkin.
+        </p>
+        <div style="padding: 1rem; background: var(--bg-hover); border-radius: 12px; display: inline-block;">
+          <p style="margin: 0; font-size: 0.9rem;">🔜 Tez kunda: progress saqlash, test natijalari tarixi va Telegram ulanishi</p>
+        </div>
       </div>
     `;
     return;

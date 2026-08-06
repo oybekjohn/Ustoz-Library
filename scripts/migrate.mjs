@@ -77,7 +77,7 @@ for (const b of books) {
   }
 
   inserts.push(
-    `INSERT INTO books (id, title_uz, title_ru, title_en, author, year, category, language, pages, file_key, cover_key, description_uz, description_ru, description_en) VALUES (` +
+    `INSERT OR REPLACE INTO books (id, title_uz, title_ru, title_en, author, year, category, language, pages, file_key, cover_key, description_uz, description_ru, description_en) VALUES (` +
     [
       b.id, sqlStr(b.title.uz), sqlStr(b.title.ru), sqlStr(b.title.en),
       sqlStr(b.author), b.year || 'NULL', sqlStr(b.category), sqlStr(b.language || 'uz'),

@@ -10,20 +10,31 @@ export async function onRequestGet(context) {
   const category = url.searchParams.get('category');
   const language = url.searchParams.get('language');
 
+  const all = url.searchParams.get('all');
+
   let sql = `SELECT t.id, t.title_uz, t.title_ru, t.title_en, t.description_uz, t.description_ru, t.description_en,
                     t.category, t.language, t.duration_minutes, t.passing_percent, t.max_attempts,
                     (SELECT COUNT(*) FROM test_questions q WHERE q.test_id = t.id) as question_count
-             FROM tests t
-             WHERE t.published = 1`;
+             FROM tests t`;
+  
   const params = [];
+  const conditions = [];
+
+  if (!all) {
+    conditions.push(`t.published = 1`);
+  }
 
   if (category) {
-    sql += ` AND t.category = ?`;
+    conditions.push(`t.category = ?`);
     params.push(category);
   }
   if (language) {
-    sql += ` AND t.language = ?`;
+    conditions.push(`t.language = ?`);
     params.push(language);
+  }
+
+  if (conditions.length > 0) {
+    sql += ` WHERE ` + conditions.join(' AND ');
   }
 
   sql += ` ORDER BY t.created_at DESC`;

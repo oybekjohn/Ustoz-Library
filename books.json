@@ -11,7 +11,7 @@
       "year": 2024,
       "category": "it",
       "language": "uz",
-      "pages": null,
+      "pages": 180,
       "file": "books/kitob1 monografiya.pdf",
       "cover": "books/pics/kitob1.png",
       "qr": "books/pics/kitob1qr.png",
@@ -32,7 +32,7 @@
       "year": 2025,
       "category": "it",
       "language": "uz",
-      "pages": null,
+      "pages": 120,
       "file": "books/kitob2 Глоссарий Рак Техн-RTU-лотин 2025.pdf",
       "cover": "books/pics/kitob2.png",
       "qr": "books/pics/kitob2qr.png",
@@ -53,7 +53,7 @@
       "year": 2021,
       "category": "it",
       "language": "ru",
-      "pages": null,
+      "pages": 240,
       "file": "books/kitob3 Инф тех в обр-Дарслик-2021 март.pdf",
       "cover": "books/pics/kitob3.png",
       "qr": "books/pics/kitob3qr.png",
@@ -74,7 +74,7 @@
       "year": 2022,
       "category": "it",
       "language": "ru",
-      "pages": null,
+      "pages": 210,
       "file": "books/kitob4 Инф_тех_в_образовании_УЧЕБНИК_для_УзГУМЯ.pdf",
       "cover": "books/pics/kitob4.png",
       "qr": "books/pics/kitob4qr.png",
@@ -95,7 +95,7 @@
       "year": 2026,
       "category": "ai",
       "language": "ru",
-      "pages": null,
+      "pages": 195,
       "file": "books/kitob5 Прогр сред ИИ-2026-rus-Oxigisi.pdf",
       "cover": "books/pics/kitob5.png",
       "qr": "books/pics/kitob5qr.png",
@@ -116,7 +116,7 @@
       "year": 2026,
       "category": "it",
       "language": "uz",
-      "pages": null,
+      "pages": 165,
       "file": "books/kitob6 Google Ekotizimi-qo'llqnma-2026.pdf",
       "cover": "books/pics/kitob6.png",
       "qr": "books/pics/kitob6qr.png",
@@ -137,7 +137,7 @@
       "year": 2026,
       "category": "it",
       "language": "uz",
-      "pages": null,
+      "pages": 140,
       "file": "books/kitob7 O'quv uslubiy qo'llanma-Oxirgisi-Scratch-2026.pdf",
       "cover": "books/pics/kitob7.png",
       "qr": "books/pics/kitob7qr.png",
@@ -145,6 +145,111 @@
         "uz": "Scratch grafik dasturlash muhiti va unda ishlash asoslari bo'yicha o'quv-uslubiy qo'llanma. Renessans Ta'lim Universiteti",
         "ru": "Учебно-методическое пособие по среде графического программирования Scratch. Университет Ренессанс",
         "en": "Teaching manual on Scratch graphical programming environment. Renaissance University"
+      }
+    },
+    {
+      "id": 8,
+      "title": {
+        "uz": "Iqtisodiyotda axborot texnologiyalari va tizimlari",
+        "ru": "Информационные технологии и системы в экономике",
+        "en": "Information Technologies and Systems in Economics"
+      },
+      "author": "Ayupov R.X., Xushvaqtov O.N.",
+      "year": 2025,
+      "category": "iqtisodiyot",
+      "language": "uz",
+      "pages": 220,
+      "file": "books/kitob1 monografiya.pdf",
+      "cover": "books/pics/kitob1.png",
+      "qr": "books/pics/kitob1qr.png",
+      "description": {
+        "uz": "Iqtisodiy jarayonlarni avtomatlashtirish va axborot tizimlaridan foydalanish bo'yicha o'quv qo'llanma",
+        "ru": "Учебное пособие по автоматизации экономических процессов",
+        "en": "Textbook on automation of economic processes"
+      }
+    },
+    {
+      "id": 9,
+      "title": {
+        "uz": "Biznes va moliya sohasida axborot texnologiyalari",
+        "ru": "Информационные технологии в бизнесе и финансах",
+        "en": "Information Technologies in Business and Finance"
+      },
+      "author": "Xushvaqtov O.N., Ayupov R.X.",
+      "year": 2025,
+      "category": "biznes",
+      "language": "uz",
+      "pages": 175,
+      "file": "books/kitob2 Глоссарий Рак Техн-RTU-лотин 2025.pdf",
+      "cover": "books/pics/kitob2.png",
+      "qr": "books/pics/kitob2qr.png",
+      "description": {
+        "uz": "Biznes boshqaruvi va moliyaviy tahlil uchun dasturiy yechimlar",
+        "ru": "Программные решения для управления бизнесом и финансового анализа",
+        "en": "Software solutions for business management and financial analysis"
+      }
+    },
+    {
+      "id": 10,
+      "title": {
+        "uz": "Sun'iy intellekt agentlari va prompt muhandisligi",
+        "ru": "Агенты искусственного интеллекта и промпт-инжиниринг",
+        "en": "AI Agents and Prompt Engineering"
+      },
+      "author": "Ayupov R.X., Maxmudova M.A.",
+      "year": 2026,
+      "category": "ai_agentlar",
+      "language": "uz",
+      "pages": 150,
+      "file": "books/kitob5 Прогр сред ИИ-2026-rus-Oxigisi.pdf",
+      "cover": "books/pics/kitob5.png",
+      "qr": "books/pics/kitob5qr.png",
+      "description": {
+        "uz": "Zamonaviy LLM va autonom AI agentlarini yaratish hamda amaliyotda qo'llash",
+        "ru": "Создание и применение современных LLM и автономных ИИ-агентов",
+        "en": "Creation and application of modern LLMs and autonomous AI agents"
+      }
+    },
+    {
+      "id": 11,
+      "title": {
+        "uz": "Raqamli iqtisodiyot va IT-tadbirkorlik asoslari",
+        "ru": "Основы цифровой экономики и IT-предпринимательства",
+        "en": "Fundamentals of Digital Economy and IT Entrepreneurship"
+      },
+      "author": "Ayupov R.X., Xushvaqtov O.N.",
+      "year": 2026,
+      "category": "iqtisodiyot",
+      "language": "uz",
+      "pages": 205,
+      "file": "books/kitob6 Google Ekotizimi-qo'llqnma-2026.pdf",
+      "cover": "books/pics/kitob6.png",
+      "qr": "books/pics/kitob6qr.png",
+      "description": {
+        "uz": "Raqamli transformatsiya va IT-startap loyihalarni boshqarish",
+        "ru": "Цифровая трансформация и управление IT-стартап проектами",
+        "en": "Digital transformation and IT startup project management"
+      }
+    },
+    {
+      "id": 12,
+      "title": {
+        "uz": "Ma'lumotlar bazasi va SQL so'rovlar tili bo'yicha amaliyot",
+        "ru": "Практикум по базам данных и языку SQL",
+        "en": "Practical Guide to Databases and SQL"
+      },
+      "author": "Fayzullayev J.J., Shakarov A.R.",
+      "year": 2025,
+      "category": "it",
+      "language": "uz",
+      "pages": 160,
+      "file": "books/kitob7 O'quv uslubiy qo'llanma-Oxirgisi-Scratch-2026.pdf",
+      "cover": "books/pics/kitob7.png",
+      "qr": "books/pics/kitob7qr.png",
+      "description": {
+        "uz": "Relatsion ma'lumotlar bazalarini loyihalash va SQL so'rovlarini optimallashtirish",
+        "ru": "Проектирование реляционных баз данных и оптимизация SQL запросов",
+        "en": "Relational database design and SQL query optimization"
       }
     }
   ]

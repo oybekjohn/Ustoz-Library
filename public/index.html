@@ -29,11 +29,6 @@
   <!-- Styles -->
   <link rel="stylesheet" href="css/style.css">
 
-  <!-- PDF.js (Mozilla) -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
-  <script>
-    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
-  </script>
 
   <!-- Page-flip kutubxonasi olib tashlandi: endi bitta katta sahifa + zoom ko'rinishi -->
 
@@ -228,11 +223,33 @@
     </div>
   </div>
 
+  <!-- ========== MOBILE BOTTOM NAVIGATION ========== -->
+  <nav class="mobile-bottom-nav" id="mobile-bottom-nav">
+    <div class="mobile-bottom-nav__inner">
+      <button class="mobile-nav-btn active" data-view="books" aria-label="Kitoblar">
+        <span class="mobile-nav-icon">📚</span>
+        <span>Kitoblar</span>
+      </button>
+      <button class="mobile-nav-btn" data-view="presentations" aria-label="Taqdimotlar">
+        <span class="mobile-nav-icon">📊</span>
+        <span>Taqdimot</span>
+      </button>
+      <button class="mobile-nav-btn" data-view="videos" aria-label="Videolar">
+        <span class="mobile-nav-icon">🎥</span>
+        <span>Video</span>
+      </button>
+      <button class="mobile-nav-btn" data-view="tests" aria-label="Testlar">
+        <span class="mobile-nav-icon">📝</span>
+        <span>Testlar</span>
+      </button>
+    </div>
+  </nav>
+
   <!-- ========== FOOTER ========== -->
   <footer class="footer">
     <div class="container">
       <p class="footer__text">
-        © 2026–2027 DL-library.uz — <span id="footer-rights">Barcha huquqlar himoyalangan</span>.
+        © 2026–2027 DL-library.uz — <span id="footer-rights">Barcha huquqlar himoyalangan</span>. | <a href="/privacy.html" target="_blank" style="color: inherit; text-decoration: underline;">Maxfiylik siyosati</a>
       </p>
       <p class="footer__text footer__text--sub">
         <span id="footer-university">Ushbu sayt mualliflari RTU AT kafedrasi o‘qituvchilari Ravshan Ayupov va Oybek Xushvaqtov</span>

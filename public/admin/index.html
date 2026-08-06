@@ -145,6 +145,11 @@
               <label>Nom (EN)<input type="text" id="pres-title-en"></label>
             </div>
             <div class="grid-3">
+              <label>Tavsif (UZ)<textarea id="pres-desc-uz" rows="2"></textarea></label>
+              <label>Tavsif (RU)<textarea id="pres-desc-ru" rows="2"></textarea></label>
+              <label>Tavsif (EN)<textarea id="pres-desc-en" rows="2"></textarea></label>
+            </div>
+            <div class="grid-3">
               <label>Kategoriya *
                 <select id="pres-category" required>
                   <option value="it">IT</option><option value="ai">SI</option><option value="iqtisodiyot">Iqtisodiyot</option><option value="biznes">Biznes</option><option value="boshqa">Boshqa</option>
@@ -152,6 +157,11 @@
               </label>
               <label>PDF Fayl *<input type="file" id="pres-pdf" accept="application/pdf" required></label>
               <label>Muqova<input type="file" id="pres-cover" accept="image/*"></label>
+            </div>
+            <div style="margin-bottom: 15px;">
+              <label style="display: flex; align-items: center; gap: 8px;">
+                <input type="checkbox" id="pres-published" checked> Darhol publish qilish (foydalanuvchilarga ko'rsatish)
+              </label>
             </div>
             <div id="pres-form-error" class="error-msg"></div>
             <button type="submit" class="btn btn--primary">💾 Prezentatsiyani saqlash</button>
@@ -170,6 +180,15 @@
           <form id="video-form" class="book-form">
             <div class="grid-3">
               <label>Nom (UZ) *<input type="text" id="vid-title-uz" required></label>
+              <label>Nom (RU)<input type="text" id="vid-title-ru"></label>
+              <label>Nom (EN)<input type="text" id="vid-title-en"></label>
+            </div>
+            <div class="grid-3">
+              <label>Tavsif (UZ)<textarea id="vid-desc-uz" rows="2"></textarea></label>
+              <label>Tavsif (RU)<textarea id="vid-desc-ru" rows="2"></textarea></label>
+              <label>Tavsif (EN)<textarea id="vid-desc-en" rows="2"></textarea></label>
+            </div>
+            <div class="grid-2">
               <label>YouTube URL *<input type="text" id="vid-url" placeholder="https://www.youtube.com/watch?v=..." required></label>
               <label>Kategoriya *
                 <select id="vid-category" required>
@@ -177,7 +196,12 @@
                 </select>
               </label>
             </div>
-            <div id="vid-preview-box" style="margin:10px 0;"></div>
+            <div style="margin-bottom: 15px;">
+              <label style="display: flex; align-items: center; gap: 8px;">
+                <input type="checkbox" id="vid-published" checked> Darhol publish qilish (foydalanuvchilarga ko'rsatish)
+              </label>
+            </div>
+            <div id="vid-preview-box" style="margin:10px 0; min-height: 50px;"></div>
             <div id="vid-form-error" class="error-msg"></div>
             <button type="submit" class="btn btn--primary">💾 Videoni saqlash</button>
           </form>
@@ -203,14 +227,30 @@
               <label>Davomiyligi (Daqiqa)<input type="number" id="test-duration" value="15" min="1"></label>
             </div>
             <div class="grid-3">
+              <label>Tavsif (UZ)<textarea id="test-desc-uz" rows="2"></textarea></label>
+              <label>Tavsif (RU)<textarea id="test-desc-ru" rows="2"></textarea></label>
+              <label>Tavsif (EN)<textarea id="test-desc-en" rows="2"></textarea></label>
+            </div>
+            <div class="grid-3">
               <label>O'tish Bali (%)<input type="number" id="test-passing" value="60" min="1" max="100"></label>
               <label>Maksimal Urinishlar<input type="number" id="test-max-att" placeholder="Cheksiz"></label>
               <label>TXT Test Fayli *<input type="file" id="test-txt-file" accept=".txt" required></label>
             </div>
+            <div class="grid-3" style="margin-bottom: 15px;">
+              <label style="display: flex; align-items: center; gap: 8px;">
+                <input type="checkbox" id="test-shuffle-questions" checked> Savollarni aralashtirish
+              </label>
+              <label style="display: flex; align-items: center; gap: 8px;">
+                <input type="checkbox" id="test-shuffle-options" checked> Variantlarni aralashtirish
+              </label>
+              <label style="display: flex; align-items: center; gap: 8px;">
+                <input type="checkbox" id="test-published"> Darhol publish qilish
+              </label>
+            </div>
             <button type="button" id="btn-parse-txt" class="btn btn--ghost">🔍 TXT faylni tekshirish / Parse</button>
             <div id="test-parse-preview" style="margin:15px 0;"></div>
             <div id="test-form-error" class="error-msg"></div>
-            <button type="submit" id="btn-save-test" class="btn btn--primary" disabled>💾 Testni Saqlash & Publish</button>
+            <button type="submit" id="btn-save-test" class="btn btn--primary" disabled>💾 Testni Saqlash</button>
           </form>
         </section>
         <section class="panel">

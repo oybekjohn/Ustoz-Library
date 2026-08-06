@@ -150,11 +150,14 @@ function setupPresentationForm() {
         title_uz: $('#pres-title-uz').value,
         title_ru: $('#pres-title-ru').value,
         title_en: $('#pres-title-en').value,
+        description_uz: $('#pres-desc-uz').value,
+        description_ru: $('#pres-desc-ru').value,
+        description_en: $('#pres-desc-en').value,
         category: $('#pres-category').value,
         page_count: pdfData.pageCount || 10,
         pdf_key: pdfData.key,
         cover_key: coverKey,
-        published: 1
+        published: $('#pres-published').checked ? 1 : 0
       };
 
       const res = await fetch('/api/presentations', {
@@ -202,6 +205,32 @@ function setupVideoForm() {
   const form = $('#video-form');
   if (!form) return;
 
+  const vidUrlInput = $('#vid-url');
+  const previewBox = $('#vid-preview-box');
+
+  if (vidUrlInput && previewBox) {
+    vidUrlInput.addEventListener('input', () => {
+      const url = vidUrlInput.value.trim();
+      let videoId = null;
+      
+      try {
+        if (url.includes('youtube.com/watch')) {
+          videoId = new URL(url).searchParams.get('v');
+        } else if (url.includes('youtu.be/')) {
+          videoId = url.split('youtu.be/')[1]?.split('?')[0];
+        } else if (url.includes('youtube.com/embed/')) {
+          videoId = url.split('youtube.com/embed/')[1]?.split('?')[0];
+        }
+      } catch (e) {}
+
+      if (videoId) {
+        previewBox.innerHTML = `<iframe width="100%" height="315" src="https://www.youtube-nocookie.com/embed/${videoId}" frameborder="0" allowfullscreen></iframe>`;
+      } else {
+        previewBox.innerHTML = '';
+      }
+    });
+  }
+
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
     $('#vid-form-error').textContent = '';
@@ -209,9 +238,14 @@ function setupVideoForm() {
     try {
       const body = {
         title_uz: $('#vid-title-uz').value,
+        title_ru: $('#vid-title-ru').value,
+        title_en: $('#vid-title-en').value,
+        description_uz: $('#vid-desc-uz').value,
+        description_ru: $('#vid-desc-ru').value,
+        description_en: $('#vid-desc-en').value,
         youtube_url: $('#vid-url').value,
         category: $('#vid-category').value,
-        published: 1
+        published: $('#vid-published').checked ? 1 : 0
       };
 
       const res = await fetch('/api/videos', {
@@ -304,11 +338,16 @@ function setupTestForm() {
     try {
       const body = {
         title_uz: $('#test-title-uz').value,
+        description_uz: $('#test-desc-uz').value,
+        description_ru: $('#test-desc-ru').value,
+        description_en: $('#test-desc-en').value,
         category: $('#test-category').value,
         duration_minutes: Number($('#test-duration').value) || 15,
         passing_percent: Number($('#test-passing').value) || 60,
         max_attempts: $('#test-max-att').value ? Number($('#test-max-att').value) : null,
-        published: 1,
+        shuffle_questions: $('#test-shuffle-questions').checked ? 1 : 0,
+        shuffle_options: $('#test-shuffle-options').checked ? 1 : 0,
+        published: $('#test-published').checked ? 1 : 0,
         questions: parsedTestQuestions
       };
 
@@ -335,7 +374,7 @@ function setupTestForm() {
 async function loadAdminTests() {
   const container = $('#tests-admin-list');
   try {
-    const res = await fetch('/api/tests');
+    const res = await fetch('/api/tests?all=1');
     const data = await res.json();
     const items = data.tests || [];
     container.innerHTML = items.map(t => `

@@ -72,12 +72,34 @@ async function openFlipbook(file, title, qrImage) {
     qrContainer.style.display = 'none';
   }
 
-  const hasPdfJs = typeof pdfjsLib !== 'undefined';
+  // Lazy load PDF.js
+  if (typeof window.pdfjsLib === 'undefined' && !isLocalFile) {
+    const loading = document.getElementById('flipbook-loading');
+    if (loading) loading.style.display = 'flex';
+    try {
+      await loadScript('https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js');
+      window.pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+    } catch (e) {
+      console.error('PDF.js yuklashda xatolik', e);
+    }
+  }
+
+  const hasPdfJs = typeof window.pdfjsLib !== 'undefined';
   if (hasPdfJs && !isLocalFile) {
     await openPdfReader(file);
   } else {
     openSecureIframe(file);
   }
+}
+
+function loadScript(src) {
+  return new Promise((resolve, reject) => {
+    const script = document.createElement('script');
+    script.src = src;
+    script.onload = resolve;
+    script.onerror = reject;
+    document.head.appendChild(script);
+  });
 }
 
 // ---------- PDF reader ----------
@@ -92,7 +114,7 @@ async function openPdfReader(file) {
   container.className = 'reader-scroll';
 
   try {
-    const task = pdfjsLib.getDocument(encodeURI(file));
+    const task = window.pdfjsLib.getDocument(encodeURI(file));
     reader.pdfDoc = await task.promise;
     reader.totalPages = reader.pdfDoc.numPages;
     reader.pageNum = 1;

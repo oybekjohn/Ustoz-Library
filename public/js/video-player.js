@@ -14,7 +14,7 @@ export function initVideoPlayer(id, youtubeVideoId, durationSec, containerEl) {
   durationSeconds = durationSec || 0;
   currentTime = 0;
 
-  renderAnonymousWarning(containerEl);
+  // renderAnonymousWarning — hozircha o'chirilgan
 
   const embedUrl = `https://www.youtube-nocookie.com/embed/${youtubeVideoId}?enablejsapi=1`;
 
@@ -26,9 +26,7 @@ export function initVideoPlayer(id, youtubeVideoId, durationSec, containerEl) {
     </div>
   `;
 
-  if (currentUser) {
-    startWatchProgressTimer();
-  }
+  // Progress tracking hozircha o'chirilgan — keyingi versiyada Google OAuth bilan qaytariladi
 }
 
 function startWatchProgressTimer() {
