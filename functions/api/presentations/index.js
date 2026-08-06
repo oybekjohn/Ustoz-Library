@@ -13,9 +13,18 @@ export async function onRequestGet(context) {
   const category = url.searchParams.get('category');
   const language = url.searchParams.get('language');
   const all = url.searchParams.get('all') === '1';
-  const session = all ? await requireAuth(request, env) : null;
 
-  let sql = `SELECT * FROM presentations WHERE published = 1`;
+  // Admin so'rovida autentifikatsiya talab qilinadi
+  if (all) {
+    const session = await requireAuth(request, env);
+    if (!session) {
+      return new Response(JSON.stringify({ error: 'Avtorizatsiya talab qilinadi' }), { status: 401 });
+    }
+  }
+
+  let sql = all
+    ? `SELECT * FROM presentations`
+    : `SELECT * FROM presentations WHERE published = 1`;
   const params = [];
 
   if (category) {

@@ -180,19 +180,41 @@ function setupPresentationForm() {
 async function loadAdminPresentations() {
   const container = $('#pres-admin-list');
   try {
-    const res = await fetch('/api/presentations');
+    const res = await fetch('/api/presentations?all=1');
     const data = await res.json();
     const items = data.presentations || [];
+    if (!items.length) {
+      container.innerHTML = '<p>Prezentatsiyalar yo\'q</p>';
+      return;
+    }
     container.innerHTML = items.map(p => `
-      <div style="padding:10px; border-bottom:1px solid #eee; display:flex; justify-content:space-between;">
-        <span><strong>${p.title_uz}</strong> (${p.page_count} slayd)</span>
-        <button onclick="deletePresentation(${p.id})" class="btn btn--danger btn--sm">O'chirish</button>
+      <div style="padding:10px; border-bottom:1px solid #eee; display:flex; justify-content:space-between; align-items:center; gap:8px; flex-wrap:wrap;">
+        <span>
+          <strong>${p.title_uz}</strong> (${p.page_count} slayd)
+          <span style="margin-left:8px; padding:2px 8px; border-radius:12px; font-size:12px; background:${p.published ? '#d4edda' : '#fff3cd'}; color:${p.published ? '#155724' : '#856404'};">
+            ${p.published ? '✅ Published' : '📋 Draft'}
+          </span>
+        </span>
+        <div style="display:flex;gap:6px;">
+          <button onclick="togglePublishPresentation(${p.id}, ${p.published})" class="btn btn--sm ${p.published ? 'btn--ghost' : 'btn--primary'}">${p.published ? 'Yashirish' : 'Nashr etish'}</button>
+          <button onclick="deletePresentation(${p.id})" class="btn btn--danger btn--sm">O'chirish</button>
+        </div>
       </div>
-    `).join('') || '<p>Prezentatsiyalar yo\'q</p>';
+    `).join('');
   } catch (err) {
-    container.textContent = 'Xatolik';
+    container.textContent = 'Xatolik: ' + err.message;
   }
 }
+
+window.togglePublishPresentation = async function(id, currentPublished) {
+  try {
+    const res = await fetch(`/api/presentations/${id}/publish`, { method: 'POST' });
+    if (!res.ok) throw new Error((await res.json()).error || 'Xatolik');
+    loadAdminPresentations();
+  } catch (e) {
+    alert('Xatolik: ' + e.message);
+  }
+};
 
 window.deletePresentation = async function(id) {
   if (confirm("O'chirishni tasdiqlaysizmi?")) {
@@ -271,19 +293,42 @@ function setupVideoForm() {
 async function loadAdminVideos() {
   const container = $('#vid-admin-list');
   try {
-    const res = await fetch('/api/videos');
+    const res = await fetch('/api/videos?all=1');
     const data = await res.json();
     const items = data.videos || [];
+    if (!items.length) {
+      container.innerHTML = '<p>Videolar yo\'q</p>';
+      return;
+    }
     container.innerHTML = items.map(v => `
-      <div style="padding:10px; border-bottom:1px solid #eee; display:flex; justify-content:space-between;">
-        <span><strong>${v.title_uz}</strong> (${v.youtube_video_id})</span>
-        <button onclick="deleteVideo(${v.id})" class="btn btn--danger btn--sm">O'chirish</button>
+      <div style="padding:10px; border-bottom:1px solid #eee; display:flex; justify-content:space-between; align-items:center; gap:8px; flex-wrap:wrap;">
+        <span>
+          <strong>${v.title_uz}</strong>
+          <a href="https://youtu.be/${v.youtube_video_id}" target="_blank" style="font-size:12px; margin-left:6px;">${v.youtube_video_id}</a>
+          <span style="margin-left:8px; padding:2px 8px; border-radius:12px; font-size:12px; background:${v.published ? '#d4edda' : '#fff3cd'}; color:${v.published ? '#155724' : '#856404'};">
+            ${v.published ? '✅ Published' : '📋 Draft'}
+          </span>
+        </span>
+        <div style="display:flex;gap:6px;">
+          <button onclick="togglePublishVideo(${v.id}, ${v.published})" class="btn btn--sm ${v.published ? 'btn--ghost' : 'btn--primary'}">${v.published ? 'Yashirish' : 'Nashr etish'}</button>
+          <button onclick="deleteVideo(${v.id})" class="btn btn--danger btn--sm">O'chirish</button>
+        </div>
       </div>
-    `).join('') || '<p>Videolar yo\'q</p>';
+    `).join('');
   } catch (err) {
-    container.textContent = 'Xatolik';
+    container.textContent = 'Xatolik: ' + err.message;
   }
 }
+
+window.togglePublishVideo = async function(id, currentPublished) {
+  try {
+    const res = await fetch(`/api/videos/${id}/publish`, { method: 'POST' });
+    if (!res.ok) throw new Error((await res.json()).error || 'Xatolik');
+    loadAdminVideos();
+  } catch (e) {
+    alert('Xatolik: ' + e.message);
+  }
+};
 
 window.deleteVideo = async function(id) {
   if (confirm("O'chirishni tasdiqlaysizmi?")) {
@@ -377,16 +422,38 @@ async function loadAdminTests() {
     const res = await fetch('/api/tests?all=1');
     const data = await res.json();
     const items = data.tests || [];
+    if (!items.length) {
+      container.innerHTML = '<p>Testlar yo\'q</p>';
+      return;
+    }
     container.innerHTML = items.map(t => `
-      <div style="padding:10px; border-bottom:1px solid #eee; display:flex; justify-content:space-between;">
-        <span><strong>${t.title_uz}</strong> (${t.question_count} savol, ${t.duration_minutes} min)</span>
-        <button onclick="deleteTest(${t.id})" class="btn btn--danger btn--sm">O'chirish</button>
+      <div style="padding:10px; border-bottom:1px solid #eee; display:flex; justify-content:space-between; align-items:center; gap:8px; flex-wrap:wrap;">
+        <span>
+          <strong>${t.title_uz}</strong> (${t.question_count} savol, ${t.duration_minutes} min)
+          <span style="margin-left:8px; padding:2px 8px; border-radius:12px; font-size:12px; background:${t.published ? '#d4edda' : '#fff3cd'}; color:${t.published ? '#155724' : '#856404'};">
+            ${t.published ? '✅ Published' : '📋 Draft'}
+          </span>
+        </span>
+        <div style="display:flex;gap:6px;">
+          <button onclick="togglePublishTest(${t.id}, ${t.published})" class="btn btn--sm ${t.published ? 'btn--ghost' : 'btn--primary'}">${t.published ? 'Yashirish' : 'Nashr etish'}</button>
+          <button onclick="deleteTest(${t.id})" class="btn btn--danger btn--sm">O'chirish</button>
+        </div>
       </div>
-    `).join('') || '<p>Testlar yo\'q</p>';
+    `).join('');
   } catch (err) {
-    container.textContent = 'Xatolik';
+    container.textContent = 'Xatolik: ' + err.message;
   }
 }
+
+window.togglePublishTest = async function(id, currentPublished) {
+  try {
+    const res = await fetch(`/api/tests/${id}/publish`, { method: 'POST' });
+    if (!res.ok) throw new Error((await res.json()).error || 'Xatolik');
+    loadAdminTests();
+  } catch (e) {
+    alert('Xatolik: ' + e.message);
+  }
+};
 
 window.deleteTest = async function(id) {
   if (confirm("Testni o'chirishni tasdiqlaysizmi?")) {
