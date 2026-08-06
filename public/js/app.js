@@ -327,9 +327,16 @@ async function loadBooks() {
 
     state.books = data.books || [];
     state.filteredBooks = [...state.books];
+    renderFilters();
+    renderStats();
     renderBooks();
   } catch (e) {
     console.error('Books load error:', e);
+    // Fallback: bo'sh holat ko'rsatish
+    const grid = $('#books-grid');
+    if (grid) {
+      grid.innerHTML = `<div class="no-results"><div class="no-results__icon">📚</div><div class="no-results__text">Kitoblarni yuklashda xatolik</div></div>`;
+    }
   }
 }
 
@@ -491,20 +498,23 @@ function setupEventListeners() {
       state.currentLang = btn.dataset.lang || 'uz';
       updateStaticTexts();
       renderFilters();
+      renderStats();
       applyBookFilters();
     });
   });
 
-  const pagination = $('#pagination');
-  if (pagination) {
-    pagination.addEventListener('click', (event) => {
-      const btn = event.target.closest('[data-page]');
-      if (!btn || btn.disabled) return;
-      state.currentPage = Number(btn.dataset.page) || 1;
-      renderBooks();
-      $('#books-section-view')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    });
-  }
+  // Pagination event delegation — document-da, chunki DOM dinamik yangilanadi
+  document.addEventListener('click', (event) => {
+    const btn = event.target.closest('#pagination [data-page]');
+    if (!btn || btn.disabled) return;
+    const page = Number(btn.dataset.page);
+    if (!page || page < 1) return;
+    const totalPages = Math.ceil(state.filteredBooks.length / state.booksPerPage);
+    if (page > totalPages) return;
+    state.currentPage = page;
+    renderBooks();
+    $('#books-section-view')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
 }
 
 function applyBookFilters() {
