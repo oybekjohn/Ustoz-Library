@@ -1,0 +1,3887 @@
+
+Texnik ta’minotning asosiy vazifalaridan biri nima?
+==================================================
+ Dasturiy mahsulotlarni boshqarish
+==================================
+ Foydalanuvchilarga xizmat ko‘rsatish
+=====================================
+#Ma'lumotlarni yig‘ish va saqlash
+=================================
+ Ma'lumotlarni tahlil qilish
+
+
++++++
+
+Iqtisodiy masalalarda qo‘llaniladigan dasturiy mahsulotlar qanday turga bo‘linadi?
+=================================================================================
+Iqtisodiy modellashtirish va simulyatsiya dasturlari
+===================================================
+ Hisob-kitob va moliyaviy tahlil dasturlari
+===========================================
+ #Barcha javoblar to‘g‘ri
+=========================
+ Hech biri to‘g‘ri emas
+
+
++++++
+Iqtisodiy masalalarni yechishda qo‘llaniladigan dasturiy mahsulotlar nima?
+==========================================================================
+ Maxsus ishlab chiqilgan tizimlar
+=================================
+ Foydalanuvchilar uchun dasturiy ilovalar
+=========================================
+ Hisob-kitoblarni avtomatlashtiruvchi dasturlar
+================================================
+ #Barchasi to‘g‘ri
+
+
++++++
+
+Zamonaviy matn muhariri iqtisodiy matnni tahrir qilishda qaysi metodlardan foydalanadi?
+======================================================================================
+Matnni qisqartirish va faqat muhim faktlarni kiritish
+=====================================================
+ #Iqtisodiy ma'lumotlarni tahlil qilib, yengil tushunarli qilib yozish
+======================================================================
+ Shunchaki matnni sozlash
+=========================
+ Matnni plagiat tekshiruvdan o‘tkazish
+
+
++++++
+
+Iqtisodiy matn muharirining asosiy vazifalaridan biri nima?
+==========================================================
+ Faqat uslubni to‘g‘rilash
+==========================
+ Ma'lumotlarni ilmiy uslubda taqdim etish
+=========================================
+#Matnning mantiqiy tuzilishini ta'minlash
+=========================================
+ Faqat ortiqcha so‘zlarni chiqarish
+
+
++++++
+
+Zamonaviy matn muharirlarida iqtisodiyot sohasiga doir topshiriqlarda asosiy maqsad nima?
+==========================================================================================
+ Faqat matnni grammatik jihatdan to‘g‘ri qilish
+===============================================
+ #Iqtisodiy tahlil va statistik ma'lumotlarni to‘g‘ri taqdim etish
+==================================================================
+ Matnni qisqartirish
+====================
+Faqat tasviriy elementlarni qo‘shish
+
+
++++++
+
+Zamonaviy matn muharirlarida iqtisodiy matnni tahrir qilishda eng muhim jihat nima?
+==================================================================================
+#Matnning to‘g‘ri va aniq bo‘lishi
+==================================
+Matnni ilg‘or uslubda yozish
+============================
+Faqat sintaksisga e’tibor berish
+=================================
+Matnni rangli qilish
+
+
++++++
+
+Iqtisodiy matnni tahrir qilishda qanday maxsus ma'lumotlar e'tiborga olinadi?
+============================================================================
+Ta'lim maqsadlari va auditoriya
+===============================
+#Statistika, tahlil va iqtisodiy tendensiyalar
+==============================================
+Faqat grammatika va uslub
+=========================
+Ijtimoiy tarmoqlar orqali foydalanish
+
+
++++++
+
+Zamonaviy matn muhariri iqtisodiy matnni tahrir qilishda qaysi metodlardan foydalanadi?
+===================================================================================
+Matnni qisqartirish va faqat muhim faktlarni kiritish
+=====================================================
+#Iqtisodiy ma'lumotlarni tahlil qilib, yengil tushunarli qilib yozish
+=====================================================================
+Shunchaki matnni sozlash
+========================
+Matnni plagiat tekshiruvdan o‘tkazish
+
+
++++++
+
+Iqtisodiy matn muharirining asosiy vazifalaridan biri nima?
+==========================================================
+Faqat uslubni to‘g‘rilash
+=========================
+Ma'lumotlarni ilmiy uslubda taqdim etish
+========================================
+#Matnning mantiqiy tuzilishini ta'minlash
+=========================================
+Faqat ortiqcha so‘zlarni chiqarish
+
+
++++++
+
+Iqtisodiy masalalar uchun grafik obyektlar bilan ishlashda asosiy imkoniyatlar qanday?
+====================================================================================
+#Ma'lumotlarni ko‘rsatish va tahlil qilishni osonlashtirish
+=============================================================
+Matnni yanada murakkab qilish
+=============================
+Faqat ko‘rsatilgan ma'lumotni vizual tarzda taqdim etish
+========================================================
+Statistika to‘plash va saqlash
+
+
++++++
+
+Jadval muharrirlarida statistik ma'lumotlar qanday tahlil qilinadi?
+==================================================================
+Raqamlarni qo‘lda hisoblash
+===========================
+#Avtomatik hisoblash va formulalar yordamida tahlil qilish
+==========================================================
+Yalpi hisob-kitoblarni tuzish
+=============================
+Grafik diagrammalar yordamida tahlil qilish
+
+
++++++
+
+Grafik obyektlar (diagrammalar) qanday maqsadlarda ishlatiladi?
+==============================================================
+Ma'lumotlarni faqat matnli shaklda ko‘rsatish
+=============================================
+#Ma'lumotlarni vizual tarzda tushunarli qilish va tahlilni osonlashtirish
+=========================================================================
+Jadvalni yanada murakkablashtirish
+==================================
+Yangi ma'lumotlar yaratish
+
+
++++++
+
+Jadval muharririda qanday imkoniyatlar mavjud?
+=============================================
+Ma'lumotlarni ajratish va guruhlash
+===================================
+Grafik tahlil va diagrammalarni yaratish
+========================================
+Matnni tahrirlash va yozish
+===========================
+#Barchasi to‘g‘ri
+
+
++++++
+
+Jadval muharririda ma'lumotlarni avtomatik ravishda hisoblashda qanday funksiyalar qo‘llaniladi?
+===================================================================================
+# Formulalar va funksiyalar
+===========================
+Avtomatik to‘ldirish
+====================
+Hisob-kitoblarni dasturda qo‘lda kiritish
+=========================================
+Ma'lumotlarni qo‘lda tahlil qilish
+
+
++++++
+
+Iqtisodiy tahlil va qaror qabul qilishda grafik diagrammalarni qanday foydali ishlatish mumkin?
+===================================================================================
+Ma'lumotlarni qisqartirish va ortiqcha ma'lumotlardan qochish
+=============================================================
+# Diagrammalar orqali tahlilni oddiy va tushunarli qilish
+=========================================================
+Faoliyatni murakkablashtirish
+=============================
+Ma'lumotlarni vizual tarzda murakkab qilish
+
+
++++++
+
+Iqtisodiy masalalarni yechishda qanday jadvallar va diagrammalar ko‘proq ishlatiladi?
+===================================================================================
+Chiziqli diagrammalar
+=====================
+Gistogrammalar va grafiklar
+===========================
+Doimiy o‘zgaruvchan jadval va grafiklar
+======================================
+#Barchasi
+
+
++++++
+
+Excel dasturida ma'lumotlarni guruhlash va qisqartirish uchun qanday vosita ishlatiladi?
+===================================================================================
+# Group (Guruhlash)
+===================
+Filter (Filtr)
+==============
+Chart (Diagramma)
+=================
+Subtotal (Qisqacha hisob)
+
+
++++++
+
+Grafik va diagrammalarni yaratish uchun Excel dasturida qanday vosita mavjud?
+============================================================================
+# Chart (Diagramma)
+==================
+Table (Jadval)
+==============
+Pivot Table (Pivot jadvali)
+===========================
+Hyperlink (Havola)
+
+
++++++
+
+Excel dasturida "Freeze Panes" (Panelni muzlatish) funksiyasi nima uchun ishlatiladi?
+===================================================================================
+#Sarlavhalarni doimiy ko‘rish uchun
+===================================
+Ma'lumotlarni avtomatik ravishda to‘ldirish uchun
+=================================================
+Diagrammalarni yaratish uchun
+=============================
+Ma'lumotlarni faqat matnli shaklda ko‘rsatish uchun
+
+
++++++
+
+
+Excel dasturida iqtisodiy ma'lumotlarni tahlil qilish uchun eng ko‘p ishlatiladigan vosita qaysi?
+===================================================================================
+#Pivot Table (Pivot jadvali)
+===========================
+Conditional Formatting (Shartli formatlash)
+==========================================
+Charts (Diagrammalar)
+=====================
+AutoFill (Avtomatik to'ldirish)
+
+
++++++
+
+Iqtisodiy ma'lumotlarni tahlil qilishda Pivot Table nima uchun ishlatiladi?
+==========================================================================
+Ma'lumotlarni tasvirlash
+========================
+#Ma'lumotlarni tahlil qilish va umumlashtirish
+==============================================
+Ma'lumotlarni avtomatik ravishda to'ldirish
+===========================================
+Ma'lumotlarni ranglar bilan ajratish
+
+
+
++++++
+
+Excel dasturida "SUM" funksiyasi qanday maqsadga xizmat qiladi?
+==============================================================
+#Yig‘ish va o‘rtacha qiymatni hisoblash
+=======================================
+Ma'lumotlar orasidagi farqni hisoblash
+======================================
+Ma'lumotlarni sanash
+====================
+Katta qiymatni topish
+
+
++++++
+
+Excelda shartli formatlash yordamida iqtisodiy ma'lumotlarni qanday tahlil qilish mumkin?
+===================================================================================
+#Ranglar yordamida qiymatlarni ajratish
+=======================================
+Grafiklarni yaratish
+====================
+Ma'lumotlarni avtomatik to'ldirish
+==================================
+Ma'lumotlarni saralash
+
+
++++++
+
+PowerPoint dasturida animatsiyalarni qanday qo‘llash mumkin?
+============================================================
+Faqat barcha slaydlarga qo‘llash mumkin
+=======================================
+Faqat matnni ko‘rsatishda
+=========================
+#Har bir ob'ektga, masalan, rasm yoki matnga alohida animatsiya berish mumkin
+=============================================================================
+Animatsiyalar faqat rasm va video fayllarga qo‘llanadi
+
+
++++++
+
+Iqtisodiy ma'lumotlar bilan bog‘liq grafik va diagrammalarni taqdimotda qanday joylashtirish mumkin?
+===================================================================================
+Slaydda bo‘sh joy bo‘lmasligi kerak
+====================================
+Faqat matnli taqdimot ishlatish mumkin
+======================================
+#PowerPoint-da "Insert" menyusidan "Chart" yoki "SmartArt"ni tanlab, diagrammalarniqo‘shish mumkin
+Grafikalr faqat tashqi dasturlardan kiritiladi
+
+
++++++
+
+PowerPoint-da slaydlar orasida harakatni qanday qo‘llash mumkin?
+===============================================================
+#Transition (Tranzitsiya) yordamida
+===================================
+Faqat matn bilan ishlash orqali
+===============================
+Animatsiya qo‘llash orqali
+==========================
+Faqat rasmlar uchun
+
+
++++++
+
+PowerPoint dasturida taqdimotga qanday qo‘shimcha vizual effektlar kiritish mumkin?
+==================================================================================
+Boshqa slaydlarga havola yaratish
+=================================
+Slaydlarga musiqiy fon qo‘shish
+===============================
+#Slaydlarga SmartArt yoki diagrammalar qo‘shish
+===============================================
+Faqat matnli slaydlardan foydalanish
+
+
++++++
+
+Iqtisodiyot bo‘yicha taqdimot yaratishda PowerPoint dasturida qanday usul yordamida ma'lumotlarni soddalashtirish mumkin?
+===================================================================================
+#Diagrammalar va grafiklardan foydalanish
+=========================================
+Faqat matnli tushuntirishlar qo‘llash
+=====================================
+Faqat rasmlar qo‘llash
+======================
+Taqdimotni faqat ma'lumotlar bilan to'ldirish
+
+
++++++
+
+PowerPoint dasturida taqdimotga interaktiv elementlar qo‘shish uchun qanday vosita mavjud?
+===================================================================================
+#Hyperlink (Havola)
+===================
+Slide Master (Slayd boshqaruvchisi)
+===================================
+Animation (Animatsiya)
+=====================
+Slide Show (Slayd shousi)
+
+
++++++
+
+Iqtisodiy ma'lumotlarni taqdimotda vizual tarzda ifodalashda qanday diagramma turi eng yaxshi ishlatiladi?
+===================================================================================
+Sektor diagrammasi (Pie chart)
+=============================
+Chiziqli diagramma (Line chart)
+==============================
+#Ustun diagramma (Bar chart)
+============================
+Gistogramma (Histogram)
+
+
++++++
+
+Biznes-jarayonlar nima?
+=======================
+Yangi mahsulotlar ishlab chiqarish
+==================================
+#Tashkilotning kundalik faoliyatini boshqarish
+==============================================
+Marketing strategiyalarini ishlab chiqish
+=========================================
+Mijozlar bilan aloqalar
+
+
++++++
+
+Iqtisodiy ma'lumotlar bazasi qaysi turdagi ma'lumotlarni o'z ichiga oladi?
+=========================================================================
+# Faoliyatdagi moliyaviy va operatsion ma'lumotlar
+==================================================
+Faqatgina marketing ma'lumotlari
+================================
+Tashqi reklama materiallari
+===========================
+Yangi mahsulotlar haqidagi ma'lumotlar
+
+
++++++
+
+Ma'lumotlar bazasini yaratishda asosiy bosqichlardan biri nima?
+==============================================================
+#Ma'lumotlarni yig'ish va tartiblash
+====================================
+Mahsulotlar ro'yxatini ishlab chiqish
+=====================================
+Yangi texnologiyalarni joriy etish
+==================================
+Faoliyatni optimallashtirish
+
+
++++++
+
+Ma'lumotlar bazasining turlari qaysilar?
+=======================================
+#Relatsion va no-relatsion
+=========================
+Yangi va eskirgan
+==================
+Tezkor va sekin
+===============
+Mahalliy va global
+
+
++++++
+
+Relatsion ma'lumotlar bazasi nima?
+==================================
+#Ma'lumotlar o'rtasidagi munosabatlarni saqlash tizimi
+======================================================
+Yalpi ichki hisobotlar tizimi
+=============================
+Faqat moliyaviy ma'lumotlarni saqlash tizimi
+============================================
+Ijtimoiy tarmoqlarga oid ma'lumotlarni saqlash tizimi
+
+
++++++
+
+Iqtisodiyot sohasidagi ma'lumotlar bazasini yaratishda qanday texnologiyalar qo'llaniladi?
+==================================================================================
+#SQL, Oracle, MySQL
+====================
+Photoshop, Illustrator
+======================
+Excel, Word
+===========
+PowerPoint, Access
+
+
++++++
+
+Ma'lumotlar bazasini tashkil etishda qanday jarayonlar amalga oshiriladi?
+========================================================================
+#Ma'lumotlarni yig'ish, tahlil qilish va saqlash
+================================================
+Marketing tadqiqotlarini o'tkazish
+==================================
+Faqat moliyaviy hisobotlar tuzish
+==================================
+Yangi mahsulotlarni ishlab chiqish
+
+
++++++
+
+Iqtisodiy ma'lumotlar bazasining qanday afzalliklari mavjud?
+===========================================================
+# Tezkor qarorlar qabul qilish imkoniyatini yaratadi
+====================================================
+Faqat marketingni boshqarishga yordam beradi
+============================================
+Mahsulot sifatini oshiradi
+==========================
+Yangi bozorlarni topishga yordam beradi
+
+
++++++
+
+Iqtisodiy ma'lumotlar bazasida saqlanadigan ma'lumotlar qanday tasniflanadi?
+============================================================================
+# Moliyaviy, operatsion, statistika, marketing
+==============================================
+Faqat moliyaviy ma'lumotlar
+===========================
+Marketing va reklama ma'lumotlari
+=================================
+Faqat ishlab chiqarish jarayonlari
+
++++++
+
+ERP (Enterprise Resource Planning) tizimi qanday maqsadda ishlatiladi?
+=====================================================================
+#Tashkilotning barcha resurslarini boshqarish
+=============================================
+Faqat marketing jarayonlarini boshqarish
+========================================
+Mahsulotlar ishlab chiqarishni optimallashtirish
+================================================
+Faqat foydalanuvchilarni ro‘yxatdan o‘tkazish
+
+
++++++
+
+CRM (Customer Relationship Management) tizimi nima?
+==================================================
+#Mijozlar bilan aloqalarni boshqarish tizimi
+============================================
+Mahsulotlarni ishlab chiqarish tizimi
+=====================================
+Reklama va marketing strategiyalarini boshqarish tizimi
+=======================================================
+Iqtisodiy tahlil qilish tizimi
+
+
++++++
+
+Axborot tizimlarining ishlab chiqarish sohasida qo‘llanilishi qanday afzalliklarga ega?
+======================================================================================
+#Ishlab chiqarish jarayonlarini avtomatlashtirish va samaradorlikni oshirish
+============================================================================
+Faqat marketing tadqiqotlarini o‘tkazish
+========================================
+Mahsulotlarni tezda sotish
+==========================
+Faqat moliyaviy hisob-kitoblarni bajarish
+
+
++++++
+
+Moliya va bank sohasida axborot tizimlarining roli nima?
+=======================================================
+#Kreditlar, qarzlar va to‘lovlarni boshqarish
+=============================================
+Faqat reklama kampaniyalarini boshqarish
+========================================
+Mahsulot ishlab chiqarish jarayonlarini boshqarish
+==================================================
+Faqat yangi bozorlarni o‘rganish
+
+
++++++
+
+Savdo va marketing sohasida axborot tizimlari qanday vazifalarni bajaradi?
+=========================================================================
+#Mijozlar bilan aloqalarni boshqarish va marketing kampaniyalarini optimallashtirish
+====================================================================================
+Faqat moliyaviy hisobotlarni tuzish
+===================================
+Ishlab chiqarish jarayonlarini optimallashtirish
+=================================
+Yangi mahsulotlarni ishlab chiqish
+
+
++++++
+
+Axborot tizimlarining tarmoqni boshqarishdagi roli qanday?
+=========================================================
+#Tashkilot ichidagi resurslarni samarali boshqarish
+===================================================
+Mahsulot ishlab chiqarishni tezlashtirish
+=========================================
+Faqat reklama va PR kampaniyalarini boshqarish
+==============================================
+Ijtimoiy tarmoqlarda mahsulotni reklama qilish
+
+
++++++
+
+Axborot tizimlari qaysi tarmoqlarda qo‘llanilishi mumkin?
+========================================================
+#Ishlab chiqarish, moliya, marketing, sog‘liqni saqlash
+=======================================================
+Faqat moliya va bank tizimida
+============================
+Faqat ishlab chiqarishda
+========================
+Faqat transport sohasida
+
+
++++++
+
+Axborot tizimlarini foydalanish orqali iqtisodiyotda qanday o‘zgarishlar yuz beradi?
+====================================================================================
+#Ishlab chiqarish jarayonlari samarali bo‘lishi, qarorlar tezroq qabul qilinadi
+===============================================================================
+Faqat yangi mahsulotlar ishlab chiqiladi
+========================================
+Faqat marketing jarayonlari boshqariladi
+========================================
+Faqat xodimlar soni oshiriladi
+
+
++++++
+
+Logistika sohasida axborot tizimlari qanday foyda keltiradi?
+===========================================================
+#Ta’minot zanjirlarini samarali boshqarish va logistika jarayonlarini optimallashtirish
+===================================================================================
+Faqat mahsulotlarni sotish
+=========================
+Ishchilarni boshqarish
+======================
+Yangi mahsulotlar ishlab chiqish
+
+
++++++
+
+Sog‘liqni saqlash sohasida axborot tizimlari qanday qo‘llaniladi?
+================================================================
+#Bemorlarga xizmat ko‘rsatish, ma'lumotlar va jarayonlarni boshqarish
+=====================================================================
+Faqat moliyaviy hisobotlarni tuzish
+==================================
+Yangi dorilarni ishlab chiqish
+==============================
+Faqat reklama va marketingni boshqarish
+
+
++++++
+
+Axborot tizimlari orqali qaysi maqsadga erishiladi?
+===================================================
+#Samaradorlikni oshirish va resurslarni tejash
+==============================================
+Faqat moliyaviy ma'lumotlarni to‘plash
+======================================
+Mahsulotlarni tezda sotish
+==========================
+Faqat mijozlar bilan aloqalarni yaxshilash
+
+
++++++
+
+Interaktiv xizmatlar nima?
+=========================
+#Foydalanuvchi bilan faol muloqot qiladigan va xizmatni shaxsiylashtiradigan xizmatlar
+======================================================================================
+Foydalanuvchi faqat tizimga ma'lumot kiritadi
+=============================================
+Faqat telefon orqali taqdim etiladigan xizmatlar
+================================================
+Kompyuter tarmoqlarini boshqarish tizimlari
+
+
++++++
+
+Interaktiv xizmatlarning asosiy xususiyati nima?
+===============================================
+#Foydalanuvchi bilan real vaqt rejimida muloqot qilish
+======================================================
+Faqat bir tomonlama axborot uzatish
+===================================
+Faqat mijozlarga xizmat ko‘rsatish
+==================================
+Xizmatlarni faqat telefon orqali taqdim etish
+
+
++++++
+
+Interaktiv xizmatlar qanday sohalarda keng qo‘llaniladi?
+=======================================================
+#Ta'lim, sog‘liqni saqlash, bank tizimi, elektron tijorat
+========================================================
+Faqat bank tizimida
+===================
+Faqat transport sohasida
+========================
+Faqat telefon aloqalarida
+
+
++++++
+
+Onlayn do‘konlarda interaktiv xizmatlar qanday ishlaydi?
+=======================================================
+# Mijozlarga mahsulotlar haqida ma'lumot berish, to‘lov tizimlarini amalga oshirish
+===================================================================================
+Faqat mahsulotni sotish
+=======================
+Faqat reklama qilish
+=======================
+Faqat saqlash tizimlarini ishlatish
+
++++++
+
+Interaktiv xizmatlar qanday tarzda foydalanuvchilarning ehtiyojlariga moslashadi?
+=======================
+#Foydalanuvchining faoliyatiga qarab shaxsiylashtirilgan xizmatlarni taqdim etish
+=======================
+Faqat umumiy xizmatlarni taqdim etish
+=======================
+Faqat reklama va promo aksiyalar
+=======================
+Faqat xaridlarni qaytarish
+
++++++
+
+Interaktiv xizmatlarda qanday texnologiyalar ishlatiladi?
+=======================
+# Web-saytlar, mobil ilovalar, chat-botlar, video konferensiyalar
+=======================
+Faqat kompyuter dasturlari
+=======================
+Faqat telefon orqali xizmat ko‘rsatish
+=======================
+Faqat foydalanuvchiga email yuborish
+
+
++++++
+
+Mijozlarga xizmat ko‘rsatish markazlarida interaktiv xizmatlar qanday qo‘llaniladi?
+=======================
+#Telefon orqali yoki onlayn tizim orqali mijozlar bilan bevosita muloqot
+=======================
+Faqat mijozlar uchun maslahatlar berish
+=======================
+Faqat to‘lovlarni qabul qilish
+=======================
+Faqat shaxsiy kabinetlarni yaratish
+
+
++++++
+
+Interaktiv xizmatlar bilan ishlashda yuzaga kelishi mumkin bo‘lgan muammolar nimalardan iborat?
+=======================
+#Tizimdagi nosozliklar, foydalanuvchi malakasi pastligi
+=======================
+Faqat mijozlarni ro‘yxatdan o‘tkazish
+=======================
+Faqat marketing strategiyalari
+=======================
+Faqat foydalanuvchiga xizmat ko‘rsatish
+
+
++++++
+
+Google Drive nima?
+=======================
+#Google tomonidan taqdim etilgan bulutli xotira xizmati
+=======================
+Elektron pochta xizmatlari
+=======================
+Faqat fayllarni yuborish uchun mo'ljallangan ilova
+=======================
+Google tomonidan ishlab chiqilgan kompyuter dasturi
+
+
++++++
+
+Google Drive'da fayllarni saqlashning qanday afzalliklari bor?
+=======================
+#Internetga ulanmagan holatda ham foydalanish mumkin
+=======================
+Faqat fayllarni saqlash mumkin
+=======================
+Fayllar faqat offline rejimda ishlaydi
+=======================
+Fayllar avtomatik tarzda yangilanmaydi
+
+
++++++
+
+Google Drive orqali qanday turdagi fayllarni saqlash mumkin?
+=======================
+#Matnli hujjatlar, jadvallar, taqdimotlar, tasvirlar va videolar
+=======================
+Faqat matnli hujjatlar
+=======================
+Faqat videolar
+=======================
+Faqat tasvirlar
+
+
++++++
+
+Google Drive’da ma’lumotlarni qanday o‘chirish mumkin?
+=======================
+#Faylni tanlab "O‘chirish" opsiyasini tanlash
+=======================
+Faylni faqat uzatish
+=======================
+Faylni faqat qidiruv orqali topish
+=======================
+Faylni boshqa joyga ko‘chirish
+
+
++++++
+
+Google Drive’da ma’lumotlarni avtomatik saqlash imkoniyati qanday mavjud?
+=======================
+#Fayllar avtomatik tarzda Google Drive’da saqlanadi
+=======================
+Faqat manual ravishda saqlanadi
+=======================
+Faqat offline rejimda saqlanadi
+=======================
+Fayllar faqat bir marta saqlanadi
+
+
++++++
+
+Google Drive’da fayllarni qaysi usul bilan baham ko‘rish mumkin?
+=======================
+#Email orqali havola yuborish yoki ulashish
+=======================
+Faqat fizik tarzda ko‘rsatish
+=======================
+Faqat diskda saqlash
+=======================
+Faqat fax orqali yuborish
+
+
++++++
+
+Blokcheyn texnologiyasining asosiy xususiyati qanday?
+=======================
+Markazlashtirilgan
+=======================
+#Ochiq va shaffof
+=======================
+Yopiq va maxfiy
+=======================
+Faqat raqamli valyutalar uchun
+
+
++++++
+
+Blokcheyn texnologiyasi qaysi asosiy tamoyilga asoslanadi?
+=======================
+Markazlashtirilgan ma'lumotlar bazasi
+=======================
+#Tarqatilgan ma'lumotlar bazasi
+=======================
+Tranzaksiyalarni faqat davlat nazoratida saqlash
+=======================
+Yopiq tizim orqali ma'lumotlar almashish
+
+
++++++
+
+Blokcheyn texnologiyasi yordamida qanday ma'lumotlar xavfsiz saqlanadi?
+=======================
+Raqamli valyutalar va moliyaviy ma'lumotlar
+=======================
+Tibbiy ma'lumotlar
+=======================
+Shaxsiy va identifikatsiya ma'lumotlari
+=======================
+#Barcha javoblar to'g'ri
+
+
++++++
+
+Blokcheyn texnologiyasi yordamida iqtisodiyotda qaysi jarayonlarni avtomatlashtirish mumkin?
+=======================
+Faqat banklar tranzaksiyalarini
+=======================
+Ishlab chiqarish jarayonlarini
+=======================
+Soliq to'lovlarini va hukumat xizmatlarini
+=======================
+#Barcha yuqoridagi jarayonlar
+
+
++++++
+
+Blokcheyn texnologiyasi yordamida amalga oshiriladigan “smart kontrakt” nima?
+=======================
+#Avtomatik ravishda shartnomalarni bajaruvchi tizim
+=======================
+Faqat shaxsiy hujjatlar uchun ishlatiladi
+=======================
+Raqamli valyutalarni yaratish mexanizmi
+=======================
+Odamlar o'rtasidagi noformal kelishuv
+
+
++++++
+
+Blokcheyn texnologiyasining xavfsizlikka ta'siri qanday?
+=======================
+Xavfsizlikni pasaytiradi
+=======================
+#Xavfsizlikni oshiradi
+=======================
+Faqat internet xavfsizligini oshiradi
+=======================
+Xavfsizlikka ta'sir qilmaydi
+
+
++++++
+
+Blokcheyn texnologiyasidan foydalanishning eng keng tarqalgan sohasi qaysi?
+=======================
+#Banklar va moliyaviy muassasalar
+=======================
+Tarixiy tadqiqotlar
+=======================
+Qishloq xo'jaligi
+=======================
+Kosmik texnologiyalar
+
+
++++++
+
+Kriptovalyutalar blokcheyn texnologiyasidan qanday foydalanadi?
+=======================
+#Tranzaksiyalarni tezlashtirish va xavfsizligini ta'minlash
+=======================
+Faqat markazlashtirilgan tizimlar bilan ishlash
+=======================
+Faqat raqamli to'lovlarni amalga oshirish
+=======================
+Faqat ma'lumotlarni saqlash
+
+
++++++
+
+Blokcheyn texnologiyasining tibbiyot sohasida qo'llanilishidan biri nima?
+=======================
+#Tibbiy ma'lumotlarni xavfsiz saqlash
+=======================
+Tibbiy dori vositalarini ishlab chiqarish
+=======================
+Xodimlar o'rtasida kelishuvlar tuzish
+=======================
+Tibbiy xizmatlarning narxini oshirish
+
+
++++++
+
+Blokcheyn texnologiyasining davlat sektori uchun qanday afzalliklari mavjud?
+=======================
+Soliq to'lovlarini optimallashtirish
+=======================
+Davlat xizmatlarini raqamlashtirish
+=======================
+Hukumat qarorlarini avtomatlashtirish
+=======================
+#Barcha javoblar to'g'ri
+
+
++++++
+
+Blokcheyn texnologiyasi transport sohasida qanday foyda keltirishi mumkin?
+=======================
+Transport tizimlarini markazlashtirish
+=======================
+#Yetkazib berish zanjirlarini optimallashtirish
+=======================
+Yangi transport tizimlarini yaratish
+=======================
+Transport xizmatlarini qimmatlashtirish
+
+
++++++
+
+Blokcheyn texnologiyasidan foydalanishning eng katta cheklovlaridan biri nima?
+=======================
+Tranzaksiyalarni tezlashtirishi
+=======================
+#Yuridik tizimning moslashuvchanligi
+=======================
+Internet aloqalarining mavjudligi
+=======================
+Yangi texnologiyalarning doimiy rivojlanishi
+
+
++++++
+
+Blokcheyn texnologiyasining iqtisodiy sektorlarga ta'siri qanday?
+=======================
+Ishlab chiqarishni qimmatlashtiradi
+=======================
+#Tranzaksiyalarni tezlashtiradi va ishonchliligini oshiradi
+=======================
+Moliyaviy bozorlarni tartibga soladi
+=======================
+Ishlab chiqarish jarayonlarini to'xtatadi
+
+
++++++
+
+Blokcheyn texnologiyasining kelajakdagi roli qanday bo'lishi mumkin?
+=======================
+Markazlashtirilgan iqtisodiyotga o'tish
+=======================
+Davlatlar o'rtasidagi iqtisodiy to'siqlarni oshirish
+=======================
+#Tranzaksiyalarni tezlashtirish va iqtisodiy jarayonlarni optimallashtirish
+=======================
+Xavfsizlikni pasaytirish
+
+
++++++
+
+Internet-banking nima?
+=======================
+Bank xizmatlarining faqat mobil ilovalar orqali taqdim etilishi
+=======================
+#Bank xizmatlarining onlayn, internet orqali ko‘rsatilishi
+=======================
+Bank hisobvaraqlarini faqat ATM orqali boshqarish
+=======================
+Bank xizmatlarining faqat telefon orqali taqdim etilishi
+
+
++++++
+
+Internet-bankingda foydalanuvchi qanday xizmatlardan foydalanishi mumkin?
+=======================
+Hisob raqamlarini tekshirish
+=======================
+Pul o‘tkazmalari amalga oshirish
+=======================
+Kreditlar va depozitlarni boshqarish
+=======================
+#Barcha javoblar to‘g‘ri
+
+
++++++
+
+Internet-savdo (e-commerce) nima?
+=======================
+Mahsulotlarni do‘konlar orqali sotish
+=======================
+#Internet orqali tovarlar yoki xizmatlar sotib olish va sotish
+=======================
+Faqat onlayn xizmatlar taqdim etish
+=======================
+Internetda faqat raqamli to‘lovlar amalga oshirish
+
+
++++++
+
+Internet-savdo tizimining asosiy afzalliklaridan biri nima?
+=======================
+#Do‘konlarga borish zarurati yo‘q
+=======================
+Faqat yirik kompaniyalar uchun mavjud
+=======================
+Tovarlarni faqat jismoniy do‘konlardan olish mumkin
+=======================
+Narxlar faqat yuqori bo‘ladi
+
+
++++++
+
+Internet-savdoda "elektron tijorat platformalari" nimani anglatadi?
+=======================
+Faqat mahsulotlarni onlayn tarzda yetkazib berish
+=======================
+#Onlayn savdo qilish uchun yaratilgan saytlari yoki tizimlar (masalan, Amazon, eBay)
+=======================
+Mahsulotlar bo‘yicha taqdimotlar qilish
+=======================
+Faqat reklama qilish tizimlari
+
+
++++++
+
+Internet-sug‘urta xizmatlarining afzalliklaridan biri nima?
+=======================
+#Sug‘urta polisini onlayn tarzda sotib olish
+=======================
+Sug‘urta shartnomalarini faqat ofisda rasmiylashtirish
+=======================
+Faqat shaxsiy uchrashuvlarda maslahat olish
+=======================
+Sug‘urta turlari cheklangan
+
+
++++++
+
+Internet-marketingning asosiy maqsadi nima?
+=======================
+Mahsulotlarni jismoniy do‘konda sotish
+=======================
+#Mahsulot yoki xizmatlarni onlayn platformalar orqali reklama qilish
+=======================
+Faqat mobil telefonlar orqali marketing qilish
+=======================
+Mahsulotlarni faqat televideniya orqali targ‘ib qilish
+
+
++++++
+
+Internet-marketingda SEO (Search Engine Optimization) nima?
+=======================
+Internetda faqat reklama qilish
+=======================
+Mahsulotlarni onlayn do‘konlarda sotish
+=======================
+#Veb-saytni qidiruv tizimlarida yuqori o‘rinlarga joylashtirish
+=======================
+Faqat ijtimoiy tarmoqlarda marketing qilish
+
+
++++++
+
+Internet-bankingda "SMS bildirishnomalari" nima?
+=======================
+Internet-bankingga kirish uchun parol
+=======================
+#Bank balansining harakatini foydalanuvchiga xabar qilish
+=======================
+Onlayn kredit olish
+=======================
+Bank ma'lumotlarini faqat telefon orqali olish
+
+
++++++
+
+Internet-marketingda "pay-per-click" (PPC) reklama qanday ishlaydi?
+=======================
+Reklama kampaniyasida faqat reklamani ko‘rish uchun to‘lanadi
+=======================
+Faqat reklama bannerlarini saytga joylashtirish
+=======================
+#Reklama ko‘rsatilgan har bir foydalanuvchi uchun to‘lov amalga oshiriladi
+=======================
+Reklama faqat ijtimoiy tarmoqlarda joylashtiriladi
+
+
++++++
+
+Internet-savdoda to‘lov tizimlari qanday ishlaydi?
+=======================
+Faqat naqd pul bilan to‘lov
+=======================
+#Kredit kartalari va onlayn to‘lov tizimlari orqali amalga oshiriladi
+=======================
+Mahsulotni sotuvchidan olish uchun faqat naqd to‘lov
+=======================
+Faqat bank hisobvaraqlari orqali to‘lov
+
+
++++++
+
+Internet-bankingda "two-factor authentication" (ikki faktorli autentifikatsiya) nima?
+=======================
+Faqat parol bilan kirish
+=======================
+Faqat telefon raqami orqali kirish
+=======================
+#Foydalanuvchi identifikatsiyasini tasdiqlash uchun ikki bosqichli xavfsizlik
+=======================
+Shaxsiy ma'lumotlarni faqat tizim orqali tekshirish
+
+
++++++
+
+Internet-sug‘urta kompaniyasida qanday xizmatlarni olish mumkin?
+=======================
+Sug‘urta polisini onlayn tarzda sotib olish
+=======================
+#Sug‘urta shartnomasi va premium to‘lovlarini internet orqali amalga oshirish
+=======================
+Faqat telefon orqali xizmatlar
+=======================
+Internetda sug‘urta kompaniyasiga ishga kirish
+
+
++++++
+
+Internet-marketingda "email marketing" nima?
+=======================
+#Email orqali xizmatlarni reklama qilish
+=======================
+Mahsulotlarni onlayn tarzda sotish
+=======================
+Faqat veb-saytni yaratish
+=======================
+Internetda faqat banner reklama qilish
+
+
++++++
+
+Internet-marketingda SEO (Search Engine Optimization) nima?
+=======================
+Internetda faqat reklama qilish
+=======================
+Mahsulotlarni onlayn do‘konlarda sotish
+=======================
+#Veb-saytni qidiruv tizimlarida yuqori o‘rinlarga joylashtirish
+=======================
+Faqat ijtimoiy tarmoqlarda marketing qilish
+
+
++++++
+
+Axborot xavfsizligida "identifikatsiya"ning roli qanday?
+=======================
+Faqat kompyuterlarni himoya qilish
+=======================
+#Foydalanuvchi yoki tizimni tasdiqlash
+=======================
+Faqat ma'lumotlarni saqlash
+=======================
+Tarmoqni faqat bloklash
+
+
++++++
+
+Internet-bankingning xavfsizligini qanday oshirish mumkin?
+=======================
+Faqat parol ishlatish
+=======================
+Faqat mobil telefon raqamini ishlatish
+=======================
+#Ikki faktorli autentifikatsiya va xavfsiz parollarni ishlatish
+=======================
+Internet-bankingni faqat faollashtirish
+
++++++
+
+Internet-banking nima?
+=======================
+Bank xizmatlarining faqat mobil ilovalar orqali taqdim etilishi
+=======================
+#Bank xizmatlarining onlayn, internet orqali ko‘rsatilishi
+=======================
+Bank hisobvaraqlarini faqat ATM orqali boshqarish
+=======================
+Bank xizmatlarining faqat telefon orqali taqdim etilishi
+
+
++++++
+
+Internet-bankingda foydalanuvchi qanday xizmatlardan foydalanishi mumkin?
+=======================
+Hisob raqamlarini tekshirish
+=======================
+Pul o‘tkazmalari amalga oshirish
+=======================
+Kreditlar va depozitlarni boshqarish
+=======================
+#Barcha javoblar to‘g‘ri
+
+
++++++
+
+Internet-savdo (e-commerce) nima?
+=======================
+Mahsulotlarni do‘konlar orqali sotish
+=======================
+#Internet orqali tovarlar yoki xizmatlar sotib olish va sotish
+=======================
+Faqat onlayn xizmatlar taqdim etish
+=======================
+Internetda faqat raqamli to‘lovlar amalga oshirish
+
+
++++++
+
+Internet-savdo tizimining asosiy afzalliklaridan biri nima?
+=======================
+#Do‘konlarga borish zarurati yo‘q
+=======================
+Faqat yirik kompaniyalar uchun mavjud
+=======================
+Tovarlarni faqat jismoniy do‘konlardan olish mumkin
+=======================
+Narxlar faqat yuqori bo‘ladi
+
+
++++++
+
+Internet-savdoda "elektron tijorat platformalari" nimani anglatadi?
+=======================
+Faqat mahsulotlarni onlayn tarzda yetkazib berish
+=======================
+#Onlayn savdo qilish uchun yaratilgan saytlari yoki tizimlar (masalan, Amazon, eBay)
+=======================
+Mahsulotlar bo‘yicha taqdimotlar qilish
+=======================
+Faqat reklama qilish tizimlari
+
+
++++++
+
+Internet-sug‘urta xizmatlarining afzalliklaridan biri nima?
+=======================
+#Sug‘urta polisini onlayn tarzda sotib olish
+=======================
+Sug‘urta shartnomalarini faqat ofisda rasmiylashtirish
+=======================
+Faqat shaxsiy uchrashuvlarda maslahat olish
+=======================
+Sug‘urta turlari cheklangan
+
+
++++++
+
+Internet-marketingning asosiy maqsadi nima?
+=======================
+Mahsulotlarni jismoniy do‘konda sotish
+=======================
+#Mahsulot yoki xizmatlarni onlayn platformalar orqali reklama qilish
+=======================
+Faqat mobil telefonlar orqali marketing qilish
+=======================
+Mahsulotlarni faqat televideniya orqali targ‘ib qilish
+
+
++++++
+
+Internet-bankingda "SMS bildirishnomalari" nima?
+=======================
+Internet-bankingga kirish uchun parol
+=======================
+#Bank balansining harakatini foydalanuvchiga xabar qilish
+=======================
+Onlayn kredit olish
+=======================
+Bank ma'lumotlarini faqat telefon orqali olish
+
+
++++++
+
+Internet-marketingda "pay-per-click" (PPC) reklama qanday ishlaydi?
+=======================
+Reklama kampaniyasida faqat reklamani ko‘rish uchun to‘lanadi
+=======================
+Faqat reklama bannerlarini saytga joylashtirish
+=======================
+#Reklama ko‘rsatilgan har bir foydalanuvchi uchun to‘lov amalga oshiriladi
+=======================
+Reklama faqat ijtimoiy tarmoqlarda joylashtiriladi
+
+
++++++
+
+Internet-savdoda to‘lov tizimlari qanday ishlaydi?
+=======================
+Faqat naqd pul bilan to‘lov
+=======================
+#Kredit kartalari va onlayn to‘lov tizimlari orqali amalga oshiriladi
+=======================
+Mahsulotni sotuvchidan olish uchun faqat naqd to‘lov
+=======================
+Faqat bank hisobvaraqlari orqali to‘lov
+
+
++++++
+
+Internet-bankingda "two-factor authentication" (ikki faktorli autentifikatsiya) nima?
+=======================
+Faqat parol bilan kirish
+=======================
+Faqat telefon raqami orqali kirish
+=======================
+#Foydalanuvchi identifikatsiyasini tasdiqlash uchun ikki bosqichli xavfsizlik
+=======================
+Shaxsiy ma'lumotlarni faqat tizim orqali tekshirish
+
+
++++++
+
+Internet-sug‘urta kompaniyasida qanday xizmatlarni olish mumkin?
+=======================
+Sug‘urta polisini onlayn tarzda sotib olish
+=======================
+#Sug‘urta shartnomasi va premium to‘lovlarini internet orqali amalga oshirish
+=======================
+Faqat telefon orqali xizmatlar
+=======================
+Internetda sug‘urta kompaniyasiga ishga kirish
+
+
++++++
+
+Internet-marketingda "email marketing" nima?
+=======================
+#Email orqali xizmatlarni reklama qilish
+=======================
+Mahsulotlarni onlayn tarzda sotish
+=======================
+Faqat veb-saytni yaratish
+=======================
+Internetda faqat banner reklama qilish
+
+
++++++
+
+Internet-bankingning xavfsizligini qanday oshirish mumkin?
+=======================
+Faqat parol ishlatish
+=======================
+Faqat mobil telefon raqamini ishlatish
+=======================
+#Ikki faktorli autentifikatsiya va xavfsiz parollarni ishlatish
+=======================
+Internet-bankingni faqat faollashtirish
+
+
++++++
+
+Axborot xavfsizligi nima?
+=======================
+Faqat ma'lumotlarni saqlash
+=======================
+#Ma'lumotlar, tizimlar va resurslarning xavfsizligini ta'minlash
+=======================
+Faqat onlayn tranzaksiyalarni himoya qilish
+=======================
+Tizimni faqat tashqi tahdidlardan himoya qilish
+
+
++++++
+
+Axborot xavfsizligini ta'minlashning asosiy tamoyillari qaysilar?
+=======================
+#Maxfiylik, butunlik va mavjudlik
+=======================
+Maxfiylik, shaffoflik va qidiruv
+=======================
+Faqat mavjudlik va butunlik
+=======================
+Maxfiylik, qidiruv va uzluksizlik
+
+
++++++
+
+Axborot xavfsizligida "kriptografiya" nima?
+=======================
+#Ma'lumotlarni faqat ruxsat etilgan foydalanuvchilar uchun kodlash
+=======================
+Faqat ma'lumotlar bazasini saqlash
+=======================
+Faqat internet tarmog'ini himoya qilish
+=======================
+Ma'lumotlarni faqat tashqi tahdidlardan himoya qilish
+
+
++++++
+
+Axborot xavfsizligini ta'minlashda "firewall" qanday rol o'ynaydi?
+=======================
+Faqat tarmoqni tezlashtirish
+=======================
+#Tarmoqdagi zararli kirishlarni bloklash
+=======================
+Faqat internetda ma'lumotlarni saqlash
+=======================
+Ma'lumotlarni faqat lokal tarmoqda saqlash
+
+
++++++
+
+Axborot xavfsizligida "antivirus dasturlari" qanday yordam beradi?
+=======================
+Kompyuterni tezlashtiradi
+=======================
+Faqat tashqi qurilmalarni himoya qiladi
+=======================
+#Kompyuter va tarmoqni zararli dasturlardan himoya qiladi
+=======================
+Faqat ma'lumotlarni saqlashga yordam beradi
+
+
++++++
+
+Ma'lumotlar xavfsizligini ta'minlashda "dasturiy ta'minotni yangilash"ning roli nima?
+=======================
+Faqat yangi funktsiyalarni qo'shish
+=======================
+#Xavfsizlik zaifliklarini tuzatish
+=======================
+Kompyuterni tezlashtirish
+=======================
+Faqat operatsion tizimni o'zgartirish
+
+
++++++
+
+Iqtisodiyotda axborot xavfsizligi ta'minlanishini qanday usullar yordamida amalga oshirish mumkin?
+=======================
+Faqat tarmoqni himoya qilish
+=======================
+#Kriptografik metodlar va autentifikatsiya
+=======================
+Faqat tizimni yopish
+=======================
+Faqat qidiruv tizimlarini optimallashtirish
+
+
++++++
+
+Axborot xavfsizligi va huquqni muhofaza qilish organlari o'rtasidagi munosabat nima?
+=======================
+Xavfsizlikni ta'minlash uchun faqat o'rgatish
+=======================
+Huquqni muhofaza qilish organlari ma'lumotlarni boshqaradi
+=======================
+#Xavfsizlikni nazorat qilish va qonunlarga rioya qilish
+=======================
+Faqat xavfsizlikni ta'minlash
+
+
++++++
+
+Axborot xavfsizligida "yangi tahdidlar"dan himoya qilish qanday amalga oshiriladi?
+=======================
+Faqat oldingi tahdidlar asosida chora ko'rish
+=======================
+#Xavf tahlili va ilg'or texnologiyalar yordamida
+=======================
+Faqat tarmoqni bloklash
+=======================
+Yangi texnologiyalarni ishlatish
+
+
++++++
+
+"Multi-faktor autentifikatsiya" (MFA) nima?
+=======================
+Foydalanuvchidan faqat bitta parolni so‘rash
+=======================
+#Foydalanuvchining bir nechta usulda identifikatsiyasini talab qilish
+=======================
+Faqat mobil ilovalar orqali autentifikatsiya qilish
+=======================
+Shunchaki faqat parol ishlatish
+
+
++++++
+
+Axborot xavfsizligini ta'minlashda "VPN"ning roli nima?
+=======================
+Faqat maxfiy ma'lumotlarni saqlash
+=======================
+#Tarmoqdagi ma'lumotlarni shifrlash va xavfsiz uzatish
+=======================
+Faqat ma'lumotlarni yuklash
+=======================
+Tarmoqni tezlashtirish
+
+
++++++
+
+Axborot xavfsizligini ta'minlashda "data encryption" (ma'lumotlarni shifrlash)ning roli qanday?
+=======================
+Ma'lumotlarni shifrlash orqali faqat tizimni optimallashtirish
+=======================
+Ma'lumotlarni faqat xavfsiz joyda saqlash
+=======================
+#Ma'lumotlarni nojo'ya kirishlardan himoya qilish
+=======================
+Faqat ma'lumotlarni onlayn tarqatish
+
+
++++++
+
+Axborot xavfsizligi strategiyasi qanday tuziladi?
+=======================
+Faqat texnologik yechimlarni qo‘llash
+=======================
+#Xavf va zaifliklarni tahlil qilish, xavfsizlikni ta'minlovchi chora-tadbirlarni ishlab chiqish
+=======================
+Faqat tarmoqni himoya qilish
+=======================
+Yangi texnologiyalarni ishlab chiqish
+
+
++++++
+
+Axborot xavfsizligini ta'minlashda "cloud computing"ning xavfsizlikka ta'siri qanday?
+=======================
+Ma'lumotlar faqat lokal tizimda saqlanadi
+=======================
+#Ma'lumotlar markazlashtirilgan tizimda saqlanadi va xavfsizligi cloud xizmatlari tomonidan ta'minlanadi
+=======================
+Faqat saqlash va uzatish uchun ishlatiladi
+=======================
+Faqat lokal tarmoqda ma'lumotlar saqlanadi
+
+
++++++
+
+Raqamli iqtisodiyot nima?
+====
+ Faoliyatning faqat an’anaviy shakllari
+====
+# Texnologiyalarga asoslangan iqtisodiy tizim
+====
+Yalpi ichki mahsulotning pasayishi
+====
+Raqamli mahsulotlar ishlab chiqarish
+
+
++++++
+
+Sun'iy intellekt (SI) nima?
+====
+ Faqat kompyuterlarda ishlovchi dasturlar
+====
+# Inson aqliga o'xshash tizimlar
+====
+Internet orqali ishlovchi ilovalar
+====
+ Kompyuter texnologiyasining asosiy qismi
+
+
++++++
+
+Blokcheyn texnologiyasi nima?
+====
+ Yangi avlod kompyuter tizimi
+====
+ Ma'lumotlarni shifrlash uchun ishlatiladigan tarmoq
+====
+ Tizimlar o'rtasida aloqani boshqarish texnologiyasi
+====
+# Ma'lumotlar bazasini himoya qilish va tekshirish usuli
+
+
++++++
+
+Neyron tarmoqlari qanday texnologiyalarni anglatadi?
+====
+ Ma'lumotlarni samarali saqlash
+====
+# Sun'iy intellekt va mashinaviy o'rganishning asosi
+====
+ Raqamli pul o'tkazmalari
+====
+ Virtual haqiqat tizimlari
+
+
++++++
+
+"Internet narsalari" (IoT) nima?
+====
+Internetga ulangan barcha smartfonlar
+====
+# Internetga ulangan va bir-biriga ma'lumot yuboradigan ob'ektlar tarmog'i
+====
+ Yangi mobil ilovalar tizimi
+====
+ Internetda ishlaydigan o'yinlar
+
+
++++++
+
+Raqamli marketing texnologiyalariga qanday misollar kiradi?
+====
+Matnli xabarlar yuborish
+====
+#Internet reklamalari va SEO (search engine optimization)
+====
+Tabiiy tilni qayta ishlash
+====
+Kompyuter grafikasi
+
+
++++++
+
+Ma'lumotlarni tahlil qilish va biznesni boshqarish uchun qanday texnologiya ishlatiladi?
+====
+Cloud computing
+====
+# Big Data
+====
+ Cybersecurity
+====
+ Blockchain
+
+
++++++
+
+Cloud computing (bulutli hisoblash) texnologiyasi nima?
+=====
+Dasturlarni va ma'lumotlarni lokal kompyuterlarda saqlash
+====
+#Internet orqali resurslar va xizmatlardan foydalanish
+====
+Avtomatik hisoblash tizimlari
+====
+Mobil ilovalar yaratish
+
+
++++++
+
+"Katta ma'lumot" (Big Data) texnologiyasining asosiy maqsadi nima?
+====
+Ma'lumotlarni yig'ish va saqlash
+====
+#Katta hajmdagi ma'lumotlarni tahlil qilish va ishlov berish
+====
+Internetga kirishni boshqarish
+====
+Kichik ma'lumotlarni aniqlash
+
+
++++++
+
+Raqamli to'lov tizimlari qanday texnologiyalarni o'z ichiga oladi?
+====
+Bank kartalari va internet banking
+====
+# Kriptovalyutalar va mobil to'lov ilovalari
+====
+ Mahsulot yetkazib berish tizimlari
+====
+Bulutli hisoblash
+
+
++++++
+
+Mashina o'rganish (Machine Learning) qanday texnologiyadir?
+====
+Tarmoqlarni boshqarish texnologiyasi
+=====
+#Kompyuterning o'z tajribasidan o'rganib, qarorlar qabul qilish usuli
+====
+ Yangi ma'lumotlarni saqlash va tashkil qilish usuli
+====
+ Ma'lumotlarni xavfsizligini ta'minlash usuli
+
+
++++++
+
+Virtual haqiqat (VR) texnologiyasi nima?
+====
+ #Kompyuterda yaratilgan simulyatsiya muhitida foydalanuvchi tajriba
+====
+ Internet orqali o'qitish tizimi
+====
+Kompyuter grafikasining yangi shakli
+====
+Real dunyo bilan bog'liq bo'lmagan tizimlar
+
+
++++++
+
+Raqamli iqtisodiyotda kiberxavfsizlik nima uchun muhim?
+====
+# Ma'lumotlar va tizimlarning himoyasini ta'minlash
+====
+Internetning tezligini oshirish
+====
+ Kompyuterlarni tezlashtirish
+====
+Onlayn to'lovlarni avtomatik ravishda bajarish
+
+
++++++
+
+Dasturiy ta'minotning asosi sifatida "open source" nima?
+====
+ Foydalanuvchilarga to'liq bepul dasturlar
+====
+# Kodlari ochiq bo'lgan va erkin o'zgartirilishi mumkin bo'lgan dasturlar
+====
+Yangi texnologiyalarni o'rganishga yordam beruvchi dasturlar
+====
+ Ma'lumotlarni xavfsiz saqlash uchun yaratilgan dasturlar
+
+
++++++
+
+Raqamli iqtisodiyotda "5G" texnologiyasi qanday rol o'ynaydi?
+====
+#Mobil internetning tezligini oshirish
+====
+ Kriptovalyutalarni himoya qilish
+====
+Katta ma'lumotlar tahlilini tezlashtirish
+====
+Raqamli marketingni rivojlantirish
+
+
++++++
+
+Axborot-kommunikatsiya texnologiyalarining (AKT) iqtisodiyotdagi roli qanday?
+====
+ Tashqi savdoni cheklash
+====
+#Ishlab chiqarishni samarali tashkil etish
+====
+ Resurslarni kamaytirish
+====
+ Ishsizlikni oshirish
+
+
++++++
+
+ AKT ning iqtisodiyotdagi rivojlanishiga qanday faktorlar ta'sir ko'rsatadi?
+====
+Faqat iqtisodiy omillar
+====
+# Texnologik, iqtisodiy va ijtimoiy omillar
+====
+Faqat ijtimoiy omillar
+====
+Faqat iqtisodiy omillar
+
+
++++++
+
+AKT ning rivojlanishi iqtisodiy samaradorlikka qanday ta'sir qiladi?
+====
+Iqtisodiy samaradorlikni kamaytiradi
+====
+# Iqtisodiy samaradorlikni oshiradi
+====
+ Samaradorlikni o'zgartirmaydi
+====
+ Faoliyatni qisqartiradi
+
+
++++++
+
+Iqtisodiyotni axborotlashtirishning asosiy maqsadi nima?
+====
+ Yangi texnologiyalarni ishlab chiqarish
+====
+Mahsulot va xizmatlarni taklif qilish
+====
+ #Axborot oqimlarini samarali boshqarish
+====
+Ijtimoiy sohani rivojlantirish
+
+
++++++
+
+Qaysi soha axborot-kommunikatsiya texnologiyalaridan ko'proq foydalanyapti?
+====
+Qishloq xo'jaligi
+====
+# Bank va moliya sektori
+====
+Sog'liqni saqlash
+====
+ Turizm
+
+
++++++
+
+Iqtisodiyotda AKT ning asosiy imkoniyatlari nimalardan iborat?
+=====
+ Faqat yangi ish o'rinlari yaratish
+====
+# Ma'lumotlarni tezda yetkazish va qayta ishlash
+====
+ Jismoniy resurslarni ortiqcha ishlatish
+====
+Ta'lim jarayonini rivojlantirish
+
+
++++++
+
+ Iqtisodiyotda AKT ning asosiy muammolaridan biri nima?
+====
+ Innovatsiyalarni rivojlantirish
+====
+Internetning cheklanganligi
+====
+# To'g'ri qarorlar qabul qilish uchun kerakli ma'lumotlarning etishmasligi
+====
+ Resurslarni boshqarishning samaradorligi
+
+
++++++
+
+Axborot-kommunikatsiya texnologiyalari qaysi sohada samarali foydalaniladi?
+====
+# Savdo-sotiq
+====
+Tashqi siyosat
+====
+ Ijtimoiy tarmoqlar
+====
+Yashil energetika
+
+
++++++
+
+Iqtisodiyotni axborotlashtirishning eng muhim ustuvor yo'nalishlaridan biri nima?
+====
+Internet tarmoqlarini kengaytirish
+====
+# Ma'lumotlarni tahlil qilish va saqlash
+====
+Ijtimoiy tarmoqlarni rivojlantirish
+====
+Axborot xavfsizligini ta'minlash
+
+
++++++
+
+ AKT ning rivojlanishi qaysi iqtisodiy jarayonni tezlashtiradi?
+====
+Faqat ishlab chiqarishni
+====
+# Axborot oqimlarining tezligini
+====
+Texnologik inqilobni
+====
+Ishlab chiqarishning diversifikatsiyasini
+
+
++++++
+
+Iqtisodiyotni axborotlashtirish orqali nima amalga oshiriladi?
+====
+Faqat ishlab chiqarish kuchlarini oshirish
+====
+# Tez va aniq qarorlar qabul qilish
+====
+Ijtimoiy aloqalarni kengaytirish
+====
+Yangi ish o'rinlari yaratish
+
+
++++++
+
+AKT rivojlanishining iqtisodiyotga ta'sirini qanday baholash mumkin?
+====
+Iqtisodiy o'sishni to'xtatadi
+====
+ #Yangi imkoniyatlar yaratadi
+====
+ Ijtimoiy aloqalarni zaiflashtiradi
+====
+ Ishsizlikni oshiradi
+
+
++++++
+
+ AKT ning iqtisodiyotni samarali boshqarishda qanday rol o'ynashini tushuntiring?
+====
+Ishlab chiqarishni to'xtatadi
+====
+ #Qarorlarni tez va samarali qabul qilishni ta'minlaydi
+====
+ Ma'lumotlarni yig'ish va saqlashda muammo yaratadi
+====
+Mahsulot ishlab chiqarishni kamaytiradi
+
+
++++++
+
+AKT ning yangi imkoniyatlar yaratishi qaysi sohada o'zini ko'rsatadi?
+====
+#Ishlab chiqarish jarayonlarini takomillashtirish
+====
+Yangi ish o'rinlari yaratish
+====
+Qishloq xo'jaligida samaradorlikni oshirish
+====
+Ta'lim tizimini rivojlantirish
+
+
++++++
+
+Iqtisodiyotni axborotlashtirishda qaysi texnologiya muhim ahamiyatga ega?
+====
+# Sun'iy intellekt
+====
+ Biotexnologiyalar
+====
+Yadro texnologiyasi
+====
+Koinot tadqiqotlari
+
+
++++++
+
+Internet-texnologiyalari nima?
+====
+Kompyuterlar o'rtasidagi tarmoq aloqasi
+====
+Axborotlarni saqlash va uzatish uchun ishlatiladigan dasturlar
+====
+ Ma'lumotlarni tezkor uzatish tizimi
+====
+# Tarmoq infratuzilmasini tashkil etuvchi texnologiyalar
+
+
++++++
+
+Internet-texnologiyalarining asosiy turlari qaysilar?
+====
+ Statik va dinamik tarmoqlar
+====
+Mobil va ofis tarmoqlari
+====
+# Veb, bulutli va mobil texnologiyalar
+====
+Shaxsiy va professional tarmoqlar
+
+
++++++
+
+Internet-aloqa texnologiyalarining asosiy innovatsiyasi nima?
+====
+# Tezkor ma'lumot uzatish
+====
+ Yangi dasturlarni yaratish
+====
+Internetga ulanishda xavfsizlikni oshirish
+====
+Global aloqa tizimlarini birlashtirish
+
+
++++++
+
+Internet-aloqasi orqali amalga oshiriladigan eng keng tarqalgan innovatsiya turi nima?
+====
+Cloud computing (bulutli hisoblash)
+====
+# E-commerce (elektron tijorat)
+====
+3D modellashtirish
+====
+ Virtual haqiqat texnologiyalari
+
+
++++++
+
+Qaysi texnologiya IT-aloqa innovatsiyasi sifatida yuqori tezlikda ma'lumot uzatishni ta'minlaydi?
+====
+Wi-Fi 5
+====
+4G
+====
+# 5G
+====
+ Ethernet
+
+
++++++
+
+Bulutli texnologiyalarning asosiy afzalligi nima?
+====
+Fayllarni lokal qurilmada saqlash
+====
+Internetga ulanish imkoniyatini yo'qotish
+====
+#Ma'lumotlarni tarmoq orqali saqlash va ulardan har joyda foydalanish
+====
+Xavfsizligini oshirish
+
+
++++++
+
+Internet tarmog'ida ishlovchi yangilangan tizimlar qanday nomlanadi?
+====
+# Internet of Things (IoT)
+====
+ Block-chain
+====
+Augmented Reality (AR)
+====
+Internet Protocol (IP)
+
+
++++++
+
+Aloqa texnologiyalarining innovatsion aspekti nima?
+====
+# Axborotlarni eng yuqori tezlikda uzatish
+====
+Internetga ulanishni yaxshilash
+====
+Internetga cheklovlar qo'yish
+====
+Dasturlarni tezlashtirish
+
+
++++++
+
+Qaysi internet-texnologiya mobil qurilmalarda keng qo'llaniladi?
+====
+ #5G
+====
+Ethernet
+====
+Wi-Fi
+====
+NFC
+
+
++++++
+
+IT-aloqa innovatsiyasining asosiy elementlaridan biri qanday texnologiyalarga kiradi?
+====
+Ma'lumotlar bazalari
+====
+ Avtomatik mashinalar
+====
+3D printerlar
+====
+# IoT va 5G
+
+
++++++
+
+Aloqa tizimlarida yangi texnologiyalarni joriy etish orqali qanday afzalliklar ko'zda tutiladi?
+====
+Tarmoqni yopish
+====
+# Samaradorlikni oshirish
+====
+Axborotlarning xavfsizligini kamaytirish
+====
+Internetni cheklash
+
+
++++++
+
+IT-aloqa innovatsiyasida "blockchain" texnologiyasining roli nima?
+====
+Internetga ulanishni optimallashtirish
+====
+# Axborotlarni xavfsiz va aniq saqlash
+====
+Internet tarmog'ini kengaytirish
+====
+Ma'lumotlarni tezda uzatish
+
+
++++++
+
+Internet-texnologiyalarining turli sohalarda qo'llanishi qaysi sohada alohida ahamiyatga ega?
+====
+# Faoliyatni avtomatlashtirishda
+====
+Faqat odamlar o'rtasidagi muloqotda
+====
+Tashqi siyosatda
+====
+Ma'lumotlarni saqlashda
+
+
++++++
+
+5G texnologiyasining internet-aloqa tizimlaridagi o'rni nima?
+====
+Internet tezligini sekinlashtiradi
+====
+ #Mobil tarmoqlarni tezlashtiradi va ko'proq qurilmalarni ulash imkonini yaratadi
+====
+Xavfsizlikni kamaytiradi
+====
+Tarmoqlarda cheklovlar yaratadi
+
+
++++++
+
+Aloqa texnologiyalaridagi innovatsiya va rivojlanishlar qanday ijtimoiy ta'sir ko'rsatadi?
+====
+Tarmoqni cheklaydi
+====
+# Ijtimoiy aloqalarni kuchaytiradi va biznesni rivojlantiradi
+====
+c) Faqat sanoatni rivojlantiradi
+====
+Ta'lim tizimida o'zgartirishlar kiritadi
+
+
++++++
+
+Mobil tarmoqlarni rivojlantirishning asosiy tamoyillaridan biri nima?
+====
+Mobil qurilmalar narxini kamaytirish
+====
+Internet tezligini cheklash
+====
+# Tarmoqning o'zaro ulanishini va uzluksizligini ta'minlash
+====
+Faqat ma'lumotlarni saqlash
+
+
++++++
+
+Mobil tarmoqlarni rivojlantirishda qaysi texnologiya muhim rol o'ynaydi?
+====
+3G texnologiyasi
+====
+4G texnologiyasi
+====
+#5G texnologiyasi
+====
+Wi-Fi 6 texnologiyasi
+
+
++++++
+
+Mobil tarmoqlarda qanday yondashuvlarni rivojlantirish muhim?
+====
+Tezkor internetni kengaytirish
+====
+# Mobil qurilmalarga yuqori darajadagi xavfsizlikni ta'minlash
+====
+Aktsiyalar va chegirmalarni tashkil etish
+====
+Faqat mobil ilovalarni rivojlantirish
+
+
++++++
+
+Mobil tarmoqlarni rivojlantirishda qanday omil muhim ahamiyatga ega?
+====
+Yangi mobil qurilmalar ishlab chiqarish
+====
+#Tarmoqning samaradorligini oshirish
+====
+Mobil ilovalar sonini ko'paytirish
+====
+Internetdagi kontentni kamaytirish
+
+
++++++
+
+Mobil tarmoqlarni rivojlantirishda "5G" texnologiyasi nima uchun zarur?
+====
+ #Internetga tezroq ulanishni ta'minlaydi
+====
+ Mobil qurilmalarning narxini oshiradi
+====
+Tarmoqlarni faqat ma'lumot uzatish uchun ishlatadi
+====
+Faqat mobil ilovalarni rivojlantiradi
+
+
++++++
+
+Mobil tarmoqlarni rivojlantirishda muhim bo'lgan infratuzilma qaysi?
+====
+# Serverlar va ma'lumotlar markazlari
+====
+Yangi qurilmalar ishlab chiqarish
+====
+Boshqa mobil tarmoqlar bilan integratsiya qilish
+====
+Internetda yangi veb-saytlar yaratish
+
+
++++++
+
+Mobil tarmoqni rivojlantirishning asosiy maqsadlaridan biri nima?
+====
+Yangi texnologiyalarni ishlab chiqish
+====
+# Foydalanuvchilarga yuqori tezlikda va uzluksiz internet ulanishini ta'minlash
+====
+Faqat mobil ilovalarni yaratish
+====
+Internet xavfsizligini kamaytirish
+
+
++++++
+
+Mobil tarmoqlarni rivojlantirishda "QoS" (Quality of Service) nima?
+====
+Tarmoqda faqat ma'lumotlar uzatiladi
+====
+#Tarmoqda yuqori sifatli xizmatlarni ta'minlash
+====
+Mobil tarmoqlarda internet tezligini sekinlashtirish
+====
+Faqat mobil qurilmalar ishlab chiqarish
+
+
++++++
+
+Mobil tarmoqlarda xavfsizlikni oshirishda qanday choralar ko'riladi?
+====
+Tarmoqning cheklovlari
+====
+# Kriptografiya va shifrlash texnologiyalarini qo'llash
+====
+Tezkor internet tarmog'ini taqdim etish
+====
+Faqat foydalanuvchi qurilmalarini yangilash
+
+
++++++
+
+Mobil tarmoqlarni rivojlantirishda "4G" texnologiyasining ahamiyati nima?
+====
+# U internetning tezligini oshirishda yordam beradi
+====
+Faqat mobil ilovalarni rivojlantiradi
+====
+Yangi tarmoq protokollarini ishlab chiqadi
+====
+Faqat xizmatlarni soddalashtiradi
+
+
++++++
+
+Mobil tarmoqlarni rivojlantirishda qanday innovatsiyalar joriy qilinadi?
+====
+Tarmoq protokollarini o'zgartirish
+====
+Mobil qurilmalarning dizaynini o'zgartirish
+====
+# Yangi tarmoq texnologiyalarini va xizmatlarni rivojlantirish
+====
+Mobil reklama platformalarini yaratish
+
+
++++++
+
+Mobil tarmoqlarda "small cell" texnologiyasining roli nima?
+====
+# Kengaytirilgan tarmoq qamrovini ta'minlash
+====
+Mobil qurilmalarni birlashtirish
+====
+Mobil internetni cheklash
+====
+Yangi ilovalar yaratish
+
+
++++++
+
+Mobil tarmoqlarda tarmoqlararo integratsiyaning afzalliklari nimalardan iborat?
+====
+# Resurslarni samarali ishlatish
+====
+Faqat bir tarmoqni yaratish
+====
+Internet xavfsizligini kamaytirish
+====
+Yangi xizmatlar yaratish
+
+
++++++
+
+Iqtisodiy tizimlarda texnik ta'minot orqali qanday xavfsizlikni ta'minlash mumkin?
+====
+Avtomatik ravishda tizimlarni yangilash
+====
+#Maxfiy ma'lumotlarni shifrlash
+====
+Yangi tizimlar yaratish
+====
+Faqat ishlab chiqarishni optimallashtirish
+
+
++++++
+
+Mobil tarmoqlarni rivojlantirishda "Edge computing" texnologiyasining roli qanday?
+====
+Ma'lumotlarni tarmoqda saqlash
+====
+# Foydalanuvchilarga tezkor xizmatlar ko'rsatish uchun ma'lumotlarni lokal ravishda qayta ishlash
+====
+Mobil qurilmalar orasida aloqa yaratish
+====
+Internetga ulanishni cheklash
+
+
++++++
+
+Iqtisodiy tizimlarning zamonaviy texnik ta'minoti nima?
+====
+Faqat iqtisodiy ma'lumotlar yig'ish
+====
+# Iqtisodiy jarayonlarni avtomatlashtirish va samarali boshqarish uchun ishlatiladigan texnologiyalar
+====
+Faqat ishlab chiqarish jarayonlarini optimallashtirish
+====
+Ijtimoiy tizimlarni tashkil qilish
+
+
++++++
+
+Zamonaviy iqtisodiy tizimlarda texnik ta'minot qanday asosiy vazifalarni bajaradi?
+====
+Faqat operatsion tizimni boshqaradi
+====
+# Iqtisodiy jarayonlarni tahlil qilish va monitoring qilish
+====
+Tarmoqlarni o'zaro bog'lash
+====
+Moliyaviy xavfsizlikni ta'minlash
+
+
++++++
+
+Iqtisodiy tizimlarning texnik ta'minoti qanday qilib samarali boshqaruvni ta'minlaydi?
+====
+# Avtomatlashtirish orqali xarajatlarni kamaytirish
+====
+Resurslarni kamaytirish
+====
+Tarmoqlarni yopish
+====
+Barcha jarayonlarni insonlar tomonidan boshqarish
+
+
++++++
+
+Zamonaviy iqtisodiy tizimlarda axborot texnologiyalarining o'rni qanday?
+====
+Axborot texnologiyalari faqat reklama uchun ishlatiladi
+====
+# Axborot texnologiyalari iqtisodiy jarayonlarni yaxshilash uchun ishlatiladi
+====
+Axborot texnologiyalari faqat ijtimoiy tarmoqlarda ishlatiladi
+====
+Axborot texnologiyalari iqtisodiyotni rivojlantirmaydi
+
+
++++++
+
+Iqtisodiy tizimlarda texnik ta'minot orqali qanday jarayonlar optimallashtiriladi?
+====
+Faqat ishlab chiqarish jarayonlari
+====
+# Ma'lumotlarni yig'ish, tahlil qilish, va qarorlar qabul qilish jarayonlari
+====
+Ijtimoiy aloqalar
+====
+Xavfsizlik choralarini qo'llash
+
+
++++++
+
+Zamonaviy iqtisodiy tizimlar uchun asosiy texnik ta'minot vositalari nimalardan iborat?
+====
+#Kompyuter tarmoqlari, serverlar, bulutli texnologiyalar
+====
+ Faqat kompyuterlar
+====
+ Faoliyatni maqsadli kuzatish tizimlari
+====
+ Faqat dasturlar
+
+
++++++
+
+ Qaysi texnologiya iqtisodiy tizimlarning samaradorligini oshirishga yordam beradi?
+====
+ Blokcheyn texnologiyasi
+====
+ Sun'iy intellekt va mashinani o'qitish
+====
+ IoT (Internet of Things)
+====
+ #Barchasi to'g'ri
+
+
++++++
+
+Iqtisodiy tizimlarning zamonaviy texnik ta'minotini qanday ta'riflash mumkin?
+====
+Faqat yuqori tezlikdagi internetga ega bo'lish
+====
+# Iqtisodiy jarayonlarni texnologik vositalar orqali boshqarish va tahlil qilish
+====
+Moliyaviy tizimlarni yangilash
+====
+ Xavfsiz tizimlar yaratish
+
+
++++++
+
+ Zamonaviy iqtisodiy tizimlarda texnik ta'minotning asosiy afzalliklaridan biri nima?
+====
+# Tezkor ma'lumot uzatish va tahlil qilish
+====
+Tarmoqdagi barcha qurilmalarni boshqarish
+====
+ Faqat bir necha tizimni avtomatlashtirish
+====
+Yangi iqtisodiy tizimlar yaratish
+
+
++++++
+
+Zamonaviy iqtisodiy tizimlar qanday tarmoq texnologiyalarini ishlatadi?
+====
+Faoliyatni to'liq boshqaruvchi dasturlar
+====
+Kompaniyalar o'rtasida aloqalar yaratadigan texnologiyalar
+====
+Xavfsizlikni ta'minlovchi texnologiyalar
+====
+ #Bulutli hisoblash, IoT, va 5G texnologiyalari
+
+
++++++
+
+Iqtisodiy tizimlarning texnik ta'minotida "bulutli hisoblash" texnologiyasining roli qanday?
+====
+# Ma'lumotlarni xavfsiz saqlash va ulardan osongina foydalanish
+====
+Yangi tarmoq qurish
+====
+ Ishlab chiqarishni faqat manual ravishda boshqarish
+====
+ Internetni sekinlashtirish
+
+
++++++
+
+Iqtisodiy tizimlarda "Internet of Things" (IoT) texnologiyasining roli nima?
+====
+ #Qurilmalar orasida uzluksiz aloqani ta'minlash
+====
+Faoliyatni maqsadga muvofiq boshqarish
+====
+Faqat xavfsizlikni ta'minlash
+====
+Tarmoqni cheklash
+
+
++++++
+
+Zamonaviy iqtisodiy tizimlarning texnik ta'minotida blokcheyn texnologiyasining roli nima?
+====
+#Ma'lumotlarni xavfsiz va shaffof tarzda saqlash
+====
+Tarmoqlarning samaradorligini kamaytirish
+====
+Internet xavfsizligini yo'qotish
+====
+ Faqat ishlab chiqarishni optimallashtirish
+
+
++++++
+
+Iqtisodiy tizimlarda "big data" texnologiyasining afzalliklari nimalardan iborat?
+====
+#Ma'lumotlarni tezda yig'ish va tahlil qilish
+====
+Faqat xatoliklarni aniqlash
+====
+Resurslarni kamaytirish
+====
+ Tarmoqlarni optimallashtirish
+
+
++++++
+
+Zamonaviy texnik ta'minot yordamida iqtisodiy tizimlarda qanday samaralar kuzatiladi?
+====
+Ijtimoiy tarmoqlarni rivojlantirish
+====
+# Ishlab chiqarishning tezlashuvi va samaradorlikning oshishi
+====
+Tarmoqni faqat bitta nuqtaga to'plamoq
+====
+ Moliyaviy tizimlarning inqirozi
+
+
++++++
+
+Zamonaviy iqtisodiy tizimlar uchun qanday tarmoq protokollari zarur?
+====
+Faqat internet xavfsizligini ta'minlash
+====
+# Tezkor ma'lumot uzatish va integratsiya qilish imkoniyatlari
+====
+Faqat axborot almashish
+====
+ Dastur ta'minotining o'zaro ulanishi
+
+
++++++
+
+Iqtisodiy tizimlarning texnik ta'minotida "AI" (sun'iy intellekt) qanday rol o'ynaydi?
+====
+#Ma'lumotlarni avtomatik ravishda tahlil qilish va qarorlar qabul qilish
+====
+Yangi texnologiyalar yaratish
+====
+ Faoliyatni kuzatish
+====
+Tarmoqni to'xtatish
+
+
++++++
+
+Zamonaviy iqtisodiy tizimlarda "smart contracts" texnologiyasining roli nima?
+====
+Ma'lumotlarni tahlil qilish
+====
+Ishlab chiqarishni avtomatlashtirish
+====
+#Avtomatik ravishda kelishuvlarni amalga oshirish
+====
+Qurilmalarning aloqasini to'xtatish
+
+
++++++
+
+Zamonaviy iqtisodiy tizimlarda "cloud computing" texnologiyasining asosiy afzalligi nima?
+====
+ #Ma'lumotlarni xavfsiz saqlash va uzluksiz ishlashni ta'minlash
+====
+Tarmoqni optimallashtirish
+====
+Yangi texnologiyalarni ishlab chiqish
+====
+Faqat yuqori tezlikda internet
+
+
++++++
+
+Iqtisodiy tizimlarda "ERP" (Enterprise Resource Planning) tizimining asosiy vazifasi nima?
+====
+Moliyaviy resurslarni boshqarish
+====
+Faqat marketingni optimallashtirish
+====
+Ishlab chiqarishni o'zgartirish
+====
+#Resurslarni samarali taqsimlash va boshqarish 
+
+
++++++
+ 
+Zamonaviy texnik ta'minot yordamida iqtisodiy tizimlarni qanday integratsiya qilish mumkin?
+====
+#Tarmoq orqali ma'lumotlarni birlashtirish
+====
+Faqat ishlab chiqarishni avtomatlashtirish
+====
+Faqat moliyaviy tarmoqlarni yangilash
+====
+Yangi tarmoq yaratish
+
+
++++++
+
+Iqtisodiy tizimlarning texnik ta'minoti qanday qilib global miqyosda qo'llanadi?
+====
+Tarmoqlarni faqat mahalliy aloqalar uchun ishlatish
+====
+# Ma'lumotlarni butun dunyo bo'ylab uzatish
+====
+Faqat bir necha mamlakatlar uchun tizimlar yaratish
+====
+Barcha texnologiyalarni to'xtatish
+
+
++++++
+
+Iqtisodiy tizimlarni rivojlantirishda zamonaviy texnik ta'minotning roli qanday?
+====
+Faqat xarajatlarni kamaytirish
+====
+#Samaradorlikni oshirish va innovatsiyalarni qo'llash
+====
+Resurslarni ko'paytirish
+====
+Tarmoqlarni butunlay yopish
+
+
++++++
+
+ Zamonaviy iqtisodiy tizimlarda texnik ta'minotni rivojlantirishning asosiy maqsadi nima?
+====
+Tezkor internetga ulanish
+====
+#Iqtisodiy jarayonlarni soddalashtirish va avtomatlashtirish
+====
+Xavfsizlikni kuchaytirish
+====
+Barcha sohalarni optimallashtirish
+
+
++++++
+
+Iqtisodiy tizimning texnik ta'minoti nimani anglatadi? 
+====
+Yangi iqtisodiy siyosat
+====
+#Iqtisodiy tizimni tashkil etish uchun zarur bo‘lgan texnologik vositalar
+====
+Faqat inson resurslari
+====
+Iqtisodiy tizimga oid qonunlar va me'yorlar
+
+
++++++
+
+Qaysi texnologiyalar zamonaviy iqtisodiy tizimlarni rivojlantirishda muhim rol o‘ynaydi? 
+====
+# Kompyuter tizimlari va dasturiy ta'minot
+====
+Tabiiy resurslar
+====
+Yangi sanoat uskunalari
+====
+Transport tizimi
+
+
++++++
+
+Iqtisodiy tizimlarda sun'iy intellekt qanday rol o'ynaydi?
+====
+ #Ishlab chiqarishning avtomatlashtirilishi
+====
+Faqat xususiy sektorda qo'llaniladi
+====
+ Faqat hukumat sohasida ishlatiladi
+====
+ Faqat iste'molchilarni kuzatishda ishlatiladi
+
+
++++++
+
+Zamonaviy iqtisodiy tizimda "blokinlash" texnologiyasi nimani anglatadi? 
+====
+# Ma'lumotlar xavfsizligini ta'minlash
+====
+ Yuqori texnologik uskunalar ishlab chiqarish
+====
+Iqtisodiyoti boshqarish tizimi uchun model yaratish
+====
+Moliyaviy resurslarni boshqarish
+
+
++++++
+
+Qaysi texnologiya orqali iqtisodiy tizimda to‘liq avtomatlashtirish amalga oshiriladi? 
+====
+Internet of Things (IoT)
+====
+Blockchain
+====
+#Robototexnika
+====
+ Kompyuter dasturlari
+
+
++++++
+
+Iqtisodiy tizimlarda ma'lumotlarni real vaqt rejimida boshqarish imkoniyatini yaratadigan texnologiya qanday nomlanadi?
+==== 
+Kiberxavfsizlik
+====
+Bulutli texnologiyalar
+====
+# Big Data
+====
+Sun'iy intellekt
+
+
++++++
+
+Iqtisodiy tizimlar uchun global tarmoqlarni yaratishda qanday texnologiya keng qo‘llaniladi?
+====
+ # Internet
+====
+Smartfonlar
+====
+Shaxsiy kompyuterlar
+====
+GPS texnologiyasi
+
+
++++++
+
+Zamonaviy iqtisodiy tizimlar qanday dasturiy ta'minotga muhtoj?
+====
+  Faqat ofis dasturlari
+====
+# ERP (Enterprise Resource Planning) tizimlari
+====
+Antivirus dasturlari
+====
+ O'yin dasturlari
+
+
++++++
+
+Iqtisodiy tizimlarda "Iqtisodiy ma'lumotlar bazasi" (EDB) qanday rol o'ynaydi?
+====
+Resurslarni saqlash
+====
+#Ma'lumotlarni yig‘ish va tahlil qilish
+====
+Internet aloqalarini o‘rnatish
+====
+Ma'lumotlarni yangilash
+
+
++++++
+
+Kiberxavfsizlik iqtisodiy tizimda qanday muhim vazifani bajaradi?
+====
+Yangi texnologiyalarni ishlab chiqish
+====
+#Internetda yasalgan yomon niyatli hujumlarni oldini olish
+====
+Ma'lumotlar bazasini yaratish
+====
+Yangi iqtisodiy modellarni yaratish
+
+
++++++
+
+Iqtisodiy tizimlarni boshqarishda sun'iy intellektning asosiy afzalligi nimada?
+==== 
+Ishlab chiqarishni yaxshilash
+====
+ #Iqtisodiy resurslarni samarali taqsimlash
+====
+Ishchilarning malakasini oshirish
+====
+Moliyaviy hisobotlarni tuzish
+
+
++++++
+
+Iqtisodiy tizimda "Internet of Things" (IoT) texnologiyasining roli qanday?
+====
+Ma'lumotlarni tezda uzatish
+====
+# Tizimni avtomatlashtirish va boshqarish
+====
+Faqat mahsulotlarni reklama qilish
+====
+Iqtisodiyoti nazorat qilish
+
+
++++++
+
+Iqtisodiy tizimlarni rivojlantirishda "Big Data" texnologiyasi qanday yordam beradi?
+====
+# Ma'lumotlarni saqlash va boshqarish
+====
+Qonunlarni ishlab chiqish
+====
+Kichik ma'lumotlarni saqlash
+====
+Texnologiyalarni rivojlantirish
+
+
++++++
+
+Zamonaviy iqtisodiy tizimlarda bulutli texnologiyalar qanday rol o'ynaydi? 
+====
+# Ma'lumotlarni saqlash va real vaqtda ulashish
+====
+Faqat ma'lumotlarni kodlash
+====
+Ishlab chiqarishning jismoniy qismlarini boshqarish
+====
+Faqat internetdagi aloqalarni boshqarish
+
+
++++++
+
+Zamonaviy iqtisodiy tizimda "blokcheyn" texnologiyasining asosiy afzalligi qanday?
+==== 
+Tizimning tezligini oshiradi
+====
+#Ma'lumotlarni himoya qilish va oshkor qilishni ta'minlaydi
+====
+Faqat xavfsizlikni oshiradi
+====
+Mahsulotni ishlab chiqarish tezligini oshiradi
+
+
++++++
+
+Microsoft Excel dasturida formula yozish qaysi belgidan boshlanadi?
+====
+#=
+====
+/
+====
+:
+====
+$
+
+
++++++
+
+Foydalanuvchilar shaxsiy kompyuterlarini Internetga ulash bo’yicha xizmatlar ko’rsatuvchi tashkilot qanday nomlanadi? 
+====
+# provayder
+====
+Brauzer
+====
+ishchi stanstiya
+====
+Paynet
+
+
+
++++++
+
+Internet tarmog’idagi quyidagi elektron pochta manzili berilgan: username@int. glasnet. ru. Ushbu elektron manzil egasining nomini aniqlang? 
+====
+#username
+====
+glasnet.ru
+====
+int.glasnet.ru
+====
+ru
+
+  
+
+
+
+
+
+
+
+
++++++
+
+Iqtisodiy masalalarni yechish uchun texnik ta’minotda nima bo‘lishi kerak?
+========================================================================
+ Kompyuter tizimi
+==================
+ Internet aloqasi
+=================
+ Dasturiy ilovalar
+==================
+ #Barchasi to‘g‘ri
+
+
++++++
+
+Iqtisodiy modellashtirish dasturlari qaysi vazifani bajaradi?
+============================================================
+Iqtisodiy jarayonlarni real vaqtda kuzatish
+===========================================
+# Iqtisodiy jarayonlarni matematik modellashtirish
+==================================================
+ Foydalanuvchilarga hisobot tayyorlash
+======================================
+ Moliyaviy hisob-kitoblarni bajarish
+
+
++++++
+
+Texnik ta’minotning yangi versiyasini chiqarishning asosiy maqsadi nima?
+=======================================================================
+ Yangi funksiyalarni qo‘shish
+=============================
+ Dasturdagi xatoliklarni tuzatish
+=================================
+Yangi foydalanuvchilarni jalb qilish
+====================================
+ #Barchasi to‘g‘ri
+
+
++++++
+
+Iqtisodiy masalalarni yechishda texnik ta’minot qanday yordam beradi?
+===================================================================
+Ishlab chiqilgan modellarning samaradorligini baholash
+======================================================
+ Ma'lumotlarni tahlil qilish va prognozlash
+===========================================
+Qarorlar qabul qilishda yordam beradi
+====================================
+ #Barchasi to‘g‘ri
+
+
++++++
+
+Iqtisodiy tahlil uchun eng mashhur dasturiy mahsulotlardan biri nima?
+===================================================================
+ Word
+=====
+ PowerPoint
+===========
+# Stata
+=======
+ Photoshop
+
+
++++++
+
+Moliyaviy tahlil va hisob-kitob dasturlari qaysi funksiyalarni bajaradi?
+=======================================================================
+ Qaror qabul qilishni tezlashtirish
+===================================
+Ma'lumotlarni saqlash
+=====================
+ #Avtomatik hisob-kitoblar va hisobotlar tayyorlash
+===================================================
+Foydalanuvchi interfeysi yaratish
+
+
++++++
+
+Zamonaviy matn muharirlarida iqtisodiyot sohasiga doir topshiriqlarda asosiy maqsad nima?
+===================================================================================
+ Faqat matnni grammatik jihatdan to‘g‘ri qilish
+===============================================
+#Iqtisodiy tahlil va statistik ma'lumotlarni to‘g‘ri taqdim etish
+=================================================================
+ Matnni qisqartirish
+====================
+ Faqat tasviriy elementlarni qo‘shish
+
+
++++++
+
+Zamonaviy matn muharirlarida iqtisodiy matnni tahrir qilishda eng muhim jihat nima?
+===================================================================================
+# Matnning to‘g‘ri va aniq bo‘lishi
+===================================
+ Matnni ilg‘or uslubda yozish
+=============================
+Faqat sintaksisga e’tibor berish
+================================
+ Matnni rangli qilish
+
+
++++++
+
+Iqtisodiy matnni tahrir qilishda qanday maxsus ma'lumotlar e'tiborga olinadi?
+===========================================================================
+ Ta'lim maqsadlari va auditoriya
+================================
+ #Statistika, tahlil va iqtisodiy tendensiyalar
+===============================================
+ Faqat grammatika va uslub
+==========================
+Ijtimoiy tarmoqlar orqali foydalanish
+
+
++++++
+
+Iqtisodiy matnni tahrir qilishda qanday stilistik usullar qo‘llaniladi?
+=======================================================================
+#Formal va rasmiy tilni tanlash
+===============================
+Shaxsiy fikrlarni qo‘shish
+==========================
+Yengil va ochiq tilni tanlash
+=============================
+Ko‘proq qisqartmalar ishlatish
+
+
++++++
+
+Iqtisodiy matnni tahrir qilishda muhim bo‘lgan manbalar qaysilar?
+================================================================
+Ijtimoiy tarmoq postlari
+========================
+#Statistika va iqtisodiy tahlil hisobotlari
+===========================================
+Personal fikrlar
+================
+Tasviriy materiallar
+
+
++++++
+
+Zamonaviy matn muhariri iqtisodiy matnlarni qaysi jihatdan yaxshilashi kerak?
+============================================================================
+#Matnni qisqartirish va to‘g‘ri tuzish
+======================================
+Matnni faqat tasvir bilan boyitish
+==================================
+Faqat mavzuga bog‘liq ma'lumotlarni qo‘shish
+============================================
+Matnni grafika va rasmlar bilan bezash
+
+
++++++
+
+Iqtisodiy matnlarni tahrir qilishda qanday asboblar ishlatiladi?
+===============================================================
+Matn tahriri uchun maxsus dasturlar (MS Word, Google Docs)
+=========================================================
+Iqtisodiy hisoblash dasturlari (Excel, SPSS)
+============================================
+Tahlil va statistik ma'lumotlarni ko‘rsatish uchun grafik dasturlar
+===================================================================
+# Barchasi to‘g‘ri
+
+
++++++
+
+Zamonaviy matn muhariri iqtisodiy matnlarni qanday qilib auditoriya uchun osonroq qilishni ta'minlaydi?
+===================================================================================
+Faqat yuqori akademik tilni ishlatish
+=====================================
+#Tahlil va tushunchalarni oddiy va tushunarli qilib ifodalash
+==============================================================
+Matnni juda qisqa va aniq qilish
+================================
+Iqtisodiy jarayonlarni juda murakkab qilib yozish
+
+
++++++
+
+Jadval muharrirlari qanday dasturiy vositalar orqali ishlaydi?
+=============================================================
+Matn tahrirlash dasturlari
+==========================
+#Elektron jadvallar (masalan, Microsoft Excel)
+================================================
+Grafik tahririy dasturlar
+=========================
+Video tahrir dasturlari
+
+
++++++
+
+Iqtisodiy masalalarda jadval muharrirlarining asosiy vazifasi nima?
+====================================================================
+Faoliyatning vizual tarzda ifodalanishini ta'minlash
+====================================================
+#Ma'lumotlarni tizimli ravishda joylashtirish va tahlil qilish
+==============================================================
+Matnni grammatik jihatdan to‘g‘ri qilish
+========================================
+Foydalanuvchi interfeysini yaratish
+
+
++++++
+
+Jadval muharrirlarida tahlil qilish uchun qanday xususiyatlar qo‘llaniladi?
+==========================================================================
+Avtomatik ranglash va shakllantirish
+====================================
+Formulalar yordamida hisoblash
+==============================
+Jadvallarni filtrlash va tartiblash
+===================================
+# Barchasi to‘g‘ri
+
+
++++++
+
+Excel dasturida ma'lumotlarni filtrlash uchun qanday vosita ishlatiladi?
+=======================================================================
+Sort (Saralash)
+==============
+#Filter (Filtr)
+===============
+Group (Guruhlash)
+=================
+Freeze Panes (Panelni muzlatish)
+
+
++++++
+
+Pivot jadvallarini yaratishda ma'lumotlar qanday ko‘rinishda bo‘lishi kerak?
+===========================================================================
+Qatorda va ustunda faqat raqamlar bo‘lishi kerak
+================================================
+#Ma'lumotlar jadval ko‘rinishida, sarlavhalar bilan bo‘lishi kerak
+==================================================================
+Faoliyat jadvali
+================
+Rasm va grafiklar bo‘lishi kerak
+
+
++++++
+
+Excel dasturida ma'lumotlarni oson tahlil qilish va umumlashtirish uchun qanday vosita ishlatiladi?
+===================================================================================
+#Pivot Table (Pivot jadvali)
+===========================
+Data Validation (Ma'lumotlarni tekshirish)
+==========================================
+AutoFill (Avtomatik to'ldirish)
+==============================
+Find and Replace (Izlash va almashtirish)
+
+
++++++
+
+Excel dasturida ma'lumotlarni saralash uchun qanday vosita ishlatiladi?
+======================================================================
+#Sort (Saralash)
+===============
+Merge (Birlashtirish)
+=====================
+Conditional Formatting (Shartli formatlash)
+==========================================
+Text to Columns (Matnni ustunlarga ajratish)
+
+
++++++
+
+Excel dasturida shartli formatlash orqali nima amalga oshiriladi?
+=================================================================
+#Ma'lumotlar ranglar yordamida vizual tarzda ajratiladi
+=======================================================
+Jadvaldagi barcha matnlar saralanadi
+====================================
+Faoliyat uchun pivot jadvallari yaratiladi
+==========================================
+Ma'lumotlar avtomatik ravishda to‘ldiriladi
+
+
++++++
+
+Ma'lumotlarni umumlashtirish uchun qanday Excel funksiyasi ishlatiladi?
+======================================================================
+#SUM (Yig‘ish)
+=============
+COUNTIF (Shartli hisoblash)
+==========================
+VLOOKUP (Vertikal izlash)
+==========================
+CONCATENATE (Birlashtirish)
+
+
++++++
+
+Excel-da ma'lumotlarni avtomatik ravishda to'ldirish uchun qanday vosita ishlatiladi?
+===================================================================================
+#AutoFill (Avtomatik to'ldirish)
+===============================
+Freeze Panes (Panelni muzlatish)
+===============================
+Pivot Table (Pivot jadvali)
+===========================
+Data Validation (Ma'lumotlarni tekshirish)
+
+
++++++
+
+Iqtisodiy ma'lumotlarni tahlil qilishda "VLOOKUP" funksiyasi qanday ishlaydi?
+============================================================================
+Bir ustundan ma'lumotlarni olish
+================================
+#Ma'lum bir qiymatni boshqa jadvaldan izlash
+============================================
+Qator bo‘ylab barcha ma'lumotlarni hisoblash
+============================================
+Ma'lumotlarni jadvalga kiritish
+
++++++
+
+Excelda iqtisodiy tahlilni osonlashtirish uchun qanday diagrammalar ishlatiladi?
+===============================================================================
+Chiziqli diagrammalar
+=====================
+Gistogrammalar
+==============
+Sektor diagrammalari
+====================
+#Barchasi
+
+
++++++
+
+Excelda iqtisodiy ma'lumotlarni saralashda "Sort" funksiyasi qanday yordam beradi?
+=================================================================================
+Ma'lumotlarni yuqoridan pastga saralash
+=======================================
+#Ma'lumotlarni raqamli yoki harfli tartibda saralash
+====================================================
+Ma'lumotlarni qo‘lda kiritish
+=============================
+Ma'lumotlarni guruhlash
+
+
++++++
+
+Excelda "Data Validation" funksiyasi yordamida nima amalga oshiriladi?
+=====================================================================
+Ma'lumotlarni ranglar yordamida ajratish
+========================================
+#Ma'lumotlarga cheklovlar qo‘yish
+=================================
+Avtomatik ravishda grafiklarni yaratish
+=======================================
+Diagrammalarning o‘lchamini o‘zgartirish
+
+
++++++
+
+Excelda iqtisodiy tahlilni grafik tarzda ko‘rsatish uchun qaysi vosita ishlatiladi?
+==================================================================================
+Table (Jadval)
+==============
+Pivot Table (Pivot jadvali)
+===========================
+#Chart (Diagramma)
+=================
+Text Box (Matn oynasi)
+
+
++++++
+
+Zamonaviy taqdimot dasturida taqdimot yaratish uchun eng ko‘p ishlatiladigan dastur qaysi?
+===================================================================================
+Microsoft Word
+==============
+Microsoft Excel
+===============
+#Microsoft PowerPoint
+=====================
+Microsoft Access
+
+
++++++
+
+PowerPoint dasturida taqdimotdagi matnni ajratib ko‘rsatish uchun qanday vosita ishlatiladi?
+============================================================================================
+Bullets (Nuqtalar)
+==================
+#Animation (Animatsiya)
+=======================
+Text Box (Matn oynasi)
+======================
+Chart (Diagramma)
+
+
++++++
+
+Zamonaviy taqdimot dasturida iqtisodiyotga doir statistik ma'lumotlarni qanday tarzda ko'rsatish mumkin?
+===================================================================================
+Jadval
+=======
+#Diagramma yoki grafik
+======================
+Faqat matnli slayd
+==================
+Tashqi havolalar
+
+
++++++
+
+Blokcheyn texnologiyasi iqtisodiyotda qanday afzalliklarga ega?
+=======================
+Tranzaksiyalarni tezlashtirish
+=======================
+Yuksak xavfsizlik
+=======================
+Kam xarajatlar
+=======================
+#Barcha javoblar to'g'ri
+
+
++++++
+
+Internet taqmog‘ida biznes-jarayonlarini tashkil etishning asosiy maqsadi nima?
+==============================================================================
+Ishchilarni ishga qabul qilish
+==============================
+#Ish jarayonlarini avtomatlashtirish va samaradorlikni oshirish
+===============================================================
+Mahsulotlarni sotish
+====================
+Internetda reklama berish
+
+
++++++
+
+"Elektron tijorat" tushunchasi nima?
+====================================
+#Mahsulotlarni onlayn sotish jarayoni
+====
+Internet orqali xizmatlar ko‘rsatish
+====================================
+Onlayn reklama va marketing
+===========================
+Ijtimoiy tarmoqlarda mahsulot taqdimoti
+
+
++++++
+
+Biznes-jarayonlarni avtomatlashtirish nima?
+==========================================
+Hamkorlar bilan shartnomalar tuzish
+===================================
+#Ish jarayonlarini kompyuter dasturlari yordamida boshqarish
+============================================================
+Mijozlarga xizmat ko‘rsatishni yaxshilash
+=========================================
+Yangi mahsulot ishlab chiqarish
+
+
++++++
+
+Internet taqmog‘ida biznes-jarayonlari uchun eng muhim vositalar qaysilar?
+=========================================================================
+Elektron pochta va SMS
+======================
+# CRM tizimlari, ERP tizimlari
+==============================
+Mijozlarga qo‘ng‘iroq qilish
+============================
+Yig‘ilishlar va anjumanlar
+
+
++++++
+
+CRM tizimi qanday maqsadlarda ishlatiladi?
+==========================================
+Mahsulot ishlab chiqarishni boshqarish
+======================================
+#Mijozlar bilan aloqalarni boshqarish
+=====================================
+Ijtimoiy tarmoqlarda marketing
+==============================
+Mahsulotni sotish jarayonini boshqarish
+
+
++++++
+
+ERP tizimi nima?
+===============
+Mijozlar bilan aloqa o‘rnatish tizimi
+=====================================
+#barcha resurslarni boshqarish tizimi
+=====================================
+Internetda reklama tizimi
+=========================
+Mahsulot ishlab chiqarish jarayonini boshqarish
+
+
++++++
+
+Internet taqmog‘ida marketingning qanday xususiyatlari mavjud?
+=============================================================
+#An’anaviy marketingga qaraganda kamroq xarajat talab qiladi
+============================================================
+Faqat ijtimoiy tarmoqlarda ishlatiladi
+=====================================
+Faqat matbuot orqali amalga oshiriladi
+======================================
+Mahsulotlarni doimiy ravishda sotishni ta’minlaydi
+
+
++++++
+
+Internetda savdo jarayonlarini qanday optimallashtirish mumkin?
+==============================================================
+Yangi mahsulotlarni ishlab chiqish
+==================================
+Sotuvchilarni tez-tez o‘zgartirish
+=================================
+#Onlayn to‘lov tizimlarini joriy etish
+======================================
+Savdo maydonlarini kengaytirish
+
+
++++++
+
+SEO (Search Engine Optimization) nima?
+=====================================
+#Saytga tashrif buyuruvchilar sonini oshirishga qaratilgan jarayon
+=================================================================
+Mahsulotlarni reklama qilish usuli
+==================================
+Mahsulot sifatini tekshirish jarayoni
+======================================
+Mijozlarga xizmat ko‘rsatish tizimi
+
+
++++++
+
+Biznes-jarayonlarini onlayn kuzatishning asosiy afzalliklari nima?
+=================================================================
+#Resurslarni tejash
+===================
+Yangi bozorlar yaratish
+=======================
+Ishchilarni tez-tez o‘zgartirish
+================================
+Yangi mijozlarni jalb qilish
+
+
++++++
+
+Internetda etkazib berish tizimini tashkil etish qanday imkoniyatlar yaratadi?
+==============================================================================
+#Mahsulotni to‘g‘ridan-to‘g‘ri mijozga yetkazish
+================================================
+Mijozlarni ro‘yxatdan o‘tkazish
+===============================
+Mahsulotni ishlab chiqarish
+===========================
+Tashqi reklama faoliyatini amalga oshirish
+
++++++
+
+Onlayn biznes-jarayonlarni optimallashtirishda qanday yondashuvlar samarali?
+===========================================================================
+#Ma’lumotlarni tahlil qilish va foydalanuvchi tajribasini yaxshilash
+====================================================================
+Mahsulotlarni tezda ishlab chiqarish
+====================================
+Faqat reklama va PR kampaniyalariga e’tibor berish
+==================================================
+Ishchilarni tez-tez almashish
+
+
++++++
+
+Internet taqmog‘ida muvaffaqiyatli biznes-jarayonlarni tashkil etish uchun qanday vositalar talab qilinadi?
+===================================================================================
+#Marketing va moliyaviy boshqaruv dasturlari
+============================================
+Yangi ofislar ochish
+====================
+Tez-tez yig‘ilishlar o‘tkazish
+==============================
+Mahsulot ishlab chiqarish uskunalari
+
+
++++++
+
+Internetda biznes-jarayonlarni tashkil etishning asosiy strategik yo‘nalishlari qanday?
+===================================================================================
+Mahsulotni ommaviy sotish
+=========================
+Faqat yangi mahsulotlarni ishlab chiqish
+========================================
+#Ish jarayonlarini samarali boshqarish va texnologiyalarni joriy etish
+======================================================================
+Tashkilot ichidagi aloqalarni kuchaytirish
+
+
++++++
+
+Ma'lumotlar bazasi nima?
+========================
+#Ma'lumotlarni yig'ish va saqlash tizimi
+========================================
+Yangi iqtisodiy strategiyalarni ishlab chiqish
+==============================================
+Faoliyatni boshqarishning yangi usulidir
+========================================
+Tashkilotning marketing strategiyasi
+
+
++++++
+
+Iqtisodiyotda ma'lumotlar bazasini shakllantirishning asosiy maqsadi nima?
+=========================================================================
+#Iqtisodiy tahlil va qarorlar qabul qilishni qo'llab-quvvatlash
+===============================================================
+Marketingni boshqarish
+======================
+Tashkilotda yangi ish o'rinlari yaratish
+========================================
+Mahsulot ishlab chiqarishni optimallashtirish
+
+
++++++
+
+Ma'lumotlar bazasining ishlashini ta'minlash uchun qanday dasturlar kerak?
+========================================================================
+# Ma'lumotlarni tahlil qilish va saqlash uchun maxsus dasturlar
+===============================================================
+Internetda reklama berish uchun dasturlar
+=========================================
+Mijozlar bilan aloqalarni o‘rnatish uchun dasturlar
+===================================================
+ Ofis ishlarini boshqarish uchun dasturlar
+
+
++++++
+
+Ma'lumotlar bazasini ishlatishning asosiy maqsadi nima?
+=======================================================
+# Ma'lumotlar tahlili orqali iqtisodiy qarorlar qabul qilish
+============================================================
+Tashqi reklama jarayonlarini boshqarish
+=======================================
+Yangi mahsulotlar ishlab chiqish
+================================
+Tashkilotning marketing strategiyasini o‘zgartirish
+
+
++++++
+
+Ma'lumotlar bazasi xavfsizligini ta'minlashda qanday choralar ko‘riladi?
+=======================================================================
+# Maxfiylikni saqlash, foydalanuvchi huquqlarini boshqarish
+===========================================================
+Faqat umumiy ma'lumotlarni joylashtirish
+========================================
+Yangi texnologiyalarni kiritish
+===============================
+Yangi mahsulotlar ishlab chiqish
+
+
++++++
+
+Iqtisodiy tahlil qilishda ma'lumotlar bazasining roli qanday?
+============================================================
+#Ma'lumotlarni tahlil qilish va optimal qarorlarni qabul qilish
+===============================================================
+Marketing tadqiqotlarini o‘tkazish
+==================================
+Faoliyatni avtomatlashtirish
+============================
+Mahsulotlarni ishlab chiqarish
+
+
++++++
+
+Ma'lumotlar bazasini yaratishda eng muhim bosqichlar qaysilar?
+=============================================================
+# Ma'lumotlarni yig'ish, tahlil qilish va tartiblash
+=====================================================
+ Faqat yangi mahsulotlar ishlab chiqish
+=======================================
+Mijozlar bilan aloqalarni yaxshilash
+====================================
+Yangi marketing strategiyalarini ishlab chiqish
+
+
++++++
+
+Axborot tizimi nima?
+===================
+Ma'lumotlarni yig'ish va saqlash tizimi
+=======================================
+Kompyuter tarmoqlarini boshqarish tizimi
+========================================
+#Faoliyatni boshqarish va qarorlar qabul qilish uchun ma'lumotlarni ishlov berish tizimi
+========================================================================================
+Yangi mahsulotlarni ishlab chiqarish tizimi
+
+
++++++
+
+Axborot tizimlari iqtisodiyotning qanday tarmoqlarida qo'llaniladi?
+==================================================================
+Faqat moliya va bank tizimida
+=============================
+Faqat ishlab chiqarish sohasida
+===============================
+#Iqtisodiyotning barcha tarmoqlarida
+====================================
+Faqat xizmat ko‘rsatish sohasida
+
+
++++++
+
+Interaktiv xizmatlar qanday afzalliklarga ega?
+=============================================
+#Foydalanuvchiga tezkor va shaxsiylashtirilgan xizmatlar taqdim etish
+====================================================================
+Faqat reklama maqsadlarida ishlatiladi
+======================================
+Faqat xizmat ko‘rsatish jarayonlarini avtomatlashtiradi
+=======================================================
+Faqat mahsulotlar sotish
+
+
++++++
+
+Elektron tijoratda interaktiv xizmatlar qanday qo‘llaniladi?
+===========================================================
+#Mijozlar bilan onlayn muloqot, savdo va to‘lov tizimlari
+=========================================================
+Faqat mahsulotlarni etkazib berish
+=================================
+Faqat reklama qilish
+====================
+Faqat mijozlarni ro‘yxatdan o‘tkazish
+
+
++++++
+
+Interaktiv xizmatlarda foydalanuvchi qanday rolda bo‘ladi?
+==========================================================
+#Foydalanuvchi va tizim o‘rtasida ikki tomonlama muloqot
+========================================================
+Faqat tizimni kuzatish
+======================
+Faqat ma'lumotlar kiritish
+==========================
+Faqat xizmatni qabul qilish
+
+
++++++
+
+Sog‘liqni saqlash sohasida interaktiv xizmatlar qanday qo‘llaniladi?
+===================================================================
+#Masofaviy maslahatlar, onlayn rejalashtirish va tibbiy ma'lumotlar
+===================================================================
+Faqat bemorlarni qabul qilish
+=============================
+Faqat dorilarni sotish
+=======================
+Tibbiy asbob-uskunalarni ishlab chiqarish
+
++++++
+
+Bank tizimida interaktiv xizmatlar nima uchun muhim?
+===================================================
+#Mijozlar bilan oson va tezkor onlayn xizmat ko‘rsatish
+=======================================================
+Faqat kredit kartalarini chiqarish
+==================================
+Faqat bank ishlarini nazorat qilish
+===================================
+Bank operatsiyalarini offline rejimda amalga oshirish
+
+
++++++
+
+Ta'limda interaktiv xizmatlar qanday qo‘llaniladi?
+=================================================
+# Onlayn ta'lim, interaktiv darslar, testlar va o‘quv materiallari
+==================================================================
+Faqat kitob sotish
+==================
+Faqat o‘qituvchilarning darslarni o‘qishi
+=========================================
+Faqat talabalar uchun sinovlar
+
+
++++++
+
+Interaktiv xizmatlarni foydalanuvchi qanday tajriba orqali baholaydi?
+=====================================================================
+#Foydalanuvchining xizmatdan qoniqish darajasi va tezkor javob olish
+====================================================================
+Faqat foydalanuvchi ma'lumotlarni qabul qilish
+=================================================
+Faqat tizimning ishlash tezligi
+===============================
+Faqat xizmatni faqat offline tarzda olish
+
+
++++++
+
+Google Drive’da faylni kimlar bilan baham ko‘rish mumkin?
+=======================
+#Faqat foydalanuvchi tomonidan belgilangan shaxslar bilan
+=======================
+Hech kim bilan baham ko‘rilmaydi
+=======================
+Faqat Google hisobiga ega bo‘lgan foydalanuvchilar bilan
+=======================
+Faqat internetda bo‘lgan shaxslar bilan
+
+
++++++
+
+Google Drive’da faylga qanday ruxsatlarni belgilash mumkin?
+=======================
+#Ko‘rish, tahrirlash, izoh qo‘shish
+=======================
+Faqat ko‘rish
+=======================
+Faqat tahrirlash
+=======================
+Faqat faylni o‘chirish
+
+
++++++
+
+Google Drive orqali bir nechta foydalanuvchilar birgalikda qanday ishlashlari mumkin?
+=======================
+#Faylni birgalikda tahrirlash
+=======================
+Faqat faylni ko‘rish
+=======================
+Faqat faylni yuklab olish
+=======================
+Faqat faylni baham ko‘rish
+
+
++++++
+
+Google Drive’da fayllarni qanday tarzda topish mumkin?
+=======================
+#Qidiruv paneli orqali
+=======================
+Faqat fayl nomini bilish orqali
+=======================
+Faqat katalogda joylashgan fayllarni ko‘rish
+=======================
+Faqat so‘nggi qo‘shilgan fayllar
+
+
++++++
+
+Google Drive’da fayllarni qanday saqlash mumkin?
+=======================
+#Faylni “Yuklash” opsiyasi orqali bulutga saqlash
+=======================
+Faqat kompyuterga saqlash mumkin
+=======================
+Faqat Google Docs formatida saqlash mumkin
+=======================
+Faqat video fayllarni saqlash mumkin
+
+
++++++
+
+Google Drive’da fayllarni kimlar tahrir qilishi mumkin?
+=======================
+#Faylga ruxsat berilgan foydalanuvchilar
+=======================
+Faqat faylni yaratuvchi
+=======================
+Faqat ma'mur
+=======================
+Faqat Google Drive administratorlari
+
+
++++++
+
+Google Drive’da fayllarni tahrir qilish uchun qanday dasturlar kerak?
+=======================
+#Google Docs, Google Sheets, Google Slides
+=======================
+Microsoft Word, Excel, PowerPoint
+=======================
+Faqat Google Chrome
+=======================
+Faqat Microsoft Office
+
+
++++++
+
+Google Drive'da qanday fayl turi bo‘yicha ishlash mumkin?
+=======================
+#Google Docs, PDF, Microsoft Office fayllari
+=======================
+Faqat PDF fayllari
+=======================
+Faqat tasvirlar va videolar
+=======================
+Faqat HTML fayllari
+
+
++++++
+
+Google Drive’da qanday faylni tahrirlash mumkin?
+=======================
+#Google Docs yoki Google Sheets formatidagi fayllar
+=======================
+Faqat PDF fayllari
+=======================
+Faqat video fayllar
+=======================
+Faqat audio fayllar
+
+
++++++
+
+Qaysi dasturiy mahsulot iqtisodiy masalalarda foydalidir?
+=========================================================
+ Excel
+======
+SPSS
+=====
+MATLAB
+======
+ #Barchasi
+

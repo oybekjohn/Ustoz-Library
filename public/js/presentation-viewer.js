@@ -9,23 +9,7 @@ let presentationId = null;
 let progressTimer = null;
 
 export function renderAnonymousWarning(containerEl) {
-  if (currentUser) return; // Login qilgan foydalanuvchiga ko'rsatilmaydi
-
-  const existing = document.getElementById('anon-warning-banner');
-  if (existing) return;
-
-  const banner = document.createElement('div');
-  banner.id = 'anon-warning-banner';
-  banner.className = 'anon-warning-banner';
-  banner.innerHTML = `
-    <div class="anon-warning-content">
-      <span class="warning-icon">⚠️</span>
-      <span class="warning-text">Profilga kirmagansiz. Ushbu faoliyat natijasi va progressingiz saqlanmaydi.</span>
-      <button class="anon-login-btn" onclick="window.location.href='/api/user-auth/google/start'">Google orqali kirish</button>
-      <button class="anon-close-btn" onclick="this.parentElement.parentElement.remove()">✕</button>
-    </div>
-  `;
-  containerEl.prepend(banner);
+  // Hozircha o'chirilgan — keyingi versiyada Google OAuth bilan birga qaytariladi
 }
 
 export function initPresentationViewer(id, pdfUrl, pageCount, containerEl) {
@@ -33,7 +17,7 @@ export function initPresentationViewer(id, pdfUrl, pageCount, containerEl) {
   totalSlides = pageCount || 1;
   currentSlide = 1;
 
-  renderAnonymousWarning(containerEl);
+  // renderAnonymousWarning — hozircha o'chirilgan
 
   containerEl.innerHTML += `
     <div class="presentation-viewer-box" id="pres-viewer-box">

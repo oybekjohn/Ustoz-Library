@@ -159,7 +159,7 @@ test('/start asosiy boshqaruv tugmalarini ko\'rsatadi', async (context) => {
   });
 
   const labels = requestBody.reply_markup.keyboard.flat().map((button) => button.text);
-  assert.deepEqual(labels, ['Kitoblarni boshqarish', 'Adminlar', 'Bot haqida']);
+  assert.deepEqual(labels, ['Materiallarni boshqarish', 'Adminlar', 'Bot haqida']);
 });
 
 test('DL Library admini faqat kitob yuklash menyusini ko‘radi', async (context) => {
@@ -188,7 +188,7 @@ test('DL Library admini faqat kitob yuklash menyusini ko‘radi', async (context
   });
 
   const labels = requestBody.reply_markup.keyboard.flat().map((button) => button.text);
-  assert.deepEqual(labels, ['Kitob yuklash', 'Bot haqida']);
+  assert.deepEqual(labels, ["Material qo'shish", 'Bot haqida']);
 });
 
 test('DL Library admini eski callback orqali kitoblar ro‘yxatini ko‘ra olmaydi', async (context) => {

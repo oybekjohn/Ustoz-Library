@@ -53,7 +53,7 @@ function mainKeyboard(role = 'owner') {
   if (role === 'library') {
     return {
       keyboard: [
-        [{ text: 'Kitob yuklash' }],
+        [{ text: 'Material qo\'shish' }],
         [{ text: 'Bot haqida' }],
       ],
       resize_keyboard: true,
@@ -61,7 +61,7 @@ function mainKeyboard(role = 'owner') {
   }
   return {
     keyboard: [
-      [{ text: 'Kitoblarni boshqarish' }],
+      [{ text: 'Materiallarni boshqarish' }],
       [{ text: 'Adminlar' }, { text: 'Bot haqida' }],
     ],
     resize_keyboard: true,
@@ -1088,6 +1088,24 @@ export async function handleTelegramUpdate(env, update) {
       await sendMessage(env, chatId, 'Jarayon bekor qilindi.', mainKeyboard(access.role));
       return { background: null };
     }
+    if (data.startsWith('create-type:')) {
+      const type = data.split(':')[1];
+      if (type === 'book') {
+        await startCreate(env, chatId, from.id);
+      } else {
+        await sendMessage(env, chatId, `Ushbu material turi (${type}) hozircha faqat Admin paneli orqali qo'shiladi.\n\nIltimos, web ilova orqali admin paneliga kiring.`, mainKeyboard(access.role));
+      }
+      return { background: null };
+    }
+    if (data.startsWith('manage-type:')) {
+      const type = data.split(':')[1];
+      if (type === 'book') {
+        await sendBookManagementMenu(env, chatId);
+      } else {
+        await sendMessage(env, chatId, `Ushbu material turi (${type}) hozircha faqat Admin paneli orqali boshqariladi.\n\nIltimos, web ilova orqali admin paneliga kiring.`, mainKeyboard(access.role));
+      }
+      return { background: null };
+    }
     if (data.startsWith('create:') || data.startsWith('create-field:') || data.startsWith('create-category:')) {
       await handleCreateCallback(env, callback, chatId, from.id, data);
       return { background: null };
@@ -1171,14 +1189,30 @@ export async function handleTelegramUpdate(env, update) {
     return { background: null };
   }
 
-  if (text === 'Kitoblarni boshqarish' || text === 'Kitob yuklash') {
-    if (text === 'Kitob yuklash') {
-      await startCreate(env, chatId, from.id);
+  if (text === 'Materiallarni boshqarish' || text === 'Material qo\'shish') {
+    if (text === 'Material qo\'shish') {
+      await sendMessage(env, chatId, 'Qaysi turdagi materialni qo\'shmoqchisiz?', {
+        inline_keyboard: [
+          [{ text: 'Kitob (PDF)', callback_data: 'create-type:book' }],
+          [{ text: 'Prezentatsiya (PDF)', callback_data: 'create-type:presentation' }],
+          [{ text: 'Video dars (YouTube)', callback_data: 'create-type:video' }],
+          [{ text: 'Test (TXT)', callback_data: 'create-type:test' }],
+          [{ text: 'Bekor qilish', callback_data: 'cancel' }],
+        ],
+      });
     } else {
       if (!isOwner(env, from.id)) {
-        await sendMessage(env, chatId, 'Kitoblar ro‘yxati va boshqaruvi faqat owner uchun.', mainKeyboard(access.role));
+        await sendMessage(env, chatId, 'Materiallarni boshqarish faqat owner uchun.', mainKeyboard(access.role));
       } else {
-        await sendBookManagementMenu(env, chatId);
+        await sendMessage(env, chatId, 'Qaysi material turini boshqarmoqchisiz?', {
+          inline_keyboard: [
+            [{ text: 'Kitoblar', callback_data: 'manage-type:book' }],
+            [{ text: 'Prezentatsiyalar', callback_data: 'manage-type:presentation' }],
+            [{ text: 'Videolar', callback_data: 'manage-type:video' }],
+            [{ text: 'Testlar', callback_data: 'manage-type:test' }],
+            [{ text: 'Yopish', callback_data: 'cancel' }],
+          ],
+        });
       }
     }
     return { background: null };

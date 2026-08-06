@@ -104,19 +104,25 @@ function renderUserAuthSlot() {
     document.getElementById('user-profile-badge').onclick = () => switchView('profile');
   } else {
     slot.innerHTML = `
-      <button id="btn-google-login" class="btn btn-sm btn-outline-google">Google orqali kirish</button>
+      <button id="btn-google-login" class="btn btn-sm btn-outline-google" title="Tez kunda ulanadi" style="opacity: 0.7; cursor: default;">Google orqali kirish</button>
     `;
-    const btn = document.getElementById('btn-google-login');
-    if (btn) btn.onclick = loginWithGoogle;
+    // Hozircha hech narsa qilmaydi — tugma dekorativ
   }
 }
 
 function initNavigation() {
+  // Desktop tabs
   const tabBtns = $$('.nav-tab-btn');
   tabBtns.forEach(btn => {
     btn.addEventListener('click', () => {
-      tabBtns.forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
+      switchView(btn.dataset.view);
+    });
+  });
+
+  // Mobile bottom nav
+  const mobileNavBtns = $$('.mobile-nav-btn');
+  mobileNavBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
       switchView(btn.dataset.view);
     });
   });
@@ -139,8 +145,13 @@ function switchView(viewName) {
   const dynamicViewSection = $('#dynamic-view-section');
   const dynamicContainer = $('#dynamic-view-container');
 
-  // Active tab button update
+  // Active tab button update — desktop tabs
   $$('.nav-tab-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.view === viewName);
+  });
+
+  // Active tab button update — mobile bottom nav
+  $$('.mobile-nav-btn').forEach(btn => {
     btn.classList.toggle('active', btn.dataset.view === viewName);
   });
 
@@ -179,16 +190,19 @@ async function renderPresentationsView(container) {
     container.innerHTML = `
       <h2 class="view-title">📊 Prezentatsiyalar va Taqdimotlar</h2>
       <div class="content-cards-grid">
-        ${items.map(p => `
+        ${items.map(p => {
+          const pdfUrl = p.pdf_key ? (p.pdf_key.startsWith('/') ? p.pdf_key : `/files/${p.pdf_key}`) : '';
+          return `
           <div class="material-card">
             <div class="material-card-header">
               <h3>${p.title_uz}</h3>
               <span class="badge badge-info">${p.page_count} slayd</span>
             </div>
             <p>${p.description_uz || ''}</p>
-            <button class="btn btn-primary btn-open-pres" data-id="${p.id}" data-pdf="/api/presentations/${p.id}/pdf" data-pages="${p.page_count}">Slaydlarni ko'rish 📖</button>
+            <button class="btn btn-primary btn-open-pres" data-id="${p.id}" data-pdf="${pdfUrl}" data-pages="${p.page_count}">Slaydlarni ko'rish 📖</button>
           </div>
-        `).join('')}
+        `;
+        }).join('')}
       </div>
     `;
 
@@ -196,12 +210,13 @@ async function renderPresentationsView(container) {
       btn.onclick = () => {
         const id = btn.dataset.id;
         const pageCount = Number(btn.dataset.pages);
+        const pdfUrl = btn.dataset.pdf;
         container.innerHTML = `
           <button class="btn btn-secondary back-btn" id="btn-back-pres">◀ Orqaga</button>
           <div id="pres-viewer-target" style="margin-top:15px;"></div>
         `;
         document.getElementById('btn-back-pres').onclick = () => renderPresentationsView(container);
-        initPresentationViewer(id, `/api/presentations/${id}`, pageCount, document.getElementById('pres-viewer-target'));
+        initPresentationViewer(id, pdfUrl, pageCount, document.getElementById('pres-viewer-target'));
       };
     });
   } catch (err) {
@@ -322,6 +337,7 @@ function renderBooks() {
   const grid = $('#books-grid');
   if (!grid) return;
   const t = translations[state.currentLang];
+  const lang = state.currentLang;
 
   if (state.filteredBooks.length === 0) {
     grid.innerHTML = `
@@ -337,16 +353,48 @@ function renderBooks() {
   const end = Math.min(start + state.booksPerPage, state.filteredBooks.length);
   const pageBooks = state.filteredBooks.slice(start, end);
 
-  grid.innerHTML = pageBooks.map(b => `
+  // Helper: kitob nomini olish (API title: {uz,ru,en} yoki title_uz formatida kelishi mumkin)
+  const getTitle = (b) => {
+    if (b.title && typeof b.title === 'object') return b.title[lang] || b.title.uz || '';
+    return b.title_uz || b.title || '';
+  };
+
+  // Helper: muqova URL (API cover: '/files/...' yoki cover_key formatida kelishi mumkin)
+  const getCover = (b) => {
+    if (b.cover) return b.cover;
+    if (b.cover_key) return `/files/${b.cover_key}`;
+    return '';
+  };
+
+  // Helper: PDF fayl URL (API file: '/files/...' yoki file_key formatida kelishi mumkin)
+  const getFile = (b) => {
+    if (b.file) return b.file;
+    if (b.file_key) return `/files/${b.file_key}`;
+    return '';
+  };
+
+  grid.innerHTML = pageBooks.map(b => {
+    const title = getTitle(b);
+    const coverUrl = getCover(b);
+    const fileUrl = getFile(b);
+    const coverImg = coverUrl
+      ? `<img src="${coverUrl}" class="book-card-cover" alt="${title}" loading="lazy" />`
+      : `<div class="book-card-cover book-card-cover--placeholder">📚</div>`;
+
+    return `
     <div class="book-card">
-      <img src="/api/books/${b.id}/cover" class="book-card-cover" alt="${b.title_uz}" loading="lazy" />
+      ${coverImg}
       <div class="book-card-body">
-        <h4 class="book-card-title">${b.title_uz}</h4>
+        <h4 class="book-card-title">${title}</h4>
         <p class="book-card-author">${b.author || ''}</p>
-        <button class="btn btn-sm btn-primary btn-read-book" data-id="${b.id}" data-file="/api/books/${b.id}/pdf">📖 O'qish</button>
+        <div class="book-card-actions">
+          <button class="btn btn-sm btn-primary btn-read-book" data-id="${b.id}" data-file="${fileUrl}">${t.btnRead}</button>
+          <button class="btn btn-sm btn-secondary btn-download-qr" data-id="${b.id}" data-title="${title}">${t.btnDownloadQr}</button>
+        </div>
       </div>
     </div>
-  `).join('');
+  `;
+  }).join('');
 
   grid.querySelectorAll('.btn-read-book').forEach(btn => {
     btn.onclick = () => {
@@ -357,6 +405,16 @@ function renderBooks() {
       }
     };
   });
+
+  grid.querySelectorAll('.btn-download-qr').forEach(btn => {
+    btn.onclick = () => {
+      const bookId = btn.dataset.id;
+      const bookTitle = btn.dataset.title;
+      if (typeof window.downloadQr === 'function') {
+        window.downloadQr(bookId, `QR_${bookTitle}.png`);
+      }
+    };
+  });
 }
 
 function setupEventListeners() {
@@ -364,7 +422,11 @@ function setupEventListeners() {
   if (searchInput) {
     searchInput.addEventListener('input', (e) => {
       const query = e.target.value.toLowerCase().trim();
-      state.filteredBooks = state.books.filter(b => b.title_uz.toLowerCase().includes(query) || (b.author && b.author.toLowerCase().includes(query)));
+      state.filteredBooks = state.books.filter(b => {
+        const title = (b.title && typeof b.title === 'object') ? (b.title.uz || '') : (b.title_uz || b.title || '');
+        const author = b.author || '';
+        return title.toLowerCase().includes(query) || author.toLowerCase().includes(query);
+      });
       renderBooks();
     });
   }
