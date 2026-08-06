@@ -251,6 +251,48 @@
         "ru": "Проектирование реляционных баз данных и оптимизация SQL запросов",
         "en": "Relational database design and SQL query optimization"
       }
+    },
+    {
+      "id": 13,
+      "title": {
+        "uz": "Kiberxavfsizlik va axborot muhofazasi asoslari",
+        "ru": "Основы кибербезопасности и защиты информации",
+        "en": "Fundamentals of Cybersecurity and Information Security"
+      },
+      "author": "Ayupov R.X., Fayzullayev J.J.",
+      "year": 2026,
+      "category": "it",
+      "language": "uz",
+      "pages": 190,
+      "file": "books/kitob1 monografiya.pdf",
+      "cover": "books/pics/kitob1.png",
+      "qr": "books/pics/kitob1qr.png",
+      "description": {
+        "uz": "Kiberxavfsizlik standartlari, shifrlash va tarmoq havfsizligi bo'yicha qo'llanma",
+        "ru": "Руководство по стандартам кибербезопасности и шифрованию",
+        "en": "Guide on cybersecurity standards and network protection"
+      }
+    },
+    {
+      "id": 14,
+      "title": {
+        "uz": "Mobil ilovalarni yaratish va UI/UX dizayn",
+        "ru": "Разработка мобильных приложений и UI/UX дизайн",
+        "en": "Mobile App Development and UI/UX Design"
+      },
+      "author": "Shakarov A.R., Xushvaqtov O.N.",
+      "year": 2026,
+      "category": "it",
+      "language": "uz",
+      "pages": 170,
+      "file": "books/kitob2 Глоссарий Рак Техн-RTU-лотин 2025.pdf",
+      "cover": "books/pics/kitob2.png",
+      "qr": "books/pics/kitob2qr.png",
+      "description": {
+        "uz": "Zamonaviy mobil ilovalarni loyihalash va foydalanuvchi interfeysi dizayni",
+        "ru": "Проектирование современных мобильных приложений и UI/UX дизайн",
+        "en": "Designing modern mobile applications and user interfaces"
+      }
     }
   ]
 }
