@@ -2,10 +2,10 @@ import { ok, error, rowToBook } from '../../_lib/http.js';
 import { requireAuth } from '../../_lib/auth.js';
 import { createBook, validateBook } from '../../_lib/books.js';
 
-// GET /api/books — barcha kitoblar (ommaviy)
+// GET /api/books — faol (arxivlanmagan) kitoblar (ommaviy)
 export async function onRequestGet({ env }) {
   const { results } = await env.DB
-    .prepare('SELECT * FROM books ORDER BY created_at DESC, id DESC')
+    .prepare('SELECT * FROM books WHERE archived = 0 ORDER BY created_at DESC, id DESC')
     .all();
   return ok({ books: (results || []).map(rowToBook) });
 }
