@@ -22,11 +22,10 @@ export async function onRequestGet(context) {
     }
   }
 
-  let sql = all
-    ? `SELECT * FROM presentations`
-    : `SELECT * FROM presentations WHERE published = 1`;
+  let sql = `SELECT * FROM presentations WHERE 1 = 1`;
   const params = [];
 
+  if (!all) sql += ` AND published = 1`;
   if (category) {
     sql += ` AND category = ?`;
     params.push(category);
@@ -77,7 +76,7 @@ export async function onRequestPost(context) {
       body.description_en ? body.description_en.trim() : null,
       body.category,
       body.language || 'uz',
-      body.page_count,
+      body.page_count || 0,
       body.pdf_key,
       body.cover_key || null,
       body.published ? 1 : 0,

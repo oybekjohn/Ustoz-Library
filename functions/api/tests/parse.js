@@ -1,11 +1,17 @@
 /**
  * POST /api/tests/parse
- * Parses TXT file for test import preview
+ * TXT faylni import preview uchun tahlil qiladi (faqat admin)
  */
 import { parseTestTxt } from '../../_lib/test-parser.js';
+import { requireAuth } from '../../_lib/auth.js';
 
 export async function onRequestPost(context) {
-  const { request } = context;
+  const { request, env } = context;
+
+  const session = await requireAuth(request, env);
+  if (!session) {
+    return new Response(JSON.stringify({ error: 'Avtorizatsiya talab qilinadi' }), { status: 401 });
+  }
 
   try {
     const contentType = request.headers.get('Content-Type') || '';

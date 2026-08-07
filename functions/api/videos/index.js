@@ -22,11 +22,10 @@ export async function onRequestGet(context) {
     }
   }
 
-  let sql = all
-    ? `SELECT * FROM videos`
-    : `SELECT * FROM videos WHERE published = 1`;
+  let sql = `SELECT * FROM videos WHERE 1 = 1`;
   const params = [];
 
+  if (!all) sql += ` AND published = 1`;
   if (category) {
     sql += ` AND category = ?`;
     params.push(category);

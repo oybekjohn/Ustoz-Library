@@ -1,5 +1,5 @@
 import { ok, error } from '../../_lib/http.js';
-import { createSession, sessionCookie } from '../../_lib/auth.js';
+import { createSession, safeEqual, sessionCookie } from '../../_lib/auth.js';
 
 export async function onRequestPost({ request, env }) {
   if (!env.ADMIN_USERNAME || !env.ADMIN_PASSWORD || !env.SESSION_SECRET) {
@@ -14,8 +14,9 @@ export async function onRequestPost({ request, env }) {
   }
 
   const { username, password } = body || {};
-  const valid = username === env.ADMIN_USERNAME && password === env.ADMIN_PASSWORD;
-  if (!valid) {
+  const validUser = typeof username === 'string' && safeEqual(username, env.ADMIN_USERNAME);
+  const validPass = typeof password === 'string' && safeEqual(password, env.ADMIN_PASSWORD);
+  if (!validUser || !validPass) {
     return error("Login yoki parol noto'g'ri", 401);
   }
 

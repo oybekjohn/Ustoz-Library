@@ -13,7 +13,10 @@ export function validatePresentationInput(data) {
   if (!data.pdf_key || typeof data.pdf_key !== 'string') {
     errors.push("pdf_key ko'rsatilishi shart");
   }
-  if (typeof data.page_count !== 'number' || data.page_count <= 0) {
+  const isPptx = /\.pptx?$/i.test(data.pdf_key || '');
+  // PDF uchun sahifalar soni majburiy; PPT/PPTX Office viewerda ochilgani
+  // uchun page_count 0 bo'lishi mumkin.
+  if (!isPptx && (typeof data.page_count !== 'number' || data.page_count <= 0)) {
     errors.push("page_count noldan katta bo'lishi kerak");
   }
 

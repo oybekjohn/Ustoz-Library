@@ -1,7 +1,8 @@
 /**
  * /api/presentations/:id
- * GET, PUT, DELETE for specific presentation
+ * GET (ommaviy), PUT/DELETE (faqat admin)
  */
+import { requireAuth } from '../../_lib/auth.js';
 
 export async function onRequestGet(context) {
   const { env, params } = context;
@@ -21,6 +22,11 @@ export async function onRequestGet(context) {
 export async function onRequestPut(context) {
   const { env, params, request } = context;
   const id = params.id;
+
+  const session = await requireAuth(request, env);
+  if (!session) {
+    return new Response(JSON.stringify({ error: 'Avtorizatsiya talab qilinadi' }), { status: 401 });
+  }
 
   try {
     const body = await request.json();
@@ -46,8 +52,13 @@ export async function onRequestPut(context) {
 }
 
 export async function onRequestDelete(context) {
-  const { env, params } = context;
+  const { env, params, request } = context;
   const id = params.id;
+
+  const session = await requireAuth(request, env);
+  if (!session) {
+    return new Response(JSON.stringify({ error: 'Avtorizatsiya talab qilinadi' }), { status: 401 });
+  }
 
   try {
     const item = await env.DB.prepare(`SELECT pdf_key, cover_key FROM presentations WHERE id = ?`).bind(id).first();
