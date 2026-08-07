@@ -1,130 +1,245 @@
 /* ============================================
-   DL-LIBRARY.UZ вЂ” Application Main Engine
-   Renessans Ta'lim Universiteti Raqamli Kutubxona
+   DL-LIBRARY.UZ — Asosiy ilova
+   Renessans Ta'lim Universiteti — Raqamli kutubxona
+   Barcha bo'limlar ro'yxatdan o'tishsiz ishlaydi.
    ============================================ */
 
-import { checkAuthState, currentUser } from './auth.js';
 import { initThemeToggle } from './theme.js';
+import { showToast } from './toast.js';
 import { initPresentationViewer } from './presentation-viewer.js';
 import { initVideoPlayer } from './video-player.js';
 import { initTestRunner } from './test-runner.js';
-import { initProfilePage } from './profile.js';
 import { initTelegramMiniApp } from './telegram-mini-app.js';
 
-// ---------- Internationalization (i18n) ----------
+// ---------- Tarjimalar (i18n) ----------
 const translations = {
   uz: {
-    siteTitle: "DL-library.uz",
+    siteTitle: "DL-library.uz — Raqamli kutubxona",
     heroName: "DL-library.uz",
-    heroTitle: "Renessans Ta'lim Universiteti вЂ” Raqamli Kutubxona",
-    heroBio: "Ushbu elektron kutubxona Renessans ta'lim universiteti Matematika va Iqtisod fakul'tetining Axborot texnologiyalari kafedrasi jamoasi tomonidan yaratilgan bo'lib, uning asosiy maqsadi talabalarga fan dasturlarini, fanlar bo'yicha uslubiy qo'llanmalarni, o'quv qo'llanmalarni, darsliklarni va monografiyalarni taqdim etishdir. Undan tashqari saytga talabalar uchun qiziq bo'lgan mavzular bo'yicha ham bir qancha adabiyotlar jam qilingan.",
-    heroContact: "Agar siz elektron kutubxonadagi biror bir kitobni yuklab olmoqchi bo'lsangiz, quyidagi kontaktlarga murojaat qiling:",
+    heroTitle: "Renessans Ta'lim Universiteti — Raqamli kutubxona",
+    heroBio: "Ushbu elektron kutubxona Renessans ta'lim universiteti Matematika va iqtisod fakultetining Axborot texnologiyalari kafedrasi jamoasi tomonidan yaratilgan bo'lib, uning asosiy maqsadi talabalarga fan dasturlarini, fanlar bo'yicha uslubiy qo'llanmalarni, o'quv qo'llanmalarni, darsliklarni va monografiyalarni taqdim etishdir. Bundan tashqari, saytda talabalar uchun qiziqarli mavzulardagi bir qancha adabiyotlar ham jamlangan.",
+    heroContact: "Elektron kutubxonadagi biror kitobni yuklab olmoqchi bo'lsangiz, quyidagi kontaktlarga murojaat qiling:",
     searchPlaceholder: "Kitob nomini qidirish...",
     filterAll: "Barchasi",
-    statBooks: "Umumiy kitoblar",
-    btnRead: "рџ“– O'qish",
-    btnDownloadQr: "рџ“± QR yuklab olish",
-    noResults: "Topilmadi",
+    statBooks: "Jami kitoblar",
+    btnRead: "📖 O'qish",
+    btnDownloadQr: "📱 QR yuklab olish",
+    noResults: "Hech narsa topilmadi",
     noResultsDesc: "Boshqa kalit so'z bilan qidirib ko'ring",
     footerText: "Barcha huquqlar himoyalangan",
-    footerUniversity: "Ushbu sayt mualliflari RTU AT kafedrasi o'qituvchilari Ravshan Ayupov va Oybek Xushvaqtov"
+    footerUniversity: "Sayt mualliflari — RTU AT kafedrasi o'qituvchilari Ravshan Ayupov va Oybek Xushvaqtov",
+    navBooks: "📚 Kitoblar",
+    navPresentations: "📊 Taqdimotlar",
+    navVideos: "🎥 Videolar",
+    navTests: "📝 Testlar",
+    comingSoon: "Bu funksiya hali mavjud emas",
+    loading: "Yuklanmoqda...",
+    back: "◀ Orqaga",
+    presTitle: "📊 Taqdimotlar",
+    presEmpty: "Hozircha taqdimotlar yo'q. Tez orada qo'shiladi!",
+    presOpen: "Slaydlarni ko'rish",
+    presSlides: "slayd",
+    videosTitle: "🎥 Video darslar",
+    videosEmpty: "Hozircha video darslar yo'q. Tez orada qo'shiladi!",
+    videoOpen: "▶ Videoni ko'rish",
+    testsTitle: "📝 Bilimni tekshirish testlari",
+    testsEmpty: "Hozircha testlar yo'q. Tez orada qo'shiladi!",
+    testStart: "🚀 Testni boshlash",
+    testQuestions: "savol",
+    loadError: "Ma'lumotlarni yuklashda xatolik yuz berdi. Sahifani yangilab ko'ring.",
+    qrLabel: "Skanerlang va kitobni oching",
+    pageOf: (c, t, n) => `Sahifa ${c} / ${t} (jami ${n} ta kitob)`,
+    prev: "Oldingi",
+    next: "Keyingi",
   },
   ru: {
-    siteTitle: "DL-library.uz",
+    siteTitle: "DL-library.uz — Цифровая библиотека",
     heroName: "DL-library.uz",
-    heroTitle: "РЈРЅРёРІРµСЂСЃРёС‚РµС‚ Р РµРЅРµСЃСЃР°РЅСЃ вЂ” Р¦РёС„СЂРѕРІР°СЏ Р‘РёР±Р»РёРѕС‚РµРєР°",
-    heroBio: "Р”Р°РЅРЅР°СЏ СЌР»РµРєС‚СЂРѕРЅРЅР°СЏ Р±РёР±Р»РёРѕС‚РµРєР° СЃРѕР·РґР°РЅР° РєРѕР»Р»РµРєС‚РёРІРѕРј РєР°С„РµРґСЂС‹ РРЅС„РѕСЂРјР°С†РёРѕРЅРЅС‹С… С‚РµС…РЅРѕР»РѕРіРёР№ С„Р°РєСѓР»СЊС‚РµС‚Р° РњР°С‚РµРјР°С‚РёРєРё Рё Р­РєРѕРЅРѕРјРёРєРё Р РµРЅРµСЃСЃР°РЅСЃ СѓРЅРёРІРµСЂСЃРёС‚РµС‚Р° РѕР±СЂР°Р·РѕРІР°РЅРёСЏ. РћСЃРЅРѕРІРЅР°СЏ С†РµР»СЊ вЂ” РїСЂРµРґРѕСЃС‚Р°РІР»РµРЅРёРµ СЃС‚СѓРґРµРЅС‚Р°Рј СѓС‡РµР±РЅС‹С… РїСЂРѕРіСЂР°РјРј, РјРµС‚РѕРґРёС‡РµСЃРєРёС… РїРѕСЃРѕР±РёР№, СѓС‡РµР±РЅРёРєРѕРІ Рё РјРѕРЅРѕРіСЂР°С„РёР№.",
-    heroContact: "Р•СЃР»Рё РІС‹ С…РѕС‚РёС‚Рµ СЃРєР°С‡Р°С‚СЊ РєРЅРёРіСѓ РёР· СЌР»РµРєС‚СЂРѕРЅРЅРѕР№ Р±РёР±Р»РёРѕС‚РµРєРё, РѕР±СЂР°С‚РёС‚РµСЃСЊ РїРѕ СЃР»РµРґСѓСЋС‰РёРј РєРѕРЅС‚Р°РєС‚Р°Рј:",
-    searchPlaceholder: "РџРѕРёСЃРє...",
-    filterAll: "Р’СЃРµ",
-    statBooks: "Р’СЃРµРіРѕ РєРЅРёРі",
-    btnRead: "рџ“– Р§РёС‚Р°С‚СЊ",
-    btnDownloadQr: "рџ“± РЎРєР°С‡Р°С‚СЊ QR",
-    noResults: "РќРµ РЅР°Р№РґРµРЅРѕ",
-    noResultsDesc: "РџРѕРїСЂРѕР±СѓР№С‚Рµ РґСЂСѓРіРѕРµ РєР»СЋС‡РµРІРѕРµ СЃР»РѕРІРѕ",
-    footerText: "Р’СЃРµ РїСЂР°РІР° Р·Р°С‰РёС‰РµРЅС‹",
-    footerUniversity: "РђРІС‚РѕСЂС‹ СЃР°Р№С‚Р° вЂ” РїСЂРµРїРѕРґР°РІР°С‚РµР»Рё РєР°С„РµРґСЂС‹ РРў RTU Р Р°РІС€Р°РЅ РђСЋРїРѕРІ Рё РћР№Р±РµРє РҐСѓС€РІР°РєС‚РѕРІ"
+    heroTitle: "Университет образования Ренессанс — Цифровая библиотека",
+    heroBio: "Данная электронная библиотека создана коллективом кафедры Информационных технологий факультета Математики и экономики университета образования Ренессанс. Основная цель — предоставление студентам учебных программ, методических пособий, учебников и монографий. Кроме того, на сайте собран ряд материалов на темы, интересные студентам.",
+    heroContact: "Если вы хотите скачать книгу из электронной библиотеки, свяжитесь с нами:",
+    searchPlaceholder: "Поиск по названию книги...",
+    filterAll: "Все",
+    statBooks: "Всего книг",
+    btnRead: "📖 Читать",
+    btnDownloadQr: "📱 Скачать QR",
+    noResults: "Ничего не найдено",
+    noResultsDesc: "Попробуйте другое ключевое слово",
+    footerText: "Все права защищены",
+    footerUniversity: "Авторы сайта — преподаватели кафедры ИТ RTU Равшан Аюпов и Ойбек Хушвактов",
+    navBooks: "📚 Книги",
+    navPresentations: "📊 Презентации",
+    navVideos: "🎥 Видео",
+    navTests: "📝 Тесты",
+    comingSoon: "Эта функция пока недоступна",
+    loading: "Загрузка...",
+    back: "◀ Назад",
+    presTitle: "📊 Презентации",
+    presEmpty: "Презентаций пока нет. Скоро появятся!",
+    presOpen: "Открыть слайды",
+    presSlides: "слайдов",
+    videosTitle: "🎥 Видеоуроки",
+    videosEmpty: "Видеоуроков пока нет. Скоро появятся!",
+    videoOpen: "▶ Смотреть видео",
+    testsTitle: "📝 Тесты для проверки знаний",
+    testsEmpty: "Тестов пока нет. Скоро появятся!",
+    testStart: "🚀 Начать тест",
+    testQuestions: "вопросов",
+    loadError: "Ошибка загрузки данных. Обновите страницу.",
+    qrLabel: "Отсканируйте и откройте книгу",
+    pageOf: (c, t, n) => `Страница ${c} из ${t} (всего ${n} книг)`,
+    prev: "Назад",
+    next: "Вперёд",
   },
   en: {
-    siteTitle: "DL-library.uz",
+    siteTitle: "DL-library.uz — Digital Library",
     heroName: "DL-library.uz",
-    heroTitle: "Renaissance University of Education вЂ” Digital Library",
-    heroBio: "This digital library was created by the Information Technology Department of the Faculty of Mathematics and Economics at Renaissance University of Education.",
-    heroContact: "If you would like to download a book from the digital library, please contact us via:",
-    searchPlaceholder: "Search...",
+    heroTitle: "Renaissance University of Education — Digital Library",
+    heroBio: "This digital library was created by the Information Technology Department of the Faculty of Mathematics and Economics at Renaissance University of Education. Its main goal is to provide students with curricula, study guides, textbooks and monographs. The site also offers a range of materials on topics of interest to students.",
+    heroContact: "If you would like to download a book from the digital library, please contact us:",
+    searchPlaceholder: "Search books...",
     filterAll: "All",
-    statBooks: "Total Books",
-    btnRead: "рџ“– Read",
-    btnDownloadQr: "рџ“± Download QR",
-    noResults: "No items found",
+    statBooks: "Total books",
+    btnRead: "📖 Read",
+    btnDownloadQr: "📱 Download QR",
+    noResults: "Nothing found",
     noResultsDesc: "Try a different keyword",
     footerText: "All rights reserved",
-    footerUniversity: "Site authors вЂ” RTU IT Department lecturers Ravshan Ayupov and Oybek Xushvaqtov"
-  }
+    footerUniversity: "Site authors — RTU IT Department lecturers Ravshan Ayupov and Oybek Xushvaqtov",
+    navBooks: "📚 Books",
+    navPresentations: "📊 Slides",
+    navVideos: "🎥 Videos",
+    navTests: "📝 Tests",
+    comingSoon: "This feature is not available yet",
+    loading: "Loading...",
+    back: "◀ Back",
+    presTitle: "📊 Presentations",
+    presEmpty: "No presentations yet. Coming soon!",
+    presOpen: "Open slides",
+    presSlides: "slides",
+    videosTitle: "🎥 Video lessons",
+    videosEmpty: "No videos yet. Coming soon!",
+    videoOpen: "▶ Watch video",
+    testsTitle: "📝 Knowledge tests",
+    testsEmpty: "No tests yet. Coming soon!",
+    testStart: "🚀 Start test",
+    testQuestions: "questions",
+    loadError: "Failed to load data. Please refresh the page.",
+    qrLabel: "Scan to open the book",
+    pageOf: (c, t, n) => `Page ${c} of ${t} (total ${n} books)`,
+    prev: "Prev",
+    next: "Next",
+  },
 };
+
+// Kategoriya nomlari (kalitlar backend CATEGORIES bilan bir xil)
+const CATEGORY_LABELS = {
+  it: { uz: "Axborot texnologiyalari", ru: "Информационные технологии", en: "IT" },
+  ai: { uz: "Sun'iy intellekt", ru: "Искусственный интеллект", en: "AI" },
+  iqtisodiyot: { uz: "Iqtisodiyot", ru: "Экономика", en: "Economics" },
+  biznes: { uz: "Biznes", ru: "Бизнес", en: "Business" },
+  salomatlik: { uz: "Salomatlik", ru: "Здоровье", en: "Health" },
+  bogdorchilik: { uz: "Bog'dorchilik", ru: "Садоводство", en: "Gardening" },
+  fandastur: { uz: "Fan dasturlari", ru: "Учебные программы", en: "Curricula" },
+  ai_darslar: { uz: "AI darslar", ru: "Уроки AI", en: "AI lessons" },
+  ai_agentlar: { uz: "AI agentlar", ru: "AI-агенты", en: "AI agents" },
+  boshqa: { uz: "Boshqa", ru: "Прочее", en: "Other" },
+};
+
+const VIEWS = ['books', 'presentations', 'videos', 'tests'];
 
 const state = {
   books: [],
   filteredBooks: [],
-  currentLang: 'uz',
+  currentLang: localStorage.getItem('dl_lang') || 'uz',
   currentCategory: 'all',
   searchQuery: '',
   currentPage: 1,
   booksPerPage: 12,
-  activeView: 'books' // 'books', 'presentations', 'videos', 'tests', 'profile'
+  activeView: 'books',
 };
 
 const $ = (sel) => document.querySelector(sel);
 const $$ = (sel) => document.querySelectorAll(sel);
 
-document.addEventListener('DOMContentLoaded', async () => {
-  initThemeToggle();
-  await checkAuthState();
-  renderUserAuthSlot();
-
-  initNavigation();
-  loadBooks();
-  setupEventListeners();
-
-  // Telegram Mini App Context check
-  initTelegramMiniApp();
-});
-
-function renderUserAuthSlot() {
-  const slot = $('#user-auth-slot');
-  if (!slot) return;
-
-  if (currentUser) {
-    slot.innerHTML = `
-      <div class="user-profile-badge" id="user-profile-badge" style="cursor:pointer; display:flex; align-items:center; gap:8px;">
-        <img src="${currentUser.avatarUrl || '/img/default-avatar.png'}" style="width:32px; height:32px; border-radius:50%; object-fit:cover;" />
-        <span style="font-weight:600; font-size:0.9rem;">${currentUser.displayName.split(' ')[0]}</span>
-      </div>
-    `;
-    document.getElementById('user-profile-badge').onclick = () => switchView('profile');
-  } else {
-    slot.innerHTML = `
-      <button id="btn-google-login" class="btn btn-sm btn-outline-google" title="Tez kunda ulanadi" style="opacity: 0.7; cursor: default;">Google orqali kirish</button>
-    `;
-    // Hozircha hech narsa qilmaydi вЂ” tugma dekorativ
-  }
+export function t() {
+  return translations[state.currentLang] || translations.uz;
 }
 
-function initNavigation() {
-  // Desktop tabs
-  const tabBtns = $$('.nav-tab-btn');
-  tabBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-      switchView(btn.dataset.view);
-    });
+export function catLabel(key) {
+  const entry = CATEGORY_LABELS[key];
+  if (!entry) return key;
+  return entry[state.currentLang] || entry.uz;
+}
+
+export function localized(row, field) {
+  if (!row) return '';
+  return row[`${field}_${state.currentLang}`] || row[`${field}_uz`] || '';
+}
+
+// ---------- Ishga tushirish ----------
+document.addEventListener('DOMContentLoaded', () => {
+  initThemeToggle();
+  initTelegramMiniApp();
+  initLanguage();
+  initGoogleLoginPlaceholder();
+  initNavigation();
+  initScrollTop();
+  setupBookControls();
+  updateStaticTexts();
+
+  loadBooks().then(() => {
+    // QR chuqur havolasi: ?book=<id>
+    const bookId = new URLSearchParams(location.search).get('book');
+    if (bookId) openBookById(bookId);
   });
 
-  // Mobile bottom nav
-  const mobileNavBtns = $$('.mobile-nav-btn');
-  mobileNavBtns.forEach(btn => {
+  // Boshlang'ich ko'rinish: URL hash saqlanadi (#presentations, ...)
+  const initial = location.hash.replace('#', '');
+  switchView(VIEWS.includes(initial) ? initial : 'books', { updateHash: false });
+
+  window.addEventListener('hashchange', () => {
+    const view = location.hash.replace('#', '');
+    if (VIEWS.includes(view) && view !== state.activeView) {
+      switchView(view, { updateHash: false });
+    }
+  });
+});
+
+// ---------- Google login (hozircha o'chirilgan) ----------
+function initGoogleLoginPlaceholder() {
+  const slot = $('#user-auth-slot');
+  if (!slot) return;
+  slot.addEventListener('click', (e) => {
+    if (e.target.closest('#btn-google-login')) {
+      showToast(t().comingSoon, { type: 'info' });
+    }
+  });
+}
+
+// ---------- Til ----------
+function initLanguage() {
+  $$('.lang-btn').forEach((btn) => {
+    btn.classList.toggle('active', btn.dataset.lang === state.currentLang);
     btn.addEventListener('click', () => {
-      switchView(btn.dataset.view);
+      $$('.lang-btn').forEach((item) => item.classList.remove('active'));
+      btn.classList.add('active');
+      state.currentLang = btn.dataset.lang || 'uz';
+      localStorage.setItem('dl_lang', state.currentLang);
+      updateStaticTexts();
+      renderFilters();
+      renderStats();
+      applyBookFilters();
+      // Aktiv bo'lim kitoblardan boshqa bo'lsa, uni qayta chizamiz
+      if (state.activeView !== 'books') renderActiveView();
     });
+  });
+}
+
+// ---------- Navigatsiya ----------
+function initNavigation() {
+  $$('.nav-tab-btn, .mobile-nav-btn').forEach((btn) => {
+    btn.addEventListener('click', () => switchView(btn.dataset.view));
   });
 
   const logoBtn = $('#nav-logo-btn');
@@ -136,46 +251,52 @@ function initNavigation() {
   }
 }
 
-function switchView(viewName) {
+function switchView(viewName, { updateHash = true } = {}) {
   state.activeView = viewName;
-
-  const booksSection = $('#books-section-view');
-  const heroSection = $('#hero');
-  const controlsSection = $('#controls');
-  const dynamicViewSection = $('#dynamic-view-section');
-  const dynamicContainer = $('#dynamic-view-container');
-
-  // Active tab button update вЂ” desktop tabs
-  $$('.nav-tab-btn').forEach(btn => {
-    btn.classList.toggle('active', btn.dataset.view === viewName);
-  });
-
-  // Active tab button update вЂ” mobile bottom nav
-  $$('.mobile-nav-btn').forEach(btn => {
-    btn.classList.toggle('active', btn.dataset.view === viewName);
-  });
-
-  if (viewName === 'books') {
-    if (booksSection) booksSection.style.display = 'block';
-    if (heroSection) heroSection.style.display = 'block';
-    if (controlsSection) controlsSection.style.display = 'block';
-    if (dynamicViewSection) dynamicViewSection.style.display = 'none';
-  } else {
-    if (booksSection) booksSection.style.display = 'none';
-    if (heroSection) heroSection.style.display = 'none';
-    if (controlsSection) controlsSection.style.display = 'none';
-    if (dynamicViewSection) dynamicViewSection.style.display = 'block';
-
-    dynamicContainer.innerHTML = '<div class="loading-spinner">Yuklanmoqda...</div>';
-
-    if (viewName === 'presentations') renderPresentationsView(dynamicContainer);
-    if (viewName === 'videos') renderVideosView(dynamicContainer);
-    if (viewName === 'tests') renderTestsView(dynamicContainer);
-    if (viewName === 'profile') initProfilePage(dynamicContainer);
+  if (updateHash) {
+    history.replaceState(null, '', viewName === 'books' ? '#' : `#${viewName}`);
   }
+
+  $$('.nav-tab-btn, .mobile-nav-btn').forEach((btn) => {
+    btn.classList.toggle('active', btn.dataset.view === viewName);
+  });
+
+  const isBooks = viewName === 'books';
+  toggleSection('#books-section-view', isBooks);
+  toggleSection('#hero', isBooks);
+  toggleSection('#controls', isBooks);
+  toggleSection('#dynamic-view-section', !isBooks);
+
+  if (!isBooks) renderActiveView();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-// ---------- Presentations View ----------
+function toggleSection(sel, visible) {
+  const node = $(sel);
+  if (node) node.style.display = visible ? '' : 'none';
+}
+
+function renderActiveView() {
+  const container = $('#dynamic-view-container');
+  if (!container) return;
+  container.innerHTML = `<div class="loading-spinner">${t().loading}</div>`;
+  if (state.activeView === 'presentations') renderPresentationsView(container);
+  if (state.activeView === 'videos') renderVideosView(container);
+  if (state.activeView === 'tests') renderTestsView(container);
+}
+
+function renderBackButton(container, onBack) {
+  const bar = document.createElement('div');
+  bar.className = 'view-back-bar';
+  const btn = document.createElement('button');
+  btn.className = 'btn btn-secondary back-btn';
+  btn.textContent = t().back;
+  btn.addEventListener('click', onBack);
+  bar.appendChild(btn);
+  container.appendChild(bar);
+}
+
+// ---------- Taqdimotlar bo'limi ----------
 async function renderPresentationsView(container) {
   try {
     const res = await fetch('/api/presentations');
@@ -183,48 +304,52 @@ async function renderPresentationsView(container) {
     const items = data.presentations || [];
 
     if (items.length === 0) {
-      container.innerHTML = `<div class="empty-state">рџ“Љ Taqdimotlar mavjud emas.</div>`;
+      container.innerHTML = `<div class="empty-state"><div class="empty-state__icon">📊</div><p>${t().presEmpty}</p></div>`;
       return;
     }
 
     container.innerHTML = `
-      <h2 class="view-title">рџ“Љ Prezentatsiyalar va Taqdimotlar</h2>
-      <div class="content-cards-grid">
-        ${items.map(p => {
-          const pdfUrl = p.pdf_key ? (p.pdf_key.startsWith('/') ? p.pdf_key : `/files/${p.pdf_key}`) : '';
-          return `
-          <div class="material-card">
-            <div class="material-card-header">
-              <h3>${p.title_uz}</h3>
-              <span class="badge badge-info">${p.page_count} slayd</span>
-            </div>
-            <p>${p.description_uz || ''}</p>
-            <button class="btn btn-primary btn-open-pres" data-id="${p.id}" data-pdf="${pdfUrl}" data-pages="${p.page_count}">Slaydlarni ko'rish рџ“–</button>
-          </div>
-        `;
-        }).join('')}
-      </div>
+      <h2 class="view-title">${t().presTitle}</h2>
+      <div class="content-cards-grid"></div>
     `;
+    const grid = container.querySelector('.content-cards-grid');
 
-    container.querySelectorAll('.btn-open-pres').forEach(btn => {
-      btn.onclick = () => {
-        const id = btn.dataset.id;
-        const pageCount = Number(btn.dataset.pages);
-        const pdfUrl = btn.dataset.pdf;
-        container.innerHTML = `
-          <button class="btn btn-secondary back-btn" id="btn-back-pres">в—Ђ Orqaga</button>
-          <div id="pres-viewer-target" style="margin-top:15px;"></div>
-        `;
-        document.getElementById('btn-back-pres').onclick = () => renderPresentationsView(container);
-        initPresentationViewer(id, pdfUrl, pageCount, document.getElementById('pres-viewer-target'));
-      };
+    items.forEach((p) => {
+      const title = localized(p, 'title');
+      const desc = localized(p, 'description');
+      const cover = p.cover_key ? `/files/${p.cover_key}` : '';
+      const card = document.createElement('article');
+      card.className = 'material-card material-card--clickable';
+      card.innerHTML = `
+        <div class="material-card__media ${cover ? '' : 'material-card__media--placeholder'}">
+          ${cover ? `<img src="${cover}" alt="" loading="lazy" />` : '<span class="material-card__media-icon">📊</span>'}
+          ${p.page_count > 0 ? `<span class="material-card__count">${p.page_count} ${t().presSlides}</span>` : ''}
+        </div>
+        <div class="material-card__body">
+          <span class="cat-chip" data-cat="${p.category}">${catLabel(p.category)}</span>
+          <h3 class="material-card__title"></h3>
+          <p class="material-card__desc"></p>
+          <button class="btn btn-primary btn-block">${t().presOpen}</button>
+        </div>
+      `;
+      card.querySelector('.material-card__title').textContent = title;
+      card.querySelector('.material-card__desc').textContent = desc;
+      card.querySelector('button').addEventListener('click', () => {
+        container.innerHTML = '';
+        renderBackButton(container, () => renderPresentationsView(container));
+        const target = document.createElement('div');
+        container.appendChild(target);
+        initPresentationViewer(p, target, { lang: state.currentLang });
+      });
+      grid.appendChild(card);
     });
   } catch (err) {
-    container.innerHTML = `<p class="error-msg">Taqdimotlarni yuklashda xatolik</p>`;
+    console.error('Presentations load error:', err);
+    container.innerHTML = `<p class="error-msg">${t().loadError}</p>`;
   }
 }
 
-// ---------- Videos View ----------
+// ---------- Videolar bo'limi ----------
 async function renderVideosView(container) {
   try {
     const res = await fetch('/api/videos');
@@ -232,46 +357,61 @@ async function renderVideosView(container) {
     const items = data.videos || [];
 
     if (items.length === 0) {
-      container.innerHTML = `<div class="empty-state">рџЋҐ Video darslar mavjud emas.</div>`;
+      container.innerHTML = `<div class="empty-state"><div class="empty-state__icon">🎥</div><p>${t().videosEmpty}</p></div>`;
       return;
     }
 
     container.innerHTML = `
-      <h2 class="view-title">рџЋҐ Video Darslar</h2>
-      <div class="content-cards-grid">
-        ${items.map(v => `
-          <div class="material-card">
-            <div class="material-card-header">
-              <h3>${v.title_uz}</h3>
-              <span class="badge badge-secondary">YouTube</span>
-            </div>
-            <p>${v.description_uz || ''}</p>
-            <button class="btn btn-primary btn-open-video" data-id="${v.id}" data-yt="${v.youtube_video_id}" data-duration="${v.duration_seconds || 0}">Videoni ko'rish в–¶</button>
-          </div>
-        `).join('')}
-      </div>
+      <h2 class="view-title">${t().videosTitle}</h2>
+      <div class="content-cards-grid"></div>
     `;
+    const grid = container.querySelector('.content-cards-grid');
 
-    container.querySelectorAll('.btn-open-video').forEach(btn => {
-      btn.onclick = () => {
-        const id = btn.dataset.id;
-        const ytId = btn.dataset.yt;
-        const duration = Number(btn.dataset.duration);
-
-        container.innerHTML = `
-          <button class="btn btn-secondary back-btn" id="btn-back-video">в—Ђ Orqaga</button>
-          <div id="video-player-target" style="margin-top:15px;"></div>
-        `;
-        document.getElementById('btn-back-video').onclick = () => renderVideosView(container);
-        initVideoPlayer(id, ytId, duration, document.getElementById('video-player-target'));
+    items.forEach((v) => {
+      const title = localized(v, 'title');
+      const desc = localized(v, 'description');
+      const thumb = `https://i.ytimg.com/vi/${v.youtube_video_id}/hqdefault.jpg`;
+      const card = document.createElement('article');
+      card.className = 'material-card material-card--clickable';
+      card.innerHTML = `
+        <div class="material-card__media material-card__media--video">
+          <img src="${thumb}" alt="" loading="lazy" />
+          <span class="material-card__play">▶</span>
+          ${v.duration_seconds ? `<span class="material-card__count">${formatDuration(v.duration_seconds)}</span>` : ''}
+        </div>
+        <div class="material-card__body">
+          <span class="cat-chip" data-cat="${v.category}">${catLabel(v.category)}</span>
+          <h3 class="material-card__title"></h3>
+          <p class="material-card__desc"></p>
+          <button class="btn btn-primary btn-block">${t().videoOpen}</button>
+        </div>
+      `;
+      card.querySelector('.material-card__title').textContent = title;
+      card.querySelector('.material-card__desc').textContent = desc;
+      const open = () => {
+        container.innerHTML = '';
+        renderBackButton(container, () => renderVideosView(container));
+        const target = document.createElement('div');
+        container.appendChild(target);
+        initVideoPlayer(v, target, { lang: state.currentLang });
       };
+      card.querySelector('button').addEventListener('click', open);
+      card.querySelector('.material-card__media').addEventListener('click', open);
+      grid.appendChild(card);
     });
   } catch (err) {
-    container.innerHTML = `<p class="error-msg">Videolarni yuklashda xatolik</p>`;
+    console.error('Videos load error:', err);
+    container.innerHTML = `<p class="error-msg">${t().loadError}</p>`;
   }
 }
 
-// ---------- Tests View ----------
+function formatDuration(totalSec) {
+  const min = Math.floor(totalSec / 60);
+  const sec = totalSec % 60;
+  return `${min}:${String(sec).padStart(2, '0')}`;
+}
+
+// ---------- Testlar bo'limi ----------
 async function renderTestsView(container) {
   try {
     const res = await fetch('/api/tests');
@@ -279,49 +419,55 @@ async function renderTestsView(container) {
     const items = data.tests || [];
 
     if (items.length === 0) {
-      container.innerHTML = `<div class="empty-state">рџ“ќ Hozircha faol testlar yo'q.</div>`;
+      container.innerHTML = `<div class="empty-state"><div class="empty-state__icon">📝</div><p>${t().testsEmpty}</p></div>`;
       return;
     }
 
     container.innerHTML = `
-      <h2 class="view-title">рџ“ќ Bilimni Tekshirish Testlari</h2>
-      <div class="content-cards-grid">
-        ${items.map(t => `
-          <div class="material-card">
-            <div class="material-card-header">
-              <h3>${t.title_uz}</h3>
-              <span class="badge badge-warning">вЏі ${t.duration_minutes} daqiqa</span>
-            </div>
-            <p>${t.description_uz || ''}</p>
-            <p><small>Savollar soni: ${t.question_count || 0} ta | O'tish bali: ${t.passing_percent}%</small></p>
-            <div style="display:flex; gap:10px; margin-top:10px;">
-              <button class="btn btn-primary btn-start-test-run" data-id="${t.id}">Testni boshlash рџљЂ</button>
-            </div>
-          </div>
-        `).join('')}
-      </div>
+      <h2 class="view-title">${t().testsTitle}</h2>
+      <div class="content-cards-grid"></div>
     `;
+    const grid = container.querySelector('.content-cards-grid');
 
-    container.querySelectorAll('.btn-start-test-run').forEach(btn => {
-      btn.onclick = () => {
-        const testId = btn.dataset.id;
-        container.innerHTML = `
-          <button class="btn btn-secondary back-btn" id="btn-back-tests">в—Ђ Orqaga</button>
-          <div id="test-runner-target" style="margin-top:15px;"></div>
-        `;
-        document.getElementById('btn-back-tests').onclick = () => renderTestsView(container);
-        initTestRunner(testId, document.getElementById('test-runner-target'));
-      };
+    items.forEach((test) => {
+      const title = localized(test, 'title');
+      const desc = localized(test, 'description');
+      const shownCount = Math.min(20, test.question_count || 0);
+      const card = document.createElement('article');
+      card.className = 'material-card material-card--clickable';
+      card.innerHTML = `
+        <div class="material-card__media material-card__media--placeholder material-card__media--test">
+          <span class="material-card__media-icon">📝</span>
+          <span class="material-card__count">${shownCount} ${t().testQuestions}</span>
+        </div>
+        <div class="material-card__body">
+          <span class="cat-chip" data-cat="${test.category}">${catLabel(test.category)}</span>
+          <h3 class="material-card__title"></h3>
+          <p class="material-card__desc"></p>
+          <button class="btn btn-primary btn-block">${t().testStart}</button>
+        </div>
+      `;
+      card.querySelector('.material-card__title').textContent = title;
+      card.querySelector('.material-card__desc').textContent = desc;
+      card.querySelector('button').addEventListener('click', () => {
+        container.innerHTML = '';
+        renderBackButton(container, () => renderTestsView(container));
+        const target = document.createElement('div');
+        container.appendChild(target);
+        initTestRunner(test, target, { lang: state.currentLang });
+      });
+      grid.appendChild(card);
     });
   } catch (err) {
-    container.innerHTML = `<p class="error-msg">Testlarni yuklashda xatolik</p>`;
+    console.error('Tests load error:', err);
+    container.innerHTML = `<p class="error-msg">${t().loadError}</p>`;
   }
 }
 
-// ---------- Load Books (backend API) ----------
+// ---------- Kitoblar ----------
 async function loadBooks() {
   try {
-    const res = await fetch('/api/books', { headers: { 'Accept': 'application/json' } });
+    const res = await fetch('/api/books', { headers: { Accept: 'application/json' } });
     const data = await res.json();
     if (!data.ok) throw new Error(data.error || 'API xatosi');
 
@@ -332,98 +478,108 @@ async function loadBooks() {
     renderBooks();
   } catch (e) {
     console.error('Books load error:', e);
-    // Fallback: bo'sh holat ko'rsatish
     const grid = $('#books-grid');
     if (grid) {
-      grid.innerHTML = `<div class="no-results"><div class="no-results__icon">📚</div><div class="no-results__text">Kitoblarni yuklashda xatolik</div></div>`;
+      grid.innerHTML = `<div class="no-results"><div class="no-results__icon">📚</div><div class="no-results__text">${t().loadError}</div></div>`;
     }
+  }
+}
+
+function openBookById(bookId) {
+  const book = state.books.find((b) => String(b.id) === String(bookId));
+  if (!book) return;
+  switchView('books');
+  openBookReader(book);
+}
+
+function openBookReader(book) {
+  const fileUrl = book.file || (book.file_key ? `/files/${book.file_key}` : '');
+  const title = getLocalizedTitle(book, state.currentLang);
+  const qrDataUrl = typeof window.bookQrDataUrl === 'function' ? window.bookQrDataUrl(book.id) : '';
+  if (typeof window.openFlipbook === 'function' && fileUrl) {
+    window.openFlipbook(fileUrl, title, qrDataUrl);
   }
 }
 
 function renderBooks() {
   const grid = $('#books-grid');
   if (!grid) return;
-  const t = translations[state.currentLang];
-  const lang = state.currentLang;
+  const tr = t();
 
   if (state.filteredBooks.length === 0) {
     grid.innerHTML = `
       <div class="no-results">
-        <div class="no-results__icon">рџ“љ</div>
-        <div class="no-results__text">${t.noResults}</div>
+        <div class="no-results__icon">📚</div>
+        <div class="no-results__text">${tr.noResults}</div>
+        <div class="no-results__desc">${tr.noResultsDesc}</div>
       </div>
     `;
+    renderPagination();
     return;
   }
 
   const start = (state.currentPage - 1) * state.booksPerPage;
-  const end = Math.min(start + state.booksPerPage, state.filteredBooks.length);
-  const pageBooks = state.filteredBooks.slice(start, end);
+  const pageBooks = state.filteredBooks.slice(start, start + state.booksPerPage);
 
-  // Helper: kitob nomini olish (API title: {uz,ru,en} yoki title_uz formatida kelishi mumkin)
-  const getTitle = (b) => {
-    if (b.title && typeof b.title === 'object') return b.title[lang] || b.title.uz || '';
-    return b.title_uz || b.title || '';
-  };
+  grid.innerHTML = '';
+  pageBooks.forEach((b, i) => {
+    const title = getLocalizedTitle(b, state.currentLang);
+    const desc = getLocalizedDesc(b, state.currentLang);
+    const coverUrl = b.cover || (b.cover_key ? `/files/${b.cover_key}` : '');
+    const qrDataUrl = typeof window.bookQrDataUrl === 'function' ? window.bookQrDataUrl(b.id) : '';
 
-  // Helper: muqova URL (API cover: '/files/...' yoki cover_key formatida kelishi mumkin)
-  const getCover = (b) => {
-    if (b.cover) return b.cover;
-    if (b.cover_key) return `/files/${b.cover_key}`;
-    return '';
-  };
-
-  // Helper: PDF fayl URL (API file: '/files/...' yoki file_key formatida kelishi mumkin)
-  const getFile = (b) => {
-    if (b.file) return b.file;
-    if (b.file_key) return `/files/${b.file_key}`;
-    return '';
-  };
-
-  grid.innerHTML = pageBooks.map(b => {
-    const title = getTitle(b);
-    const coverUrl = getCover(b);
-    const fileUrl = getFile(b);
-    const coverImg = coverUrl
-      ? `<img src="${coverUrl}" class="book-card-cover" alt="${title}" loading="lazy" />`
-      : `<div class="book-card-cover book-card-cover--placeholder">рџ“љ</div>`;
-
-    return `
-    <div class="book-card">
-      ${coverImg}
-      <div class="book-card-body">
-        <h4 class="book-card-title">${title}</h4>
-        <p class="book-card-author">${b.author || ''}</p>
-        <div class="book-card-actions">
-          <button class="btn btn-sm btn-primary btn-read-book" data-id="${b.id}" data-file="${fileUrl}">${t.btnRead}</button>
-          <button class="btn btn-sm btn-secondary btn-download-qr" data-id="${b.id}" data-title="${title}">${t.btnDownloadQr}</button>
+    const card = document.createElement('article');
+    card.className = 'book-card';
+    card.style.animationDelay = `${Math.min(i, 8) * 50}ms`;
+    card.innerHTML = `
+      <div class="book-card__cover-wrapper">
+        ${coverUrl
+          ? `<img src="${coverUrl}" class="book-card__cover" alt="" loading="lazy" />`
+          : '<div class="book-card__cover book-card__cover--placeholder">📚</div>'}
+        <span class="book-card__badge book-card__badge--${b.category || 'boshqa'}">${catLabel(b.category)}</span>
+        ${b.language ? `<span class="book-card__lang-badge">${b.language}</span>` : ''}
+      </div>
+      <div class="book-card__body">
+        <h3 class="book-card__title"></h3>
+        <div class="book-card__meta">
+          ${b.year ? `<span class="book-card__year">📅 ${b.year}</span>` : ''}
+          <span class="book-card__author">👤 <span class="book-card__author-name"></span></span>
+        </div>
+        ${desc ? '<p class="book-card__desc"></p>' : ''}
+        ${qrDataUrl ? `
+          <div class="book-card__qr">
+            <img src="${qrDataUrl}" class="book-card__qr-img" alt="QR" loading="lazy" draggable="false" />
+            <span class="book-card__qr-label">${tr.qrLabel}</span>
+          </div>` : ''}
+        <div class="book-card__actions">
+          <button class="btn btn--primary btn-read-book">${tr.btnRead}</button>
+          <button class="btn btn--secondary btn-download-qr">${tr.btnDownloadQr}</button>
         </div>
       </div>
-    </div>
-  `;
-  }).join('');
-
-  grid.querySelectorAll('.btn-read-book').forEach(btn => {
-    btn.onclick = () => {
-      const bookId = btn.dataset.id;
-      const pdfUrl = btn.dataset.file;
-      if (typeof window.openFlipbook === 'function') {
-        window.openFlipbook(pdfUrl, btn.closest('.book-card').querySelector('h4').textContent, bookId);
-      }
-    };
-  });
-
-  grid.querySelectorAll('.btn-download-qr').forEach(btn => {
-    btn.onclick = () => {
-      const bookId = btn.dataset.id;
-      const bookTitle = btn.dataset.title;
+    `;
+    card.querySelector('.book-card__title').textContent = title;
+    card.querySelector('.book-card__author-name').textContent = b.author || '';
+    const descNode = card.querySelector('.book-card__desc');
+    if (descNode) descNode.textContent = desc;
+    card.querySelector('.book-card__title').addEventListener('click', () => openBookReader(b));
+    card.querySelector('.book-card__cover-wrapper').addEventListener('click', () => openBookReader(b));
+    card.querySelector('.btn-read-book').addEventListener('click', () => openBookReader(b));
+    card.querySelector('.btn-download-qr').addEventListener('click', () => {
       if (typeof window.downloadQr === 'function') {
-        window.downloadQr(bookId, `QR_${bookTitle}.png`);
+        window.downloadQr(b.id, `QR_${title}.png`);
       }
-    };
+    });
+    grid.appendChild(card);
   });
 
   renderPagination();
+}
+
+function getLocalizedDesc(book, lang) {
+  if (book.description && typeof book.description === 'object') {
+    return book.description[lang] || book.description.uz || '';
+  }
+  return book.description_uz || '';
 }
 
 function renderPagination() {
@@ -440,48 +596,25 @@ function renderPagination() {
     return;
   }
 
-  const lang = state.currentLang;
+  const tr = t();
   const current = state.currentPage;
 
-  // Pagination info text
-  let infoText = `Sahifa ${current} / ${totalPages} (Jami ${totalItems} ta kitob)`;
-  if (lang === 'ru') infoText = `Страница ${current} из ${totalPages} (Всего ${totalItems} книг)`;
-  if (lang === 'en') infoText = `Page ${current} of ${totalPages} (Total ${totalItems} books)`;
+  paginationInfo.innerHTML = `<span class="pagination-info-text">${tr.pageOf(current, totalPages, totalItems)}</span>`;
 
-  paginationInfo.innerHTML = `<span class="pagination-info-text">${infoText}</span>`;
-
-  // Buttons HTML
-  let buttonsHtml = '';
-
-  // Previous button
-  const prevLabel = lang === 'ru' ? 'Назад' : (lang === 'en' ? 'Prev' : 'Oldingi');
-  buttonsHtml += `
-    <button class="pagination-btn pagination-btn--prev" data-page="${current - 1}" ${current === 1 ? 'disabled' : ''}>
-      ◀ ${prevLabel}
-    </button>
+  let buttonsHtml = `
+    <button class="pagination-btn pagination-btn--prev" data-page="${current - 1}" ${current === 1 ? 'disabled' : ''}>◀ ${tr.prev}</button>
   `;
-
-  // Page number buttons
   for (let i = 1; i <= totalPages; i++) {
-    buttonsHtml += `
-      <button class="pagination-btn ${i === current ? 'active' : ''}" data-page="${i}">
-        ${i}
-      </button>
-    `;
+    buttonsHtml += `<button class="pagination-btn ${i === current ? 'active' : ''}" data-page="${i}">${i}</button>`;
   }
-
-  // Next button
-  const nextLabel = lang === 'ru' ? 'Вперед' : (lang === 'en' ? 'Next' : 'Keyingi');
   buttonsHtml += `
-    <button class="pagination-btn pagination-btn--next" data-page="${current + 1}" ${current === totalPages ? 'disabled' : ''}>
-      ${nextLabel} ▶
-    </button>
+    <button class="pagination-btn pagination-btn--next" data-page="${current + 1}" ${current === totalPages ? 'disabled' : ''}>${tr.next} ▶</button>
   `;
 
   pagination.innerHTML = buttonsHtml;
 }
 
-function setupEventListeners() {
+function setupBookControls() {
   const searchInput = $('#search-input');
   if (searchInput) {
     searchInput.addEventListener('input', (e) => {
@@ -491,26 +624,13 @@ function setupEventListeners() {
     });
   }
 
-  $$('.lang-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      $$('.lang-btn').forEach(item => item.classList.remove('active'));
-      btn.classList.add('active');
-      state.currentLang = btn.dataset.lang || 'uz';
-      updateStaticTexts();
-      renderFilters();
-      renderStats();
-      applyBookFilters();
-    });
-  });
-
-  // Pagination event delegation — document-da, chunki DOM dinamik yangilanadi
+  // Pagination — delegatsiya (DOM dinamik yangilanadi)
   document.addEventListener('click', (event) => {
     const btn = event.target.closest('#pagination [data-page]');
     if (!btn || btn.disabled) return;
     const page = Number(btn.dataset.page);
-    if (!page || page < 1) return;
     const totalPages = Math.ceil(state.filteredBooks.length / state.booksPerPage);
-    if (page > totalPages) return;
+    if (!page || page < 1 || page > totalPages) return;
     state.currentPage = page;
     renderBooks();
     $('#books-section-view')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -518,15 +638,18 @@ function setupEventListeners() {
 }
 
 function applyBookFilters() {
-  const lang = state.currentLang;
   const query = state.searchQuery;
-  state.filteredBooks = state.books.filter(b => {
-    const title = getLocalizedTitle(b, lang);
+  state.filteredBooks = state.books.filter((b) => {
+    const title = getLocalizedTitle(b, state.currentLang);
     const author = b.author || '';
     const categoryOk = state.currentCategory === 'all' || b.category === state.currentCategory;
     const queryOk = !query || [title, author, b.category || ''].join(' ').toLowerCase().includes(query);
     return categoryOk && queryOk;
   });
+  if ((state.currentPage - 1) * state.booksPerPage >= state.filteredBooks.length) {
+    state.currentPage = 1;
+  }
+  renderStats();
   renderBooks();
 }
 
@@ -537,35 +660,55 @@ function getLocalizedTitle(book, lang) {
   return book.title_uz || book.title || '';
 }
 
+// ---------- Statik matnlar ----------
 function updateStaticTexts() {
-  const t = translations[state.currentLang] || translations.uz;
-  document.title = t.siteTitle;
+  const tr = t();
+  document.title = tr.siteTitle;
   const map = {
-    '#hero-name': t.heroName,
-    '#hero-title': t.heroTitle,
-    '#hero-bio': t.heroBio,
-    '#hero-contact-text': t.heroContact,
-    '#footer-rights': t.footerText,
-    '#footer-university': t.footerUniversity,
+    '#hero-name': tr.heroName,
+    '#hero-title': tr.heroTitle,
+    '#hero-bio': tr.heroBio,
+    '#hero-contact-text': tr.heroContact,
+    '#footer-rights': tr.footerText,
+    '#footer-university': tr.footerUniversity,
   };
   Object.entries(map).forEach(([selector, text]) => {
     const node = $(selector);
     if (node) node.textContent = text;
   });
+
   const searchInput = $('#search-input');
-  if (searchInput) searchInput.placeholder = t.searchPlaceholder;
+  if (searchInput) searchInput.placeholder = tr.searchPlaceholder;
+
+  // Navigatsiya yorliqlari
+  const navLabels = {
+    books: tr.navBooks,
+    presentations: tr.navPresentations,
+    videos: tr.navVideos,
+    tests: tr.navTests,
+  };
+  $$('.nav-tab-btn').forEach((btn) => {
+    const label = navLabels[btn.dataset.view];
+    if (label) btn.textContent = label;
+  });
+  $$('.mobile-nav-btn').forEach((btn) => {
+    const label = navLabels[btn.dataset.view];
+    if (!label) return;
+    const [icon, ...words] = label.split(' ');
+    btn.innerHTML = `<span class="mobile-nav-icon">${icon}</span><span>${words.join(' ')}</span>`;
+  });
 }
 
 function renderStats() {
   const stats = $('#stats');
   const count = $('#search-count');
-  const t = translations[state.currentLang] || translations.uz;
+  const tr = t();
   if (count) count.textContent = `${state.filteredBooks.length}/${state.books.length}`;
   if (!stats) return;
   stats.innerHTML = `
     <div class="stat-card">
       <div class="stat-card__number">${state.books.length}</div>
-      <div class="stat-card__label">${t.statBooks}</div>
+      <div class="stat-card__label">${tr.statBooks}</div>
     </div>
   `;
 }
@@ -573,15 +716,17 @@ function renderStats() {
 function renderFilters() {
   const filters = $('#filters');
   if (!filters) return;
-  const t = translations[state.currentLang] || translations.uz;
-  const categories = Array.from(new Set(state.books.map(book => book.category).filter(Boolean)));
+  const tr = t();
+  const categories = Array.from(new Set(state.books.map((b) => b.category).filter(Boolean)));
   filters.innerHTML = [
-    `<button class="filter-btn active" data-category="all">${t.filterAll}</button>`,
-    ...categories.map(category => `<button class="filter-btn" data-category="${category}">${category}</button>`),
+    `<button class="filter-btn ${state.currentCategory === 'all' ? 'active' : ''}" data-category="all">${tr.filterAll}</button>`,
+    ...categories.map(
+      (c) => `<button class="filter-btn ${state.currentCategory === c ? 'active' : ''}" data-category="${c}">${catLabel(c)}</button>`
+    ),
   ].join('');
-  filters.querySelectorAll('.filter-btn').forEach(btn => {
+  filters.querySelectorAll('.filter-btn').forEach((btn) => {
     btn.addEventListener('click', () => {
-      filters.querySelectorAll('.filter-btn').forEach(item => item.classList.remove('active'));
+      filters.querySelectorAll('.filter-btn').forEach((item) => item.classList.remove('active'));
       btn.classList.add('active');
       state.currentCategory = btn.dataset.category || 'all';
       state.currentPage = 1;
@@ -590,3 +735,12 @@ function renderFilters() {
   });
 }
 
+// ---------- Yuqoriga qaytish tugmasi ----------
+function initScrollTop() {
+  const btn = $('#scroll-top');
+  if (!btn) return;
+  window.addEventListener('scroll', () => {
+    btn.classList.toggle('visible', window.scrollY > 600);
+  });
+  btn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+}

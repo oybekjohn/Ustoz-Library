@@ -1,51 +1,50 @@
-/**
- * Video Player & Progress Tracker
- */
-import { currentUser } from './auth.js';
-import { renderAnonymousWarning } from './presentation-viewer.js';
+/* ============================================
+   DL-library.uz — Video pleyer sahifasi
+   YouTube (nocookie) — zamonaviy, responsiv pleyer.
+   ============================================ */
 
-let videoId = null;
-let watchInterval = null;
-let durationSeconds = 0;
-let currentTime = 0;
+import { saveItemProgress } from './local-progress.js';
 
-export function initVideoPlayer(id, youtubeVideoId, durationSec, containerEl) {
-  videoId = id;
-  durationSeconds = durationSec || 0;
-  currentTime = 0;
+const TEXTS = {
+  uz: { about: "Video haqida", source: "Manba: YouTube" },
+  ru: { about: "О видео", source: "Источник: YouTube" },
+  en: { about: "About this video", source: "Source: YouTube" },
+};
 
-  // renderAnonymousWarning — hozircha o'chirilgan
+export function initVideoPlayer(video, containerEl, { lang = 'uz' } = {}) {
+  const tr = TEXTS[lang] || TEXTS.uz;
+  const title = video[`title_${lang}`] || video.title_uz || '';
+  const desc = video[`description_${lang}`] || video.description_uz || '';
+  const embedUrl = `https://www.youtube-nocookie.com/embed/${video.youtube_video_id}?rel=0&modestbranding=1&color=white`;
 
-  const embedUrl = `https://www.youtube-nocookie.com/embed/${youtubeVideoId}?enablejsapi=1`;
-
-  containerEl.innerHTML += `
-    <div class="video-player-container" id="video-player-box">
-      <div class="video-aspect-ratio">
-        <iframe id="yt-video-iframe" src="${embedUrl}" width="100%" height="480" frameborder="0" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
+  containerEl.innerHTML = `
+    <section class="video-page">
+      <div class="video-page__frame-wrap">
+        <iframe
+          class="video-page__frame"
+          src="${embedUrl}"
+          title=""
+          frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          allowfullscreen
+          loading="lazy"></iframe>
       </div>
-    </div>
+      <div class="video-page__info">
+        <h2 class="video-page__title"></h2>
+        ${desc ? `
+          <div class="video-page__about">
+            <h3>${tr.about}</h3>
+            <p class="video-page__desc"></p>
+          </div>` : ''}
+        <p class="video-page__source">${tr.source}</p>
+      </div>
+    </section>
   `;
 
-  // Progress tracking hozircha o'chirilgan — keyingi versiyada Google OAuth bilan qaytariladi
-}
+  containerEl.querySelector('.video-page__title').textContent = title;
+  containerEl.querySelector('.video-page__frame').title = title;
+  const descNode = containerEl.querySelector('.video-page__desc');
+  if (descNode) descNode.textContent = desc;
 
-function startWatchProgressTimer() {
-  clearInterval(watchInterval);
-  watchInterval = setInterval(async () => {
-    currentTime += 10;
-    const percent = durationSeconds > 0 ? (currentTime / durationSeconds) * 100 : 50;
-
-    try {
-      await fetch(`/api/progress/video/${videoId}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          progress_percent: Math.min(100, percent),
-          position_value: currentTime
-        })
-      });
-    } catch (err) {
-      console.error('Video progress error:', err);
-    }
-  }, 15000);
+  saveItemProgress('videos', video.id, { opened: true });
 }
