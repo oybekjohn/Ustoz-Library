@@ -4,9 +4,17 @@ import { createBook, validateBook } from '../../_lib/books.js';
 
 // GET /api/books — faol (arxivlanmagan) kitoblar (ommaviy)
 export async function onRequestGet({ env }) {
-  const { results } = await env.DB
-    .prepare('SELECT * FROM books WHERE archived = 0 ORDER BY created_at DESC, id DESC')
-    .all();
+  let results;
+  try {
+    ({ results } = await env.DB
+      .prepare('SELECT * FROM books WHERE archived = 0 ORDER BY created_at DESC, id DESC')
+      .all());
+  } catch {
+    // 0008 migratsiyasi hali ishga tushmagan bo'lsa (archived ustuni yo'q)
+    ({ results } = await env.DB
+      .prepare('SELECT * FROM books ORDER BY created_at DESC, id DESC')
+      .all());
+  }
   return ok({ books: (results || []).map(rowToBook) });
 }
 

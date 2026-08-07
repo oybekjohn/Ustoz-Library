@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - master
-      - codex/learning-platform
 
 jobs:
   deploy:
@@ -15,6 +14,17 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      # Additive migratsiya: books.archived + rate_limits.
+      # Qayta ishga tushirilsa "duplicate column" bilan yiqiladi — bu normal,
+      # continue-on-error keyingi bosqichlarni to'xtatmaydi.
+      - name: Apply D1 migration 0008 (additive)
+        uses: cloudflare/wrangler-action@v3
+        continue-on-error: true
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: d1 execute ustoz-library-db --remote --file=./migrations/0008_catalog_v4.sql
 
       - name: Deploy to Cloudflare Pages
         uses: cloudflare/wrangler-action@v3
