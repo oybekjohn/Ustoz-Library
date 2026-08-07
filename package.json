@@ -1,6 +1,6 @@
 {
   "name": "ustoz-library",
-  "version": "3.4.0",
+  "version": "4.0.0",
   "description": "DL-library.uz — Renessans Ta'lim Universiteti raqamli kutubxonasi (Cloudflare Pages + D1 + R2)",
   "type": "module",
   "scripts": {

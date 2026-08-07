@@ -1,22 +1,52 @@
-# DL-Library (O'quv Platformasi)
+# DL-Library — o'quv platformasi
 
-Ustoz Ravshan Ayupov va Oybek Xushvaqtov tomonidan RTU talabalari uchun yaratilgan o'quv platformasi. Dastlab elektron kutubxona sifatida boshlangan loyiha kengaytirilib, endilikda taqdimotlar, video darsliklar va onlayn test sinovlarini ham o'z ichiga oladi.
+Ustoz Ravshan Ayupov va Oybek Xushvaqtov tomonidan RTU talabalari uchun
+yaratilgan o'quv platformasi: [dl-library.uz](https://dl-library.uz).
+
+Barcha bo'limlar **ro'yxatdan o'tishsiz** ishlaydi. Google orqali kirish va
+shaxsiy profil (progress va natijalarni saqlash) keyingi katta relizda
+qo'shiladi.
 
 ## Imkoniyatlar
-- **Kitoblar**: PDF formatidagi kitoblarni o'qish (lazy-loaded PDF.js orqali, progress saqlanadi).
-- **Taqdimotlar**: PDF formatidagi taqdimotlar.
-- **Videolar**: YouTube embed orqali interaktiv video darslar.
-- **Testlar**: Bir nechta variantli interaktiv testlar (o'tish balli, vaqt cheklovi kabi parametrlar bilan).
-- **Google OAuth**: Talabalar o'z Google akkauntlari bilan kirib, progress va test natijalarini saqlab borishadi.
-- **Admin Panel**: Materiallar va testlarni boshqarish uchun veb-interfeys.
-- **Telegram Bot**: Materiallarni to'g'ridan-to'g'ri bot orqali serverga yuklash (owner va belgilangan adminlar uchun).
+
+- **Kitoblar** — PDF kitoblar katalogi: qidiruv, kategoriya filtrlari,
+  sahifalash, har bir kitob uchun QR kod va ichki o'quvchi (PDF.js).
+- **Taqdimotlar** — PDF slaydlar ichki viewerda (swipe, klaviatura,
+  to'liq ekran); PPT/PPTX fayllar Office viewer orqali ochiladi.
+- **Videolar** — YouTube video darslar zamonaviy pleyerda.
+- **Testlar** — har urinishda tasodifiy 20 ta savol, vaqt cheklovsiz
+  (sarflangan vaqt hisoblanadi), javob belgilanganda darhol to'g'ri/noto'g'ri
+  ko'rsatiladi, yakunda natijalar tahlili.
+- **Telegram bot** — kitob, taqdimot, video va testlarni bot orqali qo'shish
+  va boshqarish (owner va tayinlangan adminlar uchun).
+- **Admin panel** — `/admin` sahifasida materiallarni veb orqali boshqarish.
+
+O'qish progressi va test natijalari hozircha brauzer `localStorage`'ida
+saqlanadi va keyingi relizda profilga ko'chiriladi.
 
 ## Stack
-- Frontend: Vanilla JS, HTML, CSS
-- Backend: Cloudflare Pages Functions
-- Ma'lumotlar bazasi: Cloudflare D1 (SQLite)
-- Fayl ombori: Cloudflare R2 (S3)
+
+| Qatlam | Texnologiya |
+|---|---|
+| Frontend | Vanilla JS (ES modules), HTML, CSS |
+| Backend | Cloudflare Pages Functions |
+| Baza | Cloudflare D1 (SQLite) |
+| Fayllar | Cloudflare R2 |
+| Deploy | GitHub push → Cloudflare Pages (avtomatik) |
+
+## Ishga tushirish (lokal)
+
+```bash
+npm install
+cp .dev.vars.example .dev.vars   # qiymatlarni to'ldiring
+npm run db:init:local            # yangi bo'sh baza uchun
+npm run dev                      # http://localhost:8788
+```
+
+Mavjud lokal bazani v4 ga yangilash: `npm run db:v4:local`.
 
 ## Qo'llanmalar
-- [Cloudflare deploy qo'llanmasi](./DEPLOY.md)
-- [Telegram orqali material yuklash](./TELEGRAM_BOT.md)
+
+- [Deploy qo'llanmasi](./DEPLOY.md)
+- [Telegram bot qo'llanmasi](./TELEGRAM_BOT.md)
+- [Xavfsizlik](./docs/SECURITY.md)
