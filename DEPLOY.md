@@ -1,158 +1,104 @@
-# DL-library.uz — Cloudflare'ga o'rnatish qo'llanmasi
-
-Statik sayt endi **to'liq backend + admin panelli** ilovaga aylantirildi:
+# DL-library.uz — Cloudflare deploy qo'llanmasi
 
 | Qatlam | Texnologiya |
 |--------|-------------|
 | Frontend (sayt + admin) | Cloudflare **Pages** (`public/`) |
 | Backend API | Cloudflare **Pages Functions** (`functions/`) |
-| Kitoblar bazasi | Cloudflare **D1** (SQLite) |
-| Fayllar (PDF, muqova) | Cloudflare **R2** |
-| Admin login | Imzolangan cookie (oddiy parol) |
-| QR kod | Avtomatik (kitob havolasidan) |
+| Baza | Cloudflare **D1** (`ustoz-library-db`) |
+| Fayllar (PDF, muqova) | Cloudflare **R2** (`ustoz-library-files`) |
+
+Production: **https://dl-library.uz** — `master` branchga har push avtomatik
+deploy bo'ladi (GitHub integratsiyasi).
 
 ---
 
-## 0. Talablar
-
-- Node.js 18+ (sizda 24 ✅)
-- Cloudflare akkaunti (bepul reja yetarli)
+## 1. Birinchi marta sozlash (yangi muhit uchun)
 
 ```bash
 npm install
-npx wrangler login        # brauzerda Cloudflare'ga kirish
-```
-
-> Eslatma: bu buyruqni terminalda o'zingiz bajaring (brauzer ochiladi).
-> Claude Code ichida: `! npx wrangler login`
-
----
-
-## 1. D1 bazasini yaratish
-
-```bash
-npx wrangler d1 create ustoz-library-db
-```
-
-Buyruq bergan `database_id` ni **`wrangler.toml`** ichidagi
-`REPLACE_WITH_D1_DATABASE_ID` o'rniga yozing.
-
-So'ng jadvalni yarating:
-
-```bash
-# Lokal (sinov uchun):
-npm run db:init:local
-# Haqiqiy Cloudflare uchun:
-npm run db:init:remote
-```
-
-## 2. R2 bucket yaratish
-
-```bash
+npx wrangler login
+npx wrangler d1 create ustoz-library-db      # id ni wrangler.toml ga yozing
 npx wrangler r2 bucket create ustoz-library-files
 ```
 
-## 3. Maxfiy qiymatlar (secrets)
+Secrets: `.dev.vars.example` ni `.dev.vars` deb nusxalang (lokal) va Cloudflare
+dashboard > Pages > Settings > Environment variables ga qo'ying (production).
 
-`.dev.vars.example` ni nusxalab **`.dev.vars`** yarating (lokal uchun):
+`SESSION_SECRET` uchun: `node -e "console.log(crypto.randomUUID()+crypto.randomUUID())"`
 
-```
-ADMIN_USERNAME = "admin"
-ADMIN_PASSWORD = "KuchliParol123!"
-SESSION_SECRET = "uzun-tasodifiy-satr"
-```
+## 2. Baza migratsiyalari
 
-`SESSION_SECRET` uchun tasodifiy satr: `node -e "console.log(crypto.randomUUID()+crypto.randomUUID())"`
-
----
-
-## 4. Lokal sinov
+> ⚠️ **MUHIM**: `schema.sql` faqat YANGI (bo'sh) baza uchun. Productionda
+> ma'lumot bor — u yerda faqat `migrations/` fayllari ishlatiladi.
+> Barcha migratsiyalar qo'shuvchi (additive), ma'lumotni o'chirmaydi.
 
 ```bash
-npm run dev
+# Yangi bo'sh baza (lokal):
+npm run db:init:local
+
+# Mavjud bazani bosqichma-bosqich yangilash:
+npm run db:learning:local     # 0005 — o'quv platformasi jadvallari
+npm run db:v4:local           # 0008 — archived ustuni + rate_limits
+
+# Production (mavjud baza):
+npm run db:v4:remote
 ```
 
-Brauzerda: `http://localhost:8788` (sayt) va `http://localhost:8788/admin` (panel).
+## 3. Kitoblar katalogini production bilan sinxronlash
 
-Mavjud 7 kitobni lokal bazaga ko'chirish:
+`books.json` dagi katalogni productionga chiqarish (yo'qotishsiz — eski
+kitoblar o'chirilmaydi, `archived = 1` bo'ladi):
 
 ```bash
-npm run migrate:local
+npm run catalog:sync:remote
 ```
 
----
+Skript avval PDF/muqova fayllarni R2 ga yuklaydi, so'ng D1 da eski kitoblarni
+arxivlab, yangilarini qo'shadi. Qayta ishga tushirish xavfsiz (idempotent).
 
-## 5. Cloudflare'ga deploy
-
-### A) Tez yo'l — buyruq orqali
+## 4. Lokal ishlash
 
 ```bash
-npm run deploy           # public/ ni Pages'ga yuklaydi
+npm run dev        # http://localhost:8788 (sayt), /admin (panel)
+npm test           # unit testlar
 ```
 
-Birinchi marta loyiha nomi so'raladi (masalan `ustoz-library`).
+## 5. Production deploy
 
-### B) GitHub orqali (tavsiya — har push'da avtomatik deploy)
-
-1. Cloudflare dashboard → **Workers & Pages** → **Create** → **Pages** → **Connect to Git**
-2. `oybekjohn/Ustoz-Library` repozitoriysini tanlang
-3. Build sozlamalari:
-   - **Build command:** (bo'sh qoldiring)
-   - **Build output directory:** `public`
-4. **Settings → Functions → Bindings:**
-   - D1 binding: nomi `DB` → `ustoz-library-db`
-   - R2 binding: nomi `BUCKET` → `ustoz-library-files`
-5. **Settings → Environment variables (Production)** ga *Secret* sifatida:
-   - `ADMIN_USERNAME`, `ADMIN_PASSWORD`, `SESSION_SECRET`
-
-### Haqiqiy bazaga migratsiya (bir marta)
+`master` ga push qiling — Cloudflare Pages avtomatik build va deploy qiladi:
 
 ```bash
-npm run db:init:remote     # jadval (agar hali yaratilmagan bo'lsa)
-npm run migrate:remote     # 7 kitobni R2 + D1 ga yuklaydi
+git push origin master
 ```
 
----
+Deploy holati: Cloudflare dashboard → Workers & Pages → ustoz-library →
+Deployments.
 
-## 6. Ishlatish
+**Tartib muhim**: sxema o'zgargan relizlarda avval `npm run db:v4:remote`
+(migratsiya), keyin `git push` (kod) — eski kod yangi ustunlarga zarar
+qilmaydi, yangi kod esa ustunlar tayyor bo'lishini kutadi.
 
-- **Sayt:** `https://<loyiha>.pages.dev/`
-- **Admin:** `https://<loyiha>.pages.dev/admin`
-  - Login/parol = `ADMIN_USERNAME` / `ADMIN_PASSWORD`
-  - Kitob qo'shish: maydonlarni to'ldiring, PDF va muqovani tanlang, **Saqlash**.
-  - QR kod avtomatik hosil bo'ladi (kitob sahifasiga havola).
+## 6. Telegram webhook
 
----
+Bot tokeni o'zgarganda yoki birinchi sozlashda:
 
-## Loyiha tuzilishi
-
-```
-public/                 # Pages static output
-  index.html            # sayt
-  css/ js/ pictures/
-  admin/                # admin panel (index.html, admin.js, admin.css)
-functions/              # backend API (Pages Functions)
-  _lib/                 # auth.js, http.js (yordamchilar)
-  api/
-    auth/               # login, logout, me
-    books/              # ro'yxat, yaratish, tahrirlash, o'chirish
-    upload.js           # R2 ga fayl yuklash
-  files/[[path]].js     # R2 dan fayl uzatish
-schema.sql              # D1 jadvali
-wrangler.toml           # Cloudflare konfiguratsiyasi
-scripts/migrate.mjs     # eski kitoblarni ko'chirish
-books/ books.json       # migratsiya manbasi (deploy qilinmaydi)
+```bash
+npm run telegram:webhook
 ```
 
 ## API qisqacha
 
 | Method | Yo'l | Kirish | Tavsif |
 |--------|------|--------|--------|
-| GET | `/api/books` | ommaviy | Barcha kitoblar |
-| GET | `/api/books/:id` | ommaviy | Bitta kitob |
-| POST | `/api/books` | admin | Yangi kitob |
-| PUT | `/api/books/:id` | admin | Tahrirlash |
-| DELETE | `/api/books/:id` | admin | O'chirish |
-| POST | `/api/upload` | admin | R2 ga fayl (pdf/cover) |
-| GET | `/files/:key` | ommaviy | R2 fayli |
-| POST | `/api/auth/login` · `logout` · GET `me` | — | Sessiya |
+| GET | `/api/books` | ommaviy | Faol kitoblar |
+| POST/PUT/DELETE | `/api/books[...]` | admin | Kitob CRUD |
+| GET | `/api/presentations` | ommaviy | Nashr etilgan taqdimotlar |
+| POST/PUT/DELETE | `/api/presentations[...]` | admin | Taqdimot CRUD |
+| GET | `/api/videos` | ommaviy | Nashr etilgan videolar |
+| POST/PUT/DELETE | `/api/videos[...]` | admin | Video CRUD |
+| GET | `/api/tests` | ommaviy | Nashr etilgan testlar |
+| GET | `/api/tests/quiz/:id` | ommaviy | Tasodifiy 20 savol (o'quv rejimi) |
+| POST | `/api/tests` · `/api/tests/parse` | admin | Test yaratish / TXT tahlil |
+| POST | `/api/upload` | admin | R2 ga fayl yuklash |
+| GET | `/files/:key` | ommaviy | R2 fayllari (allowlist prefikslar) |
+| POST | `/api/telegram` | webhook secret | Telegram bot webhook |

@@ -1,6 +1,6 @@
 {
   "name": "ustoz-library",
-  "version": "3.4.0",
+  "version": "4.0.0",
   "description": "DL-library.uz — Renessans Ta'lim Universiteti raqamli kutubxonasi (Cloudflare Pages + D1 + R2)",
   "type": "module",
   "scripts": {
@@ -19,6 +19,10 @@
     "db:learning:remote": "wrangler d1 execute ustoz-library-db --remote --file=./migrations/0005_learning_platform.sql",
     "db:sync:remote": "wrangler d1 execute ustoz-library-db --remote --file=./migrations/0006_production_sync.sql",
     "db:alter:remote": "wrangler d1 execute ustoz-library-db --remote --file=./migrations/0007_alter_tables.sql",
+    "db:v4:local": "wrangler d1 execute ustoz-library-db --local --file=./migrations/0008_catalog_v4.sql",
+    "db:v4:remote": "wrangler d1 execute ustoz-library-db --remote --file=./migrations/0008_catalog_v4.sql",
+    "catalog:sync:local": "node scripts/sync-catalog-remote.mjs --local",
+    "catalog:sync:remote": "node scripts/sync-catalog-remote.mjs",
     "migrate:local": "node scripts/migrate.mjs --local",
     "migrate:remote": "node scripts/migrate.mjs --remote",
     "postinstall": "node scripts/patch-unpdf.mjs",

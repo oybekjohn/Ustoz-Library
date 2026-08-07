@@ -1,0 +1,32 @@
+name: Sync book catalog to production
+
+# Qo'lda ishga tushiriladi (GitHub > Actions > Sync book catalog > Run workflow)
+# yoki `gh workflow run sync-catalog.yml` buyrug'i bilan.
+#
+# Nima qiladi: books.json dagi kitoblarning PDF/muqovalarini R2 ga yuklaydi,
+# production D1 da eski kitoblarni arxivlaydi (o'chirmaydi!) va yangi
+# katalogni qo'shadi. Batafsil: scripts/sync-catalog-remote.mjs
+
+on:
+  workflow_dispatch:
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run catalog sync
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: node scripts/sync-catalog-remote.mjs

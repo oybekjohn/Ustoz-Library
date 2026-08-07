@@ -1,10 +1,13 @@
 -- ============================================
---  DL-library.uz - D1 schema
+--  DL-library.uz - D1 schema (yangi/bo'sh baza uchun)
+--
+--  DIQQAT: bu fayl faqat YANGI (bo'sh) bazani yaratish uchun.
+--  Mavjud bazani yangilash uchun migrations/ papkasidagi
+--  fayllardan foydalaning (npm run db:v4:local va h.k.).
+--  Barcha buyruqlar IF NOT EXISTS — mavjud ma'lumotlarni buzmaydi.
 -- ============================================
 
-DROP TABLE IF EXISTS books;
-
-CREATE TABLE books (
+CREATE TABLE IF NOT EXISTS books (
   id             INTEGER PRIMARY KEY AUTOINCREMENT,
   title_uz       TEXT NOT NULL,
   title_ru       TEXT,
@@ -19,28 +22,32 @@ CREATE TABLE books (
   description_uz TEXT,
   description_ru TEXT,
   description_en TEXT,
+  archived       INTEGER NOT NULL DEFAULT 0,
   created_at     TEXT NOT NULL DEFAULT (datetime('now')),
   updated_at     TEXT NOT NULL DEFAULT (datetime('now'))
 );
 
-CREATE INDEX idx_books_category ON books(category);
-CREATE INDEX idx_books_created ON books(created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_books_category ON books(category);
+CREATE INDEX IF NOT EXISTS idx_books_created ON books(created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_books_archived ON books(archived);
 
 CREATE TABLE IF NOT EXISTS telegram_sessions (
-  user_id           TEXT PRIMARY KEY,
-  chat_id           TEXT NOT NULL,
-  state             TEXT NOT NULL DEFAULT 'idle',
-  category          TEXT,
-  pdf_file_id       TEXT,
-  pdf_name          TEXT,
-  pdf_size          INTEGER,
-  pending_pdf_key   TEXT,
-  pending_cover_key TEXT,
-  pending_metadata  TEXT,
-  edit_field        TEXT,
-  active_book_id    INTEGER,
-  list_page         INTEGER,
-  updated_at        TEXT NOT NULL DEFAULT (datetime('now'))
+  user_id            TEXT PRIMARY KEY,
+  chat_id            TEXT NOT NULL,
+  state              TEXT NOT NULL DEFAULT 'idle',
+  category           TEXT,
+  pdf_file_id        TEXT,
+  pdf_name           TEXT,
+  pdf_size           INTEGER,
+  pending_pdf_key    TEXT,
+  pending_cover_key  TEXT,
+  pending_metadata   TEXT,
+  edit_field         TEXT,
+  active_book_id     INTEGER,
+  list_page          INTEGER,
+  material_type      TEXT,
+  pending_source_key TEXT,
+  updated_at         TEXT NOT NULL DEFAULT (datetime('now'))
 );
 
 CREATE TABLE IF NOT EXISTS telegram_updates (
@@ -59,7 +66,18 @@ CREATE TABLE IF NOT EXISTS telegram_admins (
   added_by   TEXT NOT NULL,
   added_at   TEXT NOT NULL DEFAULT (datetime('now')),
   username   TEXT,
-  first_name TEXT
+  first_name TEXT,
+  last_name  TEXT,
+  role       TEXT NOT NULL DEFAULT 'library',
+  updated_at TEXT
+);
+
+-- Rate limiting hisoblagichlari (login va boshqa sezgir endpointlar)
+CREATE TABLE IF NOT EXISTS rate_limits (
+  bucket       TEXT PRIMARY KEY,
+  window_start INTEGER NOT NULL,
+  count        INTEGER NOT NULL DEFAULT 0,
+  updated_at   TEXT NOT NULL DEFAULT (datetime('now'))
 );
 
 CREATE INDEX IF NOT EXISTS idx_telegram_admins_added
@@ -307,11 +325,6 @@ CREATE TABLE IF NOT EXISTS telegram_webapp_sessions (
 CREATE INDEX IF NOT EXISTS idx_telegram_webapp_user ON telegram_webapp_sessions(telegram_user_id);
 CREATE INDEX IF NOT EXISTS idx_telegram_webapp_expires ON telegram_webapp_sessions(expires_at);
 
--- 15. Telegram sessions table additions (Additive)
-ALTER TABLE telegram_sessions ADD COLUMN material_type TEXT;
-ALTER TABLE telegram_sessions ADD COLUMN pending_source_key TEXT;
-
--- 16. Telegram admins table additions (Additive)
-ALTER TABLE telegram_admins ADD COLUMN last_name TEXT;
-ALTER TABLE telegram_admins ADD COLUMN role TEXT NOT NULL DEFAULT 'library';
-ALTER TABLE telegram_admins ADD COLUMN updated_at TEXT;
+-- Eslatma: qo'shimcha ustunlar (material_type, last_name, role, archived,
+-- rate_limits jadvali) yuqoridagi CREATE bo'limlariga kiritilgan.
+-- Mavjud bazalar uchun migrations/0007 va migrations/0008 ishlatiladi.

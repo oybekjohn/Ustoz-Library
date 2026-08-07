@@ -1,5 +1,20 @@
 # DL-Library ta'lim platformasi: Bajarilgan ishlar jurnali (plan_done.md)
 
+## v4.0.0 — Public platforma (auth'siz reliz), 2026-08-08
+
+- [x] `app.js` dagi encoding buzilishi (mojibake) tuzatildi, fayl toza qayta yozildi (uz/ru/en i18n, hash routing).
+- [x] Kitoblar gridi asl dizaynga qaytarildi: muqova, kategoriya/til badge, QR kod kartada, pagination (12 tadan), `?book=` deep link.
+- [x] Google login tugmasi "Bu funksiya hali mavjud emas" toast ko'rsatadi (o'ng yuqoridan slide-in/out); OAuth backend keyingi relizgacha dormant.
+- [x] Barcha bo'limlar ro'yxatdan o'tishsiz ishlaydi; progress localStorage'da (`dl_progress_v1`).
+- [x] Taqdimotlar: ichki PDF.js slayd vieweri (swipe, klaviatura, fullscreen, progress); PPT/PPTX — Office embed viewer.
+- [x] Videolar: zamonaviy YouTube (nocookie) pleyer sahifasi.
+- [x] Testlar: tasodifiy 20 savol, vaqt cheklovsiz + sarflangan vaqt hisoblagichi, javobda darhol to'g'ri/noto'g'ri, animatsiyalar, natija ringi va tahlil; `/api/tests/quiz/:id` N+1 dan 3 so'rovga optimallashtirildi.
+- [x] Telegram bot: taqdimot/video/test qo'shish va boshqarish (publish/unpublish, o'chirish) oqimlari; `telegram-core.js` ajratildi.
+- [x] Xavfsizlik: API rate limiting, login brute-force himoyasi (D1), CSP/HSTS va boshqa headerlar, `/files/` allowlist, taqdimot/video PUT/DELETE'dagi ochiq auth teshigi yopildi, timing-safe login.
+- [x] Migratsiya 0008 (books.archived + rate_limits) va yo'qotishsiz katalog sinxronizatsiya skripti (`catalog:sync:remote`).
+- [x] Kod tozalash: schema.sql DROP olib tashlandi, eskirgan fayllar o'chirildi, README/DEPLOY/TELEGRAM_BOT/SECURITY hujjatlari yangilandi, uz-lotin matnlari tuzatildi.
+- [x] 41 ta unit test 100% o'tadi.
+
 ## Bosqich 0: Xavfsiz boshlash
 - [x] Baseline snapshot tekshirildi: git commit `070cd9f7a81c98ba28ca50ab4b9e70a31001c9c0` (`Remove Telegram group management`).
 - [x] Yangi ishchi branch yaratildi: `codex/learning-platform`.

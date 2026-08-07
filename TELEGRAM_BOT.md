@@ -1,133 +1,70 @@
-# Telegram orqali kutubxonani boshqarish
+# DL-Library Telegram bot qo'llanmasi
 
-Bot Cloudflare Pages Functions ichida ishlaydi. PDF va muqovalar R2 ga, kitob
-metadata ma'lumotlari va bot session holatlari D1 ga yoziladi.
+Bot orqali kutubxona materiallari (kitob, taqdimot, video, test) to'g'ridan-
+to'g'ri serverga yuklanadi va boshqariladi.
 
-## Asosiy menyu
+## Rollar
 
-- `Kitoblarni boshqarish`: faqat owner create, list, search, read, update va delete qiladi.
-- `Adminlar`: faqat owner admin qo'shadi, ro'yxatni ko'radi va o'chiradi.
-- `Bot haqida`: versiya, sayt, faol AI provider/model va fayl limitlarini ko'rsatadi.
+- **Owner** (`TELEGRAM_OWNER_ID`): barcha imkoniyatlar — material qo'shish,
+  ro'yxatlar, tahrirlash, o'chirish, publish/unpublish, adminlarni boshqarish.
+- **Admin** (owner tomonidan qo'shiladi): material qo'shish.
 
-`DL Library admini` faqat yangi kitob yuklaydi va o'zi yuklayotgan kitob previewini
-ko'radi. U mavjud kitoblar, qidiruv, tahrirlash va adminlar ro'yxatiga kira olmaydi.
-Bot guruh chatlaridagi xabarlarni qayta ishlamaydi va faqat shaxsiy chatda ishlaydi.
+Botga faqat ruxsat berilgan foydalanuvchilar kira oladi.
 
-## Yangi kitob qo'shish
+## Sozlash
 
-1. `Kitoblarni boshqarish` -> `Kitob yuklash` bosiladi.
-2. Kategoriya inline tugmalardan tanlanadi.
-3. PDF yuboriladi.
-4. Sahifalar soni `pdfjs-dist` orqali, AI ishlatmasdan aniqlanadi.
-5. PDFning 1-2-sahifasidan text layer o'qiladi.
-6. Text topilsa AI'ga faqat shu text yuboriladi.
-7. Text topilmasa `pdf-lib` faqat dastlabki ikki sahifalik PDF yaratadi va vision
-   tahlil uchun AI'ga shu kichik PDF yuboriladi.
-8. AI uch tildagi nom va tavsif, mualliflar hamda yilni JSON ko'rinishida qaytaradi.
-9. Bot metadata va tayyor 1:1, 1024x1024 muqova promptini yuboradi.
-10. Admin promptni istalgan image AI'da ishlatib, muqovani botga yuboradi.
-11. Bot muqova va metadata previewini ko'rsatadi.
-12. `Tasdiqlayman`, `Tahrirlayman`, `Muqova prompti` yoki `Bekor qilaman`
-    orqali jarayon yakunlanadi.
+1. BotFather'dan token oling → `TELEGRAM_BOT_TOKEN` secretiga qo'ying.
+2. `TELEGRAM_WEBHOOK_SECRET` uchun tasodifiy satr yarating.
+3. `TELEGRAM_OWNER_ID` — o'z Telegram user ID raqamingiz.
+4. Webhook o'rnatish: `npm run telegram:webhook`
 
-Metadata D1 `books` jadvaliga faqat admin tasdiqlagandan keyin yoziladi.
+## Material qo'shish
 
-## Kitob CRUD
+**Menyu**: `Material qo'shish` → tur tanlanadi:
 
-`Kitoblarni boshqarish` bo'limida:
+| Tur | Oqim |
+|---|---|
+| 📚 Kitob (PDF) | kategoriya → PDF → AI metadata + preview → muqova → tasdiqlash |
+| 📊 Prezentatsiya | kategoriya → PDF/PPT/PPTX fayl → sarlavha → tavsif → saytga chiqadi |
+| 🎥 Video dars | kategoriya → YouTube havola → sarlavha → tavsif → saytga chiqadi |
+| 📝 Test | kategoriya → .txt fayl (quyidagi format) → sarlavha → tavsif → saytga chiqadi |
 
-- kitoblar sahifalangan ro'yxatda ko'rsatiladi;
-- ID, nom yoki muallif bo'yicha qidiriladi;
-- barcha nomlar, muallif, yil, sahifalar soni, kategoriya va tavsiflar tahrirlanadi;
-- PDF va muqova alohida almashtiriladi;
-- delete alohida tasdiqdan keyin bajariladi va D1 yozuvi bilan birga R2 fayllari
-  ham o'chiriladi.
+Taqdimot/video/test darhol `published = 1` holatda saytga chiqadi.
+Fayl hajmi limiti: `TELEGRAM_MAX_PDF_MB` (standart 19 MB — Telegram bot API
+20 MB dan katta faylni bermaydi).
 
-## Fayl limitlari
-
-Telegram Bot API orqali yuklab olinadigan PDF uchun standart limit 19 MB.
-Muqova JPG, PNG yoki WEBP bo'lishi va 8 MB dan oshmasligi kerak.
-
-## D1 migratsiyalari
-
-Yangi production baza uchun:
-
-```bash
-npm run db:telegram:remote
-npm run db:telegram-preview:remote
-npm run db:telegram-crud:remote
-```
-
-Mavjud production bazada dastlabki ikki migratsiya bajarilgan bo'lsa, faqat:
-
-```bash
-npm run db:telegram-crud:remote
-```
-
-Migratsiyalar mavjud kitoblarni o'chirmaydi.
-
-Oldingi guruh boshqaruvi o'rnatilgan production bazani bir marta tozalash uchun:
-
-```bash
-npm run db:remove-group:remote
-```
-
-Bu buyruq guruh sozlamalari, kontaktlari, so'rovlari va eski guruh adminlarini
-o'chiradi. Kitoblar va DL Library adminlari saqlanadi.
-
-## Cloudflare secrets
-
-Cloudflare Dashboard -> Workers & Pages -> `ustoz-library` -> Settings ->
-Environment variables bo'limida:
+### Test .txt formati (UTF-8)
 
 ```text
-TELEGRAM_BOT_TOKEN=<BotFather tokeni>
-TELEGRAM_WEBHOOK_SECRET=<uzun tasodifiy satr>
-TELEGRAM_ALLOWED_USER_IDS=<vergul bilan ajratilgan Telegram ID lar>
-TELEGRAM_OWNER_ID=5252931517
-AI_METADATA_PROVIDER=anthropic
-ANTHROPIC_API_KEY=<secret>
-ANTHROPIC_METADATA_MODEL=claude-haiku-4-5
-PUBLIC_SITE_URL=https://dl-library.uz
+Savol matni?
+================
+Birinchi variant
+================
+#To'g'ri variant
+================
+Uchinchi variant
+
++++++
+
+Keyingi savol?
+...
 ```
 
-`ANTHROPIC_API_KEY` oddiy variable emas, Cloudflare encrypted secret sifatida
-saqlanishi kerak. Kalit kodga yoki Git repositoryga yozilmaydi.
+- `+++++` (kamida 5 ta plyus) — savollarni ajratadi.
+- `====` qatorlari — vizual ajratgich, e'tiborga olinmaydi.
+- `#` bilan boshlangan variant — to'g'ri javob (aynan 1 ta bo'lishi shart).
+- Har savolda kamida 2 ta variant bo'lishi kerak.
+- Xato bo'lsa bot qaysi savolda muammo borligini aytadi.
 
-## Boshqa AI providerlar
+## Materiallarni boshqarish (faqat owner)
 
-Provider adapterlari saqlangan. `AI_METADATA_PROVIDER` qiymatini va tegishli secret/model
-qiymatlarini almashtirish kifoya:
+**Menyu**: `Materiallarni boshqarish` → tur tanlanadi → ro'yxat:
 
-```text
-AI_METADATA_PROVIDER=openrouter
-OPENROUTER_API_KEY=<secret>
-OPENROUTER_METADATA_MODEL=<model>
-```
+- ✅ / 🚫 — saytda ko'rinadi / yashirilgan
+- Element ustiga bosib: **publish/unpublish**, **o'chirish** (tasdiqlash
+  bilan; fayllari R2 dan ham o'chadi), kitoblarda qo'shimcha: tahrirlash,
+  PDF/muqova almashtirish, qidiruv.
 
-```text
-AI_METADATA_PROVIDER=openai
-OPENAI_API_KEY=<secret>
-OPENAI_METADATA_MODEL=<model>
-```
+## Adminlarni boshqarish (faqat owner)
 
-```text
-AI_METADATA_PROVIDER=gemini
-GEMINI_API_KEY=<secret>
-GEMINI_METADATA_MODEL=<model>
-```
-
-Har bir provider text layer mavjud bo'lsa PDF faylini yubormaydi.
-
-## Lokal tekshirish
-
-```bash
-npm run db:telegram:local
-npm run db:telegram-preview:local
-npm run db:telegram-crud:local
-npm test
-npm run dev
-```
-
-Real Telegram webhook public HTTPS manzil talab qiladi. Production webhook:
-`POST /api/telegram`.
+`Adminlar` menyusi: qo'shish / o'chirish / ro'yxat (Telegram user ID bo'yicha).

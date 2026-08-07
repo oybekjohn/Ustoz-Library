@@ -1,52 +1,66 @@
+import { json, error } from '../../../_lib/http.js';
+
+// Har bir urinishda beriladigan savollar soni
+const QUESTIONS_PER_ATTEMPT = 20;
+
 /**
  * GET /api/tests/quiz/[id]
- * Testning barcha savollari va variantlarini qaytaradi (client-side quiz uchun).
- * To'g'ri javob ham beriladi — client tomonida tekshiriladi.
- * Keyingi versiyada bu endpoint olib tashlanib, server-side attempt tizimi ishlatiladi.
+ * O'quv rejimi: testdan tasodifiy 20 ta savolni variantlari bilan qaytaradi.
+ * To'g'ri javob ham beriladi — client javob belgilanganda darhol ko'rsatadi.
  */
 export async function onRequestGet(context) {
   const { env, params } = context;
-  const testId = params.id;
+  const testId = Number(params.id);
+  if (!Number.isInteger(testId) || testId < 1) {
+    return error('Test topilmadi', 404);
+  }
 
   try {
     const test = await env.DB.prepare(
-      `SELECT * FROM tests WHERE id = ? AND published = 1`
+      `SELECT id, title_uz, title_ru, title_en, category, language,
+              passing_percent, show_answers_after_finish
+       FROM tests WHERE id = ? AND published = 1`
     ).bind(testId).first();
 
-    if (!test) {
-      return new Response(JSON.stringify({ error: "Test topilmadi" }), { status: 404 });
-    }
+    if (!test) return error('Test topilmadi', 404);
 
+    // Tasodifiy 20 ta savol (savollar 20 tadan kam bo'lsa — hammasi)
     const { results: questions } = await env.DB.prepare(
-      `SELECT id, position, question_text FROM test_questions WHERE test_id = ? ORDER BY position ASC`
-    ).bind(testId).all();
+      `SELECT id, question_text FROM test_questions
+       WHERE test_id = ? ORDER BY RANDOM() LIMIT ?`
+    ).bind(testId, QUESTIONS_PER_ATTEMPT).all();
 
-    for (const q of questions) {
-      const { results: options } = await env.DB.prepare(
-        `SELECT id, position, option_text, is_correct FROM test_options WHERE question_id = ? ORDER BY position ASC`
-      ).bind(q.id).all();
-      q.options = options || [];
+    if (!questions || questions.length === 0) {
+      return error("Testda savollar yo'q", 404);
     }
 
-    return new Response(JSON.stringify({
-      test: {
-        id: test.id,
-        title_uz: test.title_uz,
-        title_ru: test.title_ru,
-        title_en: test.title_en,
-        category: test.category,
-        duration_minutes: test.duration_minutes,
-        passing_percent: test.passing_percent,
-        shuffle_questions: test.shuffle_questions,
-        shuffle_options: test.shuffle_options,
-        show_answers_after_finish: test.show_answers_after_finish,
-      },
-      questions,
-    }), {
-      status: 200,
-      headers: { 'Content-Type': 'application/json' }
+    // Barcha variantlar bitta so'rovda
+    const placeholders = questions.map(() => '?').join(', ');
+    const { results: options } = await env.DB.prepare(
+      `SELECT id, question_id, option_text, is_correct FROM test_options
+       WHERE question_id IN (${placeholders}) ORDER BY question_id, position`
+    ).bind(...questions.map((q) => q.id)).all();
+
+    const optionsByQuestion = new Map();
+    for (const opt of options || []) {
+      if (!optionsByQuestion.has(opt.question_id)) optionsByQuestion.set(opt.question_id, []);
+      optionsByQuestion.get(opt.question_id).push({
+        id: opt.id,
+        option_text: opt.option_text,
+        is_correct: opt.is_correct,
+      });
+    }
+
+    return json({
+      test,
+      questions: questions.map((q) => ({
+        id: q.id,
+        question_text: q.question_text,
+        options: optionsByQuestion.get(q.id) || [],
+      })),
     });
   } catch (err) {
-    return new Response(JSON.stringify({ error: err.message }), { status: 500 });
+    console.error('quiz endpoint error:', err);
+    return error('Server xatosi', 500);
   }
 }

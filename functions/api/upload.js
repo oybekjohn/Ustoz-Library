@@ -3,11 +3,16 @@ import { requireAuth } from '../_lib/auth.js';
 import { createStorageKey, putObject } from '../_lib/storage.js';
 import { inspectPdfFirstPages } from '../_lib/pdf.js';
 
+const PPTX_MIMES = [
+  'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+  'application/vnd.ms-powerpoint',
+];
+
 const LIMITS = {
-  pdf: { max: 50 * 1024 * 1024, mimes: ['application/pdf'], dir: 'books', ext: 'pdf' },
-  cover: { max: 8 * 1024 * 1024, mimes: ['image/png', 'image/jpeg', 'image/webp'], dir: 'covers', ext: null },
-  presentation: { max: 50 * 1024 * 1024, mimes: ['application/pdf'], dir: 'presentations', ext: 'pdf' },
-  'presentation-cover': { max: 8 * 1024 * 1024, mimes: ['image/png', 'image/jpeg', 'image/webp'], dir: 'presentation-covers', ext: null },
+  pdf: { max: 50 * 1024 * 1024, mimes: ['application/pdf'], dir: 'books' },
+  cover: { max: 8 * 1024 * 1024, mimes: ['image/png', 'image/jpeg', 'image/webp'], dir: 'covers' },
+  presentation: { max: 50 * 1024 * 1024, mimes: ['application/pdf', ...PPTX_MIMES], dir: 'presentations' },
+  'presentation-cover': { max: 8 * 1024 * 1024, mimes: ['image/png', 'image/jpeg', 'image/webp'], dir: 'presentation-covers' },
 };
 
 // POST /api/upload  (multipart: file, type=pdf|cover|presentation|presentation-cover) - faqat admin
@@ -37,7 +42,8 @@ export async function onRequestPost({ request, env }) {
 
   let pageCount = null;
   let uploadBody = file.stream();
-  if (type === 'presentation') {
+  // Sahifalar soni faqat PDF uchun aniqlanadi (PPTX Office viewerda ochiladi)
+  if (type === 'presentation' && file.type === 'application/pdf') {
     const bytes = await file.arrayBuffer();
     const inspected = await inspectPdfFirstPages(bytes, 1);
     pageCount = inspected.pageCount;
