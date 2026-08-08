@@ -37,6 +37,12 @@
     <header class="topbar">
       <div class="topbar__brand">📚 DL-library.uz — Admin</div>
       <div class="topbar__actions">
+        <button id="ai-toggle" class="ai-toggle" type="button" aria-pressed="true"
+                title="Yoqilganda ma'lumotlarni Claude AI tayyorlaydi">
+          <span class="ai-toggle__spark">✨</span>
+          <span class="ai-toggle__label">AI bilan qo'shish</span>
+          <span class="ai-toggle__switch"><span class="ai-toggle__knob"></span></span>
+        </button>
         <a href="/" target="_blank" class="btn btn--ghost">🌐 Saytni ko'rish</a>
         <span id="who" class="who"></span>
         <button id="logout-btn" class="btn btn--ghost">Chiqish</button>
@@ -58,6 +64,22 @@
         <div class="panel__head">
           <h2 id="form-title">➕ Yangi kitob qo'shish</h2>
           <button id="reset-form" class="btn btn--ghost hidden">✖ Bekor qilish</button>
+        </div>
+
+        <!-- AI yordamchisi: PDF tanlanadi, qolgan maydonlarni AI to'ldiradi -->
+        <div class="ai-assist" data-ai-for="book">
+          <div class="ai-assist__head">
+            <span class="ai-assist__icon">✨</span>
+            <div>
+              <strong>AI yordamchisi</strong>
+              <p>PDF faylni tanlang va tugmani bosing — nom, muallif, yil va tavsiflar avtomatik to'ldiriladi.</p>
+            </div>
+          </div>
+          <div class="ai-assist__row">
+            <input type="file" id="ai-book-file" accept="application/pdf">
+            <button type="button" class="btn btn--ai" id="ai-book-run">✨ Ma'lumotlarni tayyorlash</button>
+          </div>
+          <div class="ai-status" id="ai-book-status"></div>
         </div>
 
         <form id="book-form" class="book-form">
@@ -137,7 +159,23 @@
       <!-- TAB 2: PREZENTATSIYALAR -->
       <div id="tab-presentations" class="admin-tab-pane" style="display:none;">
         <section class="panel">
-          <div class="panel__head"><h2>➕ Yangi Prezentatsiya (PDF)</h2></div>
+          <div class="panel__head"><h2>➕ Yangi taqdimot (PDF/PPTX)</h2></div>
+
+          <div class="ai-assist" data-ai-for="presentation">
+            <div class="ai-assist__head">
+              <span class="ai-assist__icon">✨</span>
+              <div>
+                <strong>AI yordamchisi</strong>
+                <p>PDF ni tanlang — sarlavha, tavsif va kategoriya birinchi sahifa asosida to'ldiriladi.</p>
+              </div>
+            </div>
+            <div class="ai-assist__row">
+              <input type="file" id="ai-pres-file" accept="application/pdf">
+              <button type="button" class="btn btn--ai" id="ai-pres-run">✨ Ma'lumotlarni tayyorlash</button>
+            </div>
+            <div class="ai-status" id="ai-pres-status"></div>
+          </div>
+
           <form id="pres-form" class="book-form">
             <div class="grid-3">
               <label>Nom (UZ) *<input type="text" id="pres-title-uz" required></label>
@@ -152,7 +190,16 @@
             <div class="grid-3">
               <label>Kategoriya *
                 <select id="pres-category" required>
-                  <option value="it">IT</option><option value="ai">SI</option><option value="iqtisodiyot">Iqtisodiyot</option><option value="biznes">Biznes</option><option value="boshqa">Boshqa</option>
+                  <option value="it">💻 IT</option>
+                  <option value="ai">🤖 Sun'iy intellekt</option>
+                  <option value="iqtisodiyot">📈 Iqtisodiyot</option>
+                  <option value="biznes">💼 Biznes va Tadbirkorlik</option>
+                  <option value="salomatlik">💊 Salomatlik va Kosmetika</option>
+                  <option value="bogdorchilik">🌱 Bog'dorchilik</option>
+                  <option value="fandastur">📋 Fan dasturlari</option>
+                  <option value="ai_darslar">🎓 SI darslar</option>
+                  <option value="ai_agentlar">🧠 SI agentlar</option>
+                  <option value="boshqa">📚 Boshqa</option>
                 </select>
               </label>
               <label>PDF Fayl *<input type="file" id="pres-pdf" accept="application/pdf" required></label>
@@ -176,7 +223,23 @@
       <!-- TAB 3: VIDEO DARSLAR -->
       <div id="tab-videos" class="admin-tab-pane" style="display:none;">
         <section class="panel">
-          <div class="panel__head"><h2>➕ Yangi Video Dars (YouTube)</h2></div>
+          <div class="panel__head"><h2>➕ Yangi video dars (YouTube)</h2></div>
+
+          <div class="ai-assist" data-ai-for="video">
+            <div class="ai-assist__head">
+              <span class="ai-assist__icon">✨</span>
+              <div>
+                <strong>AI yordamchisi</strong>
+                <p>YouTube havolasini qo'ying — sarlavha, tavsif va kategoriya avtomatik to'ldiriladi.</p>
+              </div>
+            </div>
+            <div class="ai-assist__row">
+              <input type="text" id="ai-vid-url" placeholder="https://youtu.be/...">
+              <button type="button" class="btn btn--ai" id="ai-vid-run">✨ Ma'lumotlarni tayyorlash</button>
+            </div>
+            <div class="ai-status" id="ai-vid-status"></div>
+          </div>
+
           <form id="video-form" class="book-form">
             <div class="grid-3">
               <label>Nom (UZ) *<input type="text" id="vid-title-uz" required></label>
@@ -192,7 +255,16 @@
               <label>YouTube URL *<input type="text" id="vid-url" placeholder="https://www.youtube.com/watch?v=..." required></label>
               <label>Kategoriya *
                 <select id="vid-category" required>
-                  <option value="it">IT</option><option value="ai">SI</option><option value="iqtisodiyot">Iqtisodiyot</option><option value="boshqa">Boshqa</option>
+                  <option value="it">💻 IT</option>
+                  <option value="ai">🤖 Sun'iy intellekt</option>
+                  <option value="iqtisodiyot">📈 Iqtisodiyot</option>
+                  <option value="biznes">💼 Biznes va Tadbirkorlik</option>
+                  <option value="salomatlik">💊 Salomatlik va Kosmetika</option>
+                  <option value="bogdorchilik">🌱 Bog'dorchilik</option>
+                  <option value="fandastur">📋 Fan dasturlari</option>
+                  <option value="ai_darslar">🎓 SI darslar</option>
+                  <option value="ai_agentlar">🧠 SI agentlar</option>
+                  <option value="boshqa">📚 Boshqa</option>
                 </select>
               </label>
             </div>
@@ -215,13 +287,38 @@
       <!-- TAB 4: TESTLAR -->
       <div id="tab-tests" class="admin-tab-pane" style="display:none;">
         <section class="panel">
-          <div class="panel__head"><h2>➕ Yangi Test Yaratish (.txt Import)</h2></div>
+          <div class="panel__head"><h2>➕ Yangi test (.txt import)</h2></div>
+
+          <div class="ai-assist" data-ai-for="test">
+            <div class="ai-assist__head">
+              <span class="ai-assist__icon">✨</span>
+              <div>
+                <strong>AI yordamchisi</strong>
+                <p>Mavzu nomini o'zbekcha yozing — uch tilli nom, tavsif va kategoriya tayyorlanadi.</p>
+              </div>
+            </div>
+            <div class="ai-assist__row">
+              <input type="text" id="ai-test-topic" placeholder="Masalan: Axborot xavfsizligi asoslari">
+              <button type="button" class="btn btn--ai" id="ai-test-run">✨ Ma'lumotlarni tayyorlash</button>
+            </div>
+            <div class="ai-status" id="ai-test-status"></div>
+          </div>
+
           <form id="test-form" class="book-form">
             <div class="grid-3">
               <label>Test Nomi (UZ) *<input type="text" id="test-title-uz" required></label>
               <label>Kategoriya *
                 <select id="test-category" required>
-                  <option value="it">IT</option><option value="ai">SI</option><option value="iqtisodiyot">Iqtisodiyot</option><option value="boshqa">Boshqa</option>
+                  <option value="it">💻 IT</option>
+                  <option value="ai">🤖 Sun'iy intellekt</option>
+                  <option value="iqtisodiyot">📈 Iqtisodiyot</option>
+                  <option value="biznes">💼 Biznes va Tadbirkorlik</option>
+                  <option value="salomatlik">💊 Salomatlik va Kosmetika</option>
+                  <option value="bogdorchilik">🌱 Bog'dorchilik</option>
+                  <option value="fandastur">📋 Fan dasturlari</option>
+                  <option value="ai_darslar">🎓 SI darslar</option>
+                  <option value="ai_agentlar">🧠 SI agentlar</option>
+                  <option value="boshqa">📚 Boshqa</option>
                 </select>
               </label>
               <label>Davomiyligi (Daqiqa)<input type="number" id="test-duration" value="15" min="1"></label>
@@ -262,6 +359,11 @@
   </div>
 
   <script src="admin.js"></script>
+  <script type="module">
+    import { initAiAssist } from './ai-assist.js';
+    // Modul defer bilan yuklanadi, shuning uchun DOM tayyor bo'ladi
+    initAiAssist();
+  </script>
 </body>
 
 </html>
