@@ -1,8 +1,13 @@
-/* ============================================
-   DL-library.uz — QR kod (avtomatik generatsiya)
-   qrcode-generator (CDN) asosida. Kitob uchun QR
-   ommaviy chuqur havolani (?book=<id>) kodlaydi.
-   ============================================ */
+/* ============================================================
+   DL-library.uz — QR kod generatsiyasi
+
+   Har bir kitob uchun QR kod avtomatik yasaladi. QR ichida
+   kitobning to'g'ridan-to'g'ri havolasi (?book=<id>) turadi:
+   telefon bilan skanerlansa, o'sha kitob darhol ochiladi.
+
+   Kutubxona: qrcode-generator — /js/vendor/ papkasida (o'z
+   serverimizda, tashqi CDN'ga bog'liq emas).
+   ============================================================ */
 
 function bookDeepLink(id) {
   return `${location.origin}${location.pathname}?book=${id}`;

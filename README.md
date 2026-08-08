@@ -45,8 +45,20 @@ npm run dev                      # http://localhost:8788
 
 Mavjud lokal bazani v4 ga yangilash: `npm run db:v4:local`.
 
+## Maxsus imkoniyatlar (ko'zi ojizlar uchun)
+
+Header'dagi ♿ tugmasi orqali: shrift o'lchamini 200% gacha kattalashtirish,
+yuqori kontrast (qora fon, sariq matn), kulrang rejim, harflar oralig'ini
+kengaytirish, havolalarni ajratish, rasmlarni yashirish. Sozlamalar
+brauzerda saqlanadi.
+
+Sayt klaviatura bilan to'liq boshqariladi, skrinriderlar uchun ARIA
+belgilari qo'yilgan va `prefers-reduced-motion` sozlamasi hurmat qilinadi.
+
 ## Qo'llanmalar
 
+- [Kod tuzilishi — nimani qayerdan topish](./docs/KOD-TUZILISHI.md)
 - [Deploy qo'llanmasi](./DEPLOY.md)
 - [Telegram bot qo'llanmasi](./TELEGRAM_BOT.md)
 - [Xavfsizlik](./docs/SECURITY.md)
+- [Holat va qo'lda bajariladigan ishlar](./ERTALAB.md)

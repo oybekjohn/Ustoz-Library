@@ -1,3 +1,11 @@
+/* ============================================================
+   Kitoblar bilan ishlash: tekshirish (validatsiya) va D1
+   bazasidan o'qish/yozish amallari.
+
+   Bu yerdagi funksiyalar ham web API (functions/api/books/),
+   ham Telegram bot tomonidan ishlatiladi.
+   ============================================================ */
+
 import { CATEGORIES, LANGUAGES, rowToBook } from './http.js';
 
 export function validateBook(book) {
