@@ -134,7 +134,8 @@ test('Anthropic provider text layer bor bo\'lsa PDF document yubormaydi', async 
   });
 
   assert.equal(book.title.uz, 'Algoritmlar');
-  assert.equal(requestBody.model, 'claude-haiku-4-5');
+  // Standart model aniq versiya bilan belgilanadi (alias emas)
+  assert.equal(requestBody.model, 'claude-haiku-4-5-20251001');
   assert.equal(requestBody.messages[0].content.some((item) => item.type === 'document'), false);
 });
 

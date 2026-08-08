@@ -20,6 +20,14 @@ export function resolveOpenRouterModel(env) {
   return LEGACY_MODELS.has(configured) ? DEFAULT_OPENROUTER_MODEL : configured;
 }
 
+// Anthropic (to'g'ridan-to'g'ri Claude API) uchun standart model
+export const DEFAULT_ANTHROPIC_MODEL = 'claude-haiku-4-5-20251001';
+
+export function resolveAnthropicModel(env) {
+  const configured = String(env.ANTHROPIC_METADATA_MODEL || '').trim();
+  return configured || DEFAULT_ANTHROPIC_MODEL;
+}
+
 function timeoutSignal(ms) {
   const controller = new AbortController();
   setTimeout(() => controller.abort(), ms);
@@ -69,7 +77,7 @@ async function viaAnthropic({ env, system, user, maxTokens }) {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      model: env.ANTHROPIC_METADATA_MODEL || 'claude-haiku-4-5-20251001',
+      model: resolveAnthropicModel(env),
       system,
       messages: [{ role: 'user', content: user }],
       max_tokens: maxTokens,
@@ -154,15 +162,57 @@ const PROVIDERS = {
   mock: viaMock,
 };
 
+/** Provayder uchun kalit mavjudmi? */
+function hasKey(env, name) {
+  const keys = {
+    anthropic: env.ANTHROPIC_API_KEY,
+    openrouter: env.OPENROUTER_API_KEY,
+    openai: env.OPENAI_API_KEY,
+    gemini: env.GEMINI_API_KEY,
+    mock: true,
+  };
+  return Boolean(keys[name]);
+}
+
+/**
+ * Asosiy provayder ishlamay qolsa (kalit eskirgan, kvota tugagan, API uzilgan)
+ * material qo'shish oqimi to'xtab qolmasligi kerak. Shu sababli kaliti mavjud
+ * boshqa provayderlar zaxira sifatida ketma-ket sinab ko'riladi.
+ */
+function providerChain(env) {
+  const primary = String(env.AI_METADATA_PROVIDER || 'mock').trim().toLowerCase();
+  if (primary === 'mock') return ['mock'];
+
+  const chain = [primary];
+  for (const candidate of ['anthropic', 'openrouter', 'openai', 'gemini']) {
+    if (candidate !== primary && hasKey(env, candidate)) chain.push(candidate);
+  }
+  return chain;
+}
+
 /**
  * Provayderdan JSON obyekt so'raydi.
  * @returns {Promise<object|null>} mock provayderda null qaytadi.
  */
 export async function requestJson({ env, system, user, maxTokens = 1200 }) {
-  const name = String(env.AI_METADATA_PROVIDER || 'mock').trim().toLowerCase();
-  const provider = PROVIDERS[name];
-  if (!provider) throw new Error(`AI_METADATA_PROVIDER noto'g'ri: ${name}`);
-  return provider({ env, system, user, maxTokens });
+  const chain = providerChain(env);
+  let lastError = null;
+
+  for (const name of chain) {
+    const provider = PROVIDERS[name];
+    if (!provider) {
+      lastError = new Error(`AI_METADATA_PROVIDER noto'g'ri: ${name}`);
+      continue;
+    }
+    try {
+      return await provider({ env, system, user, maxTokens });
+    } catch (error) {
+      lastError = error;
+      console.error(`AI provayder "${name}" ishlamadi:`, error?.message || error);
+    }
+  }
+
+  throw lastError || new Error('AI provayder topilmadi');
 }
 
 export function isAiConfigured(env) {
