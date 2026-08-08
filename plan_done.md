@@ -1,5 +1,17 @@
 # DL-Library ta'lim platformasi: Bajarilgan ishlar jurnali (plan_done.md)
 
+## v5.0.0 — Claude AI avtomatizatsiyasi va xavfsizlik auditi, 2026-08-08
+
+- [x] Kategoriya filtrlari (10 ta, emoji bilan) va animatsion statistika qatori (5 karta) tiklandi — `app.js` qayta yozilganda soddalashtirib yuborilgan edi.
+- [x] Hero matni taqdimot, video va testlarni ham eslatadigan qilib yangilandi (uz/ru/en).
+- [x] Claude Haiku ulandi (OpenRouter orqali `anthropic/claude-haiku-4.5`); yangi `ai/text-json.js` va `ai/content.js` modullari.
+- [x] Telegram bot qayta ishlandi: asosiy menyuda bo'limlar, yopishqoq bo'lim (ketma-ket yuborish), taqdimot va video to'liq avtomatik, test faqat mavzu nomini so'raydi.
+- [x] Taqdimot muqovasi 1-sahifadan olinadi (kichik PDF), kartochkada PDF.js bilan chiziladi (lazy yuklash + skelet animatsiya).
+- [x] Admin panelda AI yordamchisi: animatsion toggle, yuklanish animatsiyasi, formalarni avtomatik to'ldirish; yangi `/api/ai/analyze` endpointi (alohida rate limit bilan).
+- [x] Xavfsizlik auditi: admin paneldagi saqlangan XSS yopildi, autentifikatsiyasiz bazaga yozadigan o'lik endpointlar o'chirildi, PDF.js va QR kutubxonalari o'z domenga ko'chirildi (supply chain), xatolik xabarlari tozalandi, so'rov tanasi cheklandi, npm zaifliklari 6 dan 0 ga tushdi.
+- [x] Asset versiyalash (`npm run stamp`) — Cloudflare Pages keshi tufayli eski va yangi kod aralashib qolishi bartaraf etildi.
+- [x] 47 ta unit test 100% o'tadi (prompt injection himoyasi testlari bilan).
+
 ## v4.0.0 — Public platforma (auth'siz reliz), 2026-08-08
 
 - [x] `app.js` dagi encoding buzilishi (mojibake) tuzatildi, fayl toza qayta yozildi (uz/ru/en i18n, hash routing).
