@@ -4,13 +4,14 @@
    Barcha bo'limlar ro'yxatdan o'tishsiz ishlaydi.
    ============================================ */
 
-import { initThemeToggle } from './theme.js?v=5.0.0';
-import { showToast } from './toast.js?v=5.0.0';
-import { initPresentationViewer } from './presentation-viewer.js?v=5.0.0';
-import { initVideoPlayer } from './video-player.js?v=5.0.0';
-import { initTestRunner } from './test-runner.js?v=5.0.0';
-import { initTelegramMiniApp } from './telegram-mini-app.js?v=5.0.0';
-import { isPdfUrl, lazyRenderPdfThumb } from './pdf-thumb.js?v=5.0.0';
+import { initThemeToggle } from './theme.js?v=6.0.0';
+import { showToast } from './toast.js?v=6.0.0';
+import { initPresentationViewer } from './presentation-viewer.js?v=6.0.0';
+import { initVideoPlayer } from './video-player.js?v=6.0.0';
+import { initTestRunner } from './test-runner.js?v=6.0.0';
+import { initTelegramMiniApp } from './telegram-mini-app.js?v=6.0.0';
+import { isPdfUrl, lazyRenderPdfThumb } from './pdf-thumb.js?v=6.0.0';
+import { initAccessibility, updateAccessibilityLanguage } from './accessibility.js?v=6.0.0';
 
 // ---------- Tarjimalar (i18n) ----------
 const translations = {
@@ -183,6 +184,7 @@ export function localized(row, field) {
 document.addEventListener('DOMContentLoaded', () => {
   initThemeToggle();
   initTelegramMiniApp();
+  initAccessibility(state.currentLang);
   initLanguage();
   initGoogleLoginPlaceholder();
   initNavigation();
@@ -228,7 +230,9 @@ function initLanguage() {
       btn.classList.add('active');
       state.currentLang = btn.dataset.lang || 'uz';
       localStorage.setItem('dl_lang', state.currentLang);
+      document.documentElement.lang = state.currentLang;
       updateStaticTexts();
+      updateAccessibilityLanguage(state.currentLang);
       renderFilters();
       renderStats();
       applyBookFilters();

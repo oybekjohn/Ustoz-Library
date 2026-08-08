@@ -5,266 +5,337 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- SEO -->
-  <title>DL-library.uz — Raqamli Kutubxona | Renessans Ta'lim Universiteti</title>
+  <!-- ===== SEO ma'lumotlari ===== -->
+  <title>DL-library.uz — Raqamli kutubxona | Renessans Ta'lim Universiteti</title>
   <meta name="description"
-    content="DL-library.uz — Renessans Ta'lim Universiteti Axborot texnologiyalari kafedrasi elektron kutubxonasi. Fan dasturlari, darsliklar, monografiyalar va o'quv qo'llanmalar.">
+    content="DL-library.uz — Renessans Ta'lim Universiteti Axborot texnologiyalari kafedrasi elektron kutubxonasi. Kitoblar, taqdimotlar, video darslar va bilim testlari.">
   <meta name="keywords"
-    content="DL-library, Renessans Ta'lim Universiteti, RTU, elektron kutubxona, darslik, monografiya, axborot texnologiyalari, fan dasturi, o'quv qo'llanma, digital library">
+    content="DL-library, Renessans Ta'lim Universiteti, RTU, elektron kutubxona, darslik, monografiya, taqdimot, video dars, test, axborot texnologiyalari">
   <meta name="author" content="Renessans Ta'lim Universiteti — AT kafedrasi">
 
-  <!-- Open Graph -->
+  <!-- ===== Ijtimoiy tarmoqlar uchun (Open Graph) ===== -->
   <meta property="og:type" content="website">
-  <meta property="og:title" content="DL-library.uz — Raqamli Kutubxona">
+  <meta property="og:title" content="DL-library.uz — Raqamli kutubxona">
   <meta property="og:description"
-    content="Renessans Ta'lim Universiteti Axborot texnologiyalari kafedrasi elektron kutubxonasi">
+    content="Renessans Ta'lim Universiteti elektron kutubxonasi: kitoblar, taqdimotlar, video darslar va testlar">
   <meta property="og:url" content="https://dl-library.uz/">
-  <link rel="canonical" href="https://dl-library.uz/">
   <meta property="og:locale" content="uz_UZ">
+  <link rel="canonical" href="https://dl-library.uz/">
 
-  <!-- Favicon -->
+  <!-- ===== Favicon ===== -->
   <link rel="icon"
     href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='0.9em' font-size='90'>📚</text></svg>">
 
-  <!-- Styles -->
-  <link rel="stylesheet" href="css/style.css?v=5.0.0">
+  <!-- ===== Shriftlar =====
+       preconnect DNS/TLS ulanishini oldindan ochadi, display=swap esa
+       shrift yuklanguncha matnni ko'rinmas qilib qo'ymaydi (tezroq ko'rinish). -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Outfit:wght@500;600;700;800&display=swap"
+    media="print" onload="this.media='all'">
+  <noscript>
+    <link rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Outfit:wght@500;600;700;800&display=swap">
+  </noscript>
 
+  <!-- ===== Uslublar ===== -->
+  <link rel="stylesheet" href="css/style.css?v=6.0.0">
+  <link rel="stylesheet" href="css/accessibility.css?v=6.0.0">
 
-  <!-- Page-flip kutubxonasi olib tashlandi: endi bitta katta sahifa + zoom ko'rinishi -->
-
-
-  <!-- QR code generator (avtomatik QR uchun) -->
-  <script src="/js/vendor/qrcode.min.js"></script>
+  <!-- QR kod generatori (kitob kartochkalari uchun) -->
+  <script src="/js/vendor/qrcode.min.js" defer></script>
 </head>
 
 <body>
 
-  <!-- Neural Network Background -->
-  <canvas id="neural-bg" class="neural-bg" aria-hidden="true"></canvas>
+  <!-- ============================================================
+       KLAVIATURA UCHUN: asosiy kontentga tez o'tish havolasi.
+       Tab bosilganda birinchi bo'lib shu ko'rinadi.
+       ============================================================ -->
+  <a href="#main-content" class="skip-link">Asosiy kontentga o'tish</a>
 
-  <!-- Animated Background Orbs -->
+  <!-- Bezak fon: neyron tarmoq animatsiyasi va rangli doiralar.
+       Skrinriderlar uchun ahamiyatsiz (aria-hidden). -->
+  <canvas id="neural-bg" class="neural-bg" aria-hidden="true"></canvas>
   <div class="bg-decoration" aria-hidden="true">
     <div class="bg-orb bg-orb--1"></div>
     <div class="bg-orb bg-orb--2"></div>
     <div class="bg-orb bg-orb--3"></div>
   </div>
 
-  <!-- ========== NAVBAR ========== -->
-  <nav class="navbar" id="navbar">
-    <div class="container">
-      <a href="/" class="navbar__logo" id="nav-logo-btn">
-        <img src="pictures/RTU_logo.svg" alt="RTU" class="navbar__logo-img" />
-        <div class="navbar__logo-text"><span>DL-library.uz </span></div>
-      </a>
+  <!-- ============================================================
+       HEADER — sayt sarlavhasi va asosiy navigatsiya
+       ============================================================ -->
+  <header class="site-header" role="banner">
+    <nav class="navbar" id="navbar" aria-label="Asosiy menyu">
+      <div class="container">
 
-      <!-- Main Navigation Tabs -->
-      <div class="navbar__nav-links" id="navbar-nav-links">
-        <button class="nav-tab-btn active" data-view="books">📚 Kitoblar</button>
-        <button class="nav-tab-btn" data-view="presentations">📊 Taqdimotlar</button>
-        <button class="nav-tab-btn" data-view="videos">🎥 Videolar</button>
-        <button class="nav-tab-btn" data-view="tests">📝 Testlar</button>
-      </div>
+        <!-- Logo (bosilganda kitoblar bo'limiga qaytaradi) -->
+        <a href="/" class="navbar__logo" id="nav-logo-btn">
+          <img src="pictures/RTU_logo.svg" alt="Renessans Ta'lim Universiteti logotipi"
+            class="navbar__logo-img" width="40" height="40">
+          <div class="navbar__logo-text"><span>DL-library.uz</span></div>
+        </a>
 
-      <div class="navbar__actions">
-        <div class="lang-switcher">
-          <button class="lang-btn active" data-lang="uz">UZ</button>
-          <button class="lang-btn" data-lang="ru">RU</button>
-          <button class="lang-btn" data-lang="en">EN</button>
+        <!-- Bo'limlar (desktop) -->
+        <div class="navbar__nav-links" id="navbar-nav-links">
+          <button class="nav-tab-btn active" data-view="books" aria-current="page">📚 Kitoblar</button>
+          <button class="nav-tab-btn" data-view="presentations">📊 Taqdimotlar</button>
+          <button class="nav-tab-btn" data-view="videos">🎥 Videolar</button>
+          <button class="nav-tab-btn" data-view="tests">📝 Testlar</button>
         </div>
-        <button class="theme-toggle" id="theme-toggle-btn" aria-label="Toggle theme">🌙</button>
-        <div id="user-auth-slot" class="user-auth-slot">
-          <button id="btn-google-login" class="btn btn-sm btn-outline-google">Google orqali kirish</button>
+
+        <!-- O'ng tarafdagi boshqaruvlar: til, maxsus imkoniyatlar, tema, kirish -->
+        <div class="navbar__actions">
+
+          <div class="lang-switcher" role="group" aria-label="Sayt tilini tanlash">
+            <button class="lang-btn active" data-lang="uz" lang="uz">UZ</button>
+            <button class="lang-btn" data-lang="ru" lang="ru">RU</button>
+            <button class="lang-btn" data-lang="en" lang="en">EN</button>
+          </div>
+
+          <!-- Ko'zi ojizlar uchun maxsus imkoniyatlar paneli -->
+          <button class="a11y-toggle" id="a11y-toggle" type="button"
+            aria-label="Maxsus imkoniyatlar" aria-expanded="false" aria-controls="a11y-panel">
+            <span aria-hidden="true">♿</span>
+          </button>
+
+          <button class="theme-toggle" id="theme-toggle-btn" type="button"
+            aria-label="Yorug' va qorong'i rejimni almashtirish">🌙</button>
+
+          <div id="user-auth-slot" class="user-auth-slot">
+            <button id="btn-google-login" class="btn btn-sm btn-outline-google" type="button">
+              Google orqali kirish
+            </button>
+          </div>
         </div>
       </div>
-    </div>
-  </nav>
+    </nav>
+  </header>
 
-  <!-- ========== HERO ========== -->
-  <section class="hero" id="hero">
-    <div class="container">
-      <img class="hero__logo" src="pictures/RTU_logo.svg" alt="Renessans Ta'lim Universiteti" loading="eager" />
-      <h1 class="hero__name" id="hero-name">DL-library.uz</h1>
-      <p class="hero__title" id="hero-title">Renessans Ta'lim Universiteti — Raqamli Kutubxona</p>
-      <p class="hero__bio" id="hero-bio">
-        Ushbu elektron kutubxona Renessans ta'lim universiteti Matematika va iqtisod fakultetining
-        Axborot texnologiyalari kafedrasi jamoasi tomonidan yaratilgan bo'lib, uning asosiy maqsadi
-        talabalarga fan dasturlarini, fanlar bo'yicha uslubiy qo'llanmalarni, o'quv qo'llanmalarni,
-        darsliklarni va monografiyalarni, shuningdek mavzularga doir taqdimotlar, video darslar va
-        testlarni taqdim etishdir. Bundan tashqari, saytda talabalar uchun qiziqarli mavzulardagi
-        bir qancha adabiyotlar ham jamlangan.
-      </p>
+  <!-- Maxsus imkoniyatlar paneli (JS to'ldiradi) -->
+  <div class="a11y-panel" id="a11y-panel" role="dialog"
+    aria-label="Maxsus imkoniyatlar sozlamalari" hidden></div>
 
-      <!-- Contact Info -->
-      <div class="hero__contact" id="hero-contact">
-        <p class="hero__contact-text" id="hero-contact-text">
-          Elektron kutubxonadagi biror kitobni yuklab olmoqchi bo'lsangiz, quyidagi kontaktlarga murojaat qiling:
+  <!-- ============================================================
+       MAIN — saytning asosiy mazmuni
+       ============================================================ -->
+  <main id="main-content" role="main">
+
+    <!-- ========== 1-BO'LIM: Tanishtiruv (Hero) ========== -->
+    <section class="hero" id="hero" aria-labelledby="hero-name">
+      <div class="container">
+        <img class="hero__logo" src="pictures/RTU_logo.svg"
+          alt="Renessans Ta'lim Universiteti logotipi" width="90" height="90" loading="eager">
+
+        <h1 class="hero__name" id="hero-name">DL-library.uz</h1>
+        <p class="hero__title" id="hero-title">Renessans Ta'lim Universiteti — Raqamli kutubxona</p>
+
+        <p class="hero__bio" id="hero-bio">
+          Ushbu elektron kutubxona Renessans ta'lim universiteti Matematika va iqtisod fakultetining
+          Axborot texnologiyalari kafedrasi jamoasi tomonidan yaratilgan bo'lib, uning asosiy maqsadi
+          talabalarga fan dasturlarini, fanlar bo'yicha uslubiy qo'llanmalarni, o'quv qo'llanmalarni,
+          darsliklarni va monografiyalarni, shuningdek mavzularga doir taqdimotlar, video darslar va
+          testlarni taqdim etishdir. Bundan tashqari, saytda talabalar uchun qiziqarli mavzulardagi
+          bir qancha adabiyotlar ham jamlangan.
         </p>
-        <div class="hero__contact-links">
-          <a href="https://t.me/RavshanHamdamovich" class="contact-link" target="_blank" rel="noopener">
-            <span class="contact-link__icon">✈️</span>
-            <span>t.me/@RavshanHamdamovich</span>
-          </a>
-          <a href="tel:+998935962874" class="contact-link">
-            <span class="contact-link__icon">📞</span>
-            <span>+998 93 596 28 74</span>
-          </a>
-          <a href="mailto:ayupovr1x1@gmail.com" class="contact-link">
-            <span class="contact-link__icon">📧</span>
-            <span>ayupovr1x1@gmail.com</span>
-          </a>
+
+        <!-- Bog'lanish ma'lumotlari -->
+        <div class="hero__contact" id="hero-contact">
+          <p class="hero__contact-text" id="hero-contact-text">
+            Elektron kutubxonadagi biror kitobni yuklab olmoqchi bo'lsangiz, quyidagi kontaktlarga
+            murojaat qiling:
+          </p>
+          <address class="hero__contact-links">
+            <a href="https://t.me/RavshanHamdamovich" class="contact-link" target="_blank" rel="noopener">
+              <span class="contact-link__icon" aria-hidden="true">✈️</span>
+              <span>Telegram: @RavshanHamdamovich</span>
+            </a>
+            <a href="tel:+998935962874" class="contact-link">
+              <span class="contact-link__icon" aria-hidden="true">📞</span>
+              <span>+998 93 596 28 74</span>
+            </a>
+            <a href="mailto:ayupovr1x1@gmail.com" class="contact-link">
+              <span class="contact-link__icon" aria-hidden="true">📧</span>
+              <span>ayupovr1x1@gmail.com</span>
+            </a>
+          </address>
         </div>
+
+        <!-- Statistika kartalari (JS to'ldiradi: jami + asosiy kategoriyalar) -->
+        <div class="stats" id="stats" role="list" aria-label="Kutubxona statistikasi"></div>
       </div>
+    </section>
 
-      <!-- Stats (JS tomonidan to'ldiriladi: umumiy + asosiy kategoriyalar) -->
-      <div class="stats" id="stats"></div>
-    </div>
-  </section>
+    <!-- ========== 2-BO'LIM: Qidiruv va filtrlar ========== -->
+    <section class="controls" id="controls" aria-label="Kitoblarni qidirish va saralash">
+      <div class="container">
+        <div class="search-wrapper">
+          <span class="search-icon" aria-hidden="true">🔍</span>
+          <label for="search-input" class="sr-only">Kitob nomini qidirish</label>
+          <input type="search" class="search-input" id="search-input"
+            placeholder="Kitob nomini qidirish..." autocomplete="off">
+          <span class="search-count" id="search-count" aria-live="polite"></span>
+        </div>
 
-  <!-- ========== SEARCH & FILTERS ========== -->
-  <section class="controls" id="controls">
-    <div class="container">
-      <div class="search-wrapper">
-        <span class="search-icon">🔍</span>
-        <input type="text" class="search-input" id="search-input" placeholder="Kitob nomini qidirish..."
-          autocomplete="off" />
-        <span class="search-count" id="search-count"></span>
+        <!-- Kategoriya filtrlari (JS to'ldiradi) -->
+        <div class="filters" id="filters" role="group" aria-label="Kategoriya bo'yicha filtr"></div>
       </div>
-      <!-- Filterlar (JS tomonidan to'ldiriladi: Barchasi + 10 kategoriya) -->
-      <div class="filters" id="filters"></div>
-    </div>
-  </section>
+    </section>
 
-  <!-- ========== BOOKS GRID ========== -->
-  <section class="books-section" id="books-section-view">
-    <div class="container">
-      <div class="books-grid" id="books-grid">
-        <!-- Books will be rendered by JavaScript -->
-        <div class="book-card skeleton" style="height: 380px;"></div>
-        <div class="book-card skeleton" style="height: 380px;"></div>
-        <div class="book-card skeleton" style="height: 380px;"></div>
+    <!-- ========== 3-BO'LIM: Kitoblar ro'yxati ========== -->
+    <section class="books-section" id="books-section-view" aria-label="Kitoblar ro'yxati">
+      <div class="container">
+        <div class="books-grid" id="books-grid" aria-live="polite" aria-busy="true">
+          <!-- Kitob kartochkalari JS orqali chiziladi.
+               Quyidagilar — yuklanish paytidagi skelet. -->
+          <div class="book-card skeleton" style="height: 380px;" aria-hidden="true"></div>
+          <div class="book-card skeleton" style="height: 380px;" aria-hidden="true"></div>
+          <div class="book-card skeleton" style="height: 380px;" aria-hidden="true"></div>
+        </div>
+
+        <!-- Sahifalash -->
+        <div class="pagination__info" id="pagination-info" aria-live="polite"></div>
+        <nav class="pagination" id="pagination" aria-label="Sahifalar"></nav>
       </div>
-      <!-- Pagination -->
-      <div class="pagination__info" id="pagination-info"></div>
-      <div class="pagination" id="pagination"></div>
-    </div>
-  </section>
+    </section>
 
-  <!-- ========== DYNAMIC VIEW SECTION (Presentations, Videos, Tests, Profile) ========== -->
-  <section class="dynamic-view-section" id="dynamic-view-section" style="display: none;">
-    <div class="container" id="dynamic-view-container">
-      <!-- Dynamic view content renders here -->
-    </div>
-  </section>
+    <!-- ========== 4-BO'LIM: Taqdimot / Video / Test ==========
+         Bu bo'lim JS orqali to'ldiriladi. Menyudan qaysi bo'lim
+         tanlansa, mazmuni shu joyda almashadi. -->
+    <section class="dynamic-view-section" id="dynamic-view-section"
+      style="display: none;" aria-live="polite">
+      <div class="container" id="dynamic-view-container"></div>
+    </section>
 
-  <!-- ========== FLIPBOOK READER MODAL ========== -->
-  <div class="flipbook-overlay" id="flipbook-modal">
+  </main>
+
+  <!-- ============================================================
+       KITOB O'QUVCHI (modal oyna)
+       Kitob kartochkasidagi "O'qish" bosilganda ochiladi.
+       ============================================================ -->
+  <div class="flipbook-overlay" id="flipbook-modal" role="dialog"
+    aria-label="Kitob o'quvchi" aria-modal="true">
     <div class="flipbook-modal-content">
-      <!-- Header -->
+
+      <!-- O'quvchi sarlavhasi va boshqaruv tugmalari -->
       <div class="flipbook-header">
         <h2 class="flipbook-header__title" id="flipbook-title">Kitob nomi</h2>
         <div class="flipbook-header__controls">
-          <button class="flipbook-btn" onclick="flipPrev()" title="Oldingi sahifa">◀</button>
-          <span class="flipbook-header__page-info" id="flipbook-page-info">—</span>
-          <button class="flipbook-btn" onclick="flipNext()" title="Keyingi sahifa">▶</button>
-          <button class="flipbook-btn" id="toggle-toc-btn" onclick="toggleTocPanel()" title="Mundarija">📑</button>
-          <button class="flipbook-btn" onclick="toggleFlipbookFullscreen()" title="To'liq ekran">⛶</button>
-          <button class="flipbook-btn flipbook-btn--close" onclick="closeFlipbook()" title="Yopish">✕</button>
+          <button class="flipbook-btn" onclick="flipPrev()" aria-label="Oldingi sahifa">◀</button>
+          <span class="flipbook-header__page-info" id="flipbook-page-info" aria-live="polite">—</span>
+          <button class="flipbook-btn" onclick="flipNext()" aria-label="Keyingi sahifa">▶</button>
+          <button class="flipbook-btn" id="toggle-toc-btn" onclick="toggleTocPanel()"
+            aria-label="Mundarija">📑</button>
+          <button class="flipbook-btn" onclick="toggleFlipbookFullscreen()"
+            aria-label="To'liq ekran">⛶</button>
+          <button class="flipbook-btn flipbook-btn--close" onclick="closeFlipbook()"
+            aria-label="O'quvchini yopish">✕</button>
         </div>
       </div>
 
-      <!-- Body: TOC sidebar + Reader -->
+      <!-- Tanasi: mundarija paneli + sahifa ko'rinishi -->
       <div class="flipbook-body" id="flipbook-body">
-        <!-- Loading -->
+
         <div class="flipbook-loading" id="flipbook-loading">
-          <div class="flipbook-spinner"></div>
+          <div class="flipbook-spinner" aria-hidden="true"></div>
           <div class="flipbook-loading__text">PDF yuklanmoqda...</div>
         </div>
 
-        <!-- TOC Sidebar (chap) -->
+        <!-- Mundarija (chap panel) -->
         <div class="flipbook-toc" id="flipbook-toc" style="display:none;">
           <div class="flipbook-toc__header">
             <h3 class="flipbook-toc__title">📑 Mundarija</h3>
-            <button class="flipbook-toc__close" onclick="toggleTocPanel()" aria-label="Yopish">×</button>
+            <button class="flipbook-toc__close" onclick="toggleTocPanel()"
+              aria-label="Mundarijani yopish">×</button>
           </div>
-          <div class="flipbook-toc__content" id="flipbook-toc-content">
-            <!-- PDF outline yoki custom TOC shu yerda chiqadi -->
-          </div>
+          <div class="flipbook-toc__content" id="flipbook-toc-content"></div>
           <div class="flipbook-toc__manual">
-            <button class="flipbook-toc__set-btn" onclick="setCurrentPageAsToc()" title="Joriy sahifani mundarija qilib belgilash">
+            <button class="flipbook-toc__set-btn" onclick="setCurrentPageAsToc()">
               🔖 Joriy sahifani mundarija qilish
             </button>
           </div>
         </div>
 
-        <!-- Page flip container (o'ng) -->
+        <!-- Sahifa ko'rinishi (o'ng qism) -->
         <div class="flipbook-reader-wrapper">
           <div id="flipbook-container"></div>
 
-          <!-- Navigation arrows -->
           <div class="flipbook-nav flipbook-nav--prev">
-            <button class="flipbook-nav-btn" onclick="flipPrev()" title="◀ Oldingi">◀</button>
+            <button class="flipbook-nav-btn" onclick="flipPrev()" aria-label="Oldingi sahifa">◀</button>
           </div>
           <div class="flipbook-nav flipbook-nav--next">
-            <button class="flipbook-nav-btn" onclick="flipNext()" title="Keyingi ▶">▶</button>
+            <button class="flipbook-nav-btn" onclick="flipNext()" aria-label="Keyingi sahifa">▶</button>
           </div>
 
-          <!-- Zoom boshqaruvi -->
-          <div class="flipbook-zoom" id="flipbook-zoom">
-            <button class="flipbook-zoom__btn" onclick="zoomOut()" title="Kichiklashtirish" aria-label="Kichiklashtirish">−</button>
-            <span class="flipbook-zoom__level" id="flipbook-zoom-level">100%</span>
-            <button class="flipbook-zoom__btn" onclick="zoomIn()" title="Kattalashtirish" aria-label="Kattalashtirish">+</button>
-            <button class="flipbook-zoom__btn" onclick="zoomFit()" title="Ekranga moslash" aria-label="Ekranga moslash">⤢</button>
+          <!-- Masshtab boshqaruvi -->
+          <div class="flipbook-zoom" id="flipbook-zoom" role="group" aria-label="Masshtab">
+            <button class="flipbook-zoom__btn" onclick="zoomOut()" aria-label="Kichraytirish">−</button>
+            <span class="flipbook-zoom__level" id="flipbook-zoom-level" aria-live="polite">100%</span>
+            <button class="flipbook-zoom__btn" onclick="zoomIn()" aria-label="Kattalashtirish">+</button>
+            <button class="flipbook-zoom__btn" onclick="zoomFit()" aria-label="Ekranga moslash">⤢</button>
           </div>
 
-          <!-- QR Code -->
+          <!-- Kitobning QR kodi -->
           <div class="flipbook-qr" id="flipbook-qr" style="display:none;"></div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- ========== MOBILE BOTTOM NAVIGATION ========== -->
-  <nav class="mobile-bottom-nav" id="mobile-bottom-nav">
+  <!-- ============================================================
+       MOBIL PASTKI MENYU (faqat kichik ekranlarda ko'rinadi)
+       ============================================================ -->
+  <nav class="mobile-bottom-nav" id="mobile-bottom-nav" aria-label="Mobil menyu">
     <div class="mobile-bottom-nav__inner">
-      <button class="mobile-nav-btn active" data-view="books" aria-label="Kitoblar">
-        <span class="mobile-nav-icon">📚</span>
+      <button class="mobile-nav-btn active" data-view="books">
+        <span class="mobile-nav-icon" aria-hidden="true">📚</span>
         <span>Kitoblar</span>
       </button>
-      <button class="mobile-nav-btn" data-view="presentations" aria-label="Taqdimotlar">
-        <span class="mobile-nav-icon">📊</span>
+      <button class="mobile-nav-btn" data-view="presentations">
+        <span class="mobile-nav-icon" aria-hidden="true">📊</span>
         <span>Taqdimot</span>
       </button>
-      <button class="mobile-nav-btn" data-view="videos" aria-label="Videolar">
-        <span class="mobile-nav-icon">🎥</span>
+      <button class="mobile-nav-btn" data-view="videos">
+        <span class="mobile-nav-icon" aria-hidden="true">🎥</span>
         <span>Video</span>
       </button>
-      <button class="mobile-nav-btn" data-view="tests" aria-label="Testlar">
-        <span class="mobile-nav-icon">📝</span>
+      <button class="mobile-nav-btn" data-view="tests">
+        <span class="mobile-nav-icon" aria-hidden="true">📝</span>
         <span>Testlar</span>
       </button>
     </div>
   </nav>
 
-  <!-- ========== FOOTER ========== -->
-  <footer class="footer">
+  <!-- ============================================================
+       FOOTER — mualliflik va huquqiy ma'lumotlar
+       ============================================================ -->
+  <footer class="footer" role="contentinfo">
     <div class="container">
       <p class="footer__text">
-        © 2026–2027 DL-library.uz — <span id="footer-rights">Barcha huquqlar himoyalangan</span>. | <a href="/privacy.html" target="_blank" style="color: inherit; text-decoration: underline;">Maxfiylik siyosati</a>
+        © 2026–2027 DL-library.uz — <span id="footer-rights">Barcha huquqlar himoyalangan</span>.
+        | <a href="/privacy.html" target="_blank" rel="noopener">Maxfiylik siyosati</a>
       </p>
       <p class="footer__text footer__text--sub">
-        <span id="footer-university">Sayt mualliflari — RTU AT kafedrasi o'qituvchilari Ravshan Ayupov va Oybek Xushvaqtov</span>
+        <span id="footer-university">
+          Sayt mualliflari — RTU AT kafedrasi o'qituvchilari Ravshan Ayupov va Oybek Xushvaqtov
+        </span>
       </p>
     </div>
   </footer>
 
-  <!-- ========== SCROLL TO TOP ========== -->
-  <button class="scroll-top" id="scroll-top" aria-label="Scroll to top">↑</button>
+  <!-- Yuqoriga qaytish tugmasi -->
+  <button class="scroll-top" id="scroll-top" type="button" aria-label="Sahifa boshiga qaytish">↑</button>
 
-  <!-- Scripts -->
-  <script src="js/neural-bg.js?v=5.0.0"></script>
-  <script src="js/qr.js?v=5.0.0"></script>
-  <script src="js/flipbook.js?v=5.0.0"></script>
-  <script type="module" src="js/app.js?v=5.0.0"></script>
+  <!-- ============================================================
+       SKRIPTLAR
+       defer — HTML tahlilini to'xtatmaydi, sahifa tezroq ko'rinadi.
+       ============================================================ -->
+  <script src="js/neural-bg.js?v=6.0.0" defer></script>
+  <script src="js/qr.js?v=6.0.0" defer></script>
+  <script src="js/flipbook.js?v=6.0.0" defer></script>
+  <script type="module" src="js/app.js?v=6.0.0"></script>
 
 </body>
 

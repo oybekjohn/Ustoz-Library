@@ -1,12 +1,26 @@
-/* ============================================
-   DL-LIBRARY.UZ — Design System
-   Renessans Ta'lim Universiteti Raqamli Kutubxona
-   ============================================ */
+/* ============================================================
+   DL-LIBRARY.UZ — Asosiy dizayn tizimi
+   Renessans Ta'lim Universiteti raqamli kutubxonasi
 
-/* ---------- Google Fonts ---------- */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&display=swap');
+   Fayl tuzilishi:
+     1. Rang va o'lcham o'zgaruvchilari (:root)
+     2. Yorug' rejim (light theme)
+     3. Asosiy elementlar (reset, body, fon)
+     4. Header va navigatsiya
+     5. Hero bo'limi
+     6. Qidiruv va filtrlar
+     7. Kitob kartochkalari
+     8. Taqdimot / video / test bo'limlari
+     9. Kitob o'quvchi (flipbook)
+    10. Footer va mobil menyu
+    11. Responsive (mobil) moslashuvlar
 
-/* ---------- CSS Custom Properties ---------- */
+   Eslatma: shriftlar index.html da <link> orqali yuklanadi
+   (@import CSS tahlilini to'xtatib, sahifani sekinlashtiradi).
+   Maxsus imkoniyatlar uslublari — css/accessibility.css faylida.
+   ============================================================ */
+
+/* ---------- 1. Rang va o'lcham o'zgaruvchilari ---------- */
 :root {
   /* Primary palette */
   --primary-400: #818cf8;

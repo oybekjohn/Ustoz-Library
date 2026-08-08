@@ -5,6 +5,7 @@ import {
   parseJsonText,
   readJsonResponse,
 } from '../common.js';
+import { resolveAnthropicModel } from '../text-json.js';
 
 export async function analyzeWithAnthropic({
   env,
@@ -16,7 +17,7 @@ export async function analyzeWithAnthropic({
   pageCount,
 }) {
   if (!env.ANTHROPIC_API_KEY) throw new Error("ANTHROPIC_API_KEY sozlanmagan");
-  const model = env.ANTHROPIC_METADATA_MODEL || 'claude-haiku-4-5';
+  const model = resolveAnthropicModel(env);
   const hasTextLayer = Boolean(firstPagesText?.trim());
   const content = [];
 

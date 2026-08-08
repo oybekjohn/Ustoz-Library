@@ -39,7 +39,8 @@ import {
   startMaterialCreate,
   sendMaterialManageMenu,
 } from './telegram-materials.js';
-import { resolveOpenRouterModel } from './ai/text-json.js';
+import { resolveAnthropicModel, resolveOpenRouterModel } from './ai/text-json.js';
+import { analyzeVideo } from './ai/content.js';
 
 export { TELEGRAM_CATEGORIES };
 
@@ -258,6 +259,64 @@ async function syncTelegramAdminProfile(env, user) {
 async function mainKeyboardForUser(env, userId) {
   const access = await getTelegramAccess(env, userId);
   return mainKeyboard(access?.role || 'library');
+}
+
+/**
+ * AI ulanishini jonli tekshiradi: kichik test so'rovi yuborib, qaysi
+ * provayder javob berayotganini va necha soniyada javob kelganini aytadi.
+ * Kalit eskirgan yoki kvota tugagan bo'lsa shu yerda darhol ko'rinadi.
+ */
+async function runAiHealthCheck(env, chatId) {
+  const provider = String(env.AI_METADATA_PROVIDER || 'mock');
+  const model = provider === 'anthropic'
+    ? resolveAnthropicModel(env)
+    : provider === 'openrouter' ? resolveOpenRouterModel(env) : '-';
+
+  await sendMessage(env, chatId, '🔍 AI ulanishi tekshirilmoqda...');
+  const startedAt = Date.now();
+
+  try {
+    const result = await analyzeVideo({
+      env,
+      youtubeTitle: 'Matematika asoslari: kirish darsi',
+      channelName: 'Sinov',
+      videoUrl: 'https://youtu.be/test',
+    });
+    const seconds = ((Date.now() - startedAt) / 1000).toFixed(1);
+
+    if (!result.aiUsed) {
+      await sendMessage(env, chatId, [
+        '❌ AI javob bermadi.',
+        '',
+        `Provayder: ${provider}`,
+        `Model: ${model}`,
+        '',
+        'Kalit yoki kvotani tekshiring. Hozircha materiallar',
+        "AI'siz (fayl nomi asosida) qo'shiladi.",
+      ].join('\n'));
+      return;
+    }
+
+    await sendMessage(env, chatId, [
+      '✅ AI ishlayapti!',
+      '',
+      `Provayder: ${provider}`,
+      `Model: ${model}`,
+      `Javob vaqti: ${seconds} soniya`,
+      '',
+      'Sinov natijasi:',
+      `📌 ${result.title.uz}`,
+      `🏷 ${categoryLabel(result.category)}`,
+    ].join('\n'));
+  } catch (error) {
+    await sendMessage(env, chatId, [
+      '❌ AI ulanishida xatolik:',
+      safeErrorMessage(error),
+      '',
+      `Provayder: ${provider}`,
+      `Model: ${model}`,
+    ].join('\n'));
+  }
 }
 
 async function cleanupSessionFiles(env, session) {
@@ -946,6 +1005,10 @@ export async function handleTelegramUpdate(env, update) {
       await handleMaterialCallback(env, chatId, from.id, data, isOwner(env, from.id));
       return { background: null };
     }
+    // AI ulanishini jonli tekshirish: haqiqiy (kichik) so'rov yuboriladi
+    if (data === 'ai:check') {
+      return { background: () => runAiHealthCheck(env, chatId) };
+    }
     if (data.startsWith('create:') || data.startsWith('create-field:') || data.startsWith('create-category:')) {
       await handleCreateCallback(env, callback, chatId, from.id, data);
       return { background: null };
@@ -1051,7 +1114,7 @@ export async function handleTelegramUpdate(env, update) {
   if (text === MENU_ABOUT || text === 'Bot haqida') {
     const provider = String(env.AI_METADATA_PROVIDER || 'mock');
     const model = provider === 'anthropic'
-      ? String(env.ANTHROPIC_METADATA_MODEL || 'claude-haiku-4-5')
+      ? resolveAnthropicModel(env)
       : provider === 'openrouter'
         ? resolveOpenRouterModel(env)
         : String(env.OPENAI_METADATA_MODEL || env.GEMINI_METADATA_MODEL || '-');
@@ -1070,7 +1133,9 @@ export async function handleTelegramUpdate(env, update) {
       '📝 Testlar — savollarni yuborasiz, faqat mavzu nomini yozasiz.',
       '',
       "Bo'lim tanlangach ketma-ket material yuboraverasiz — har safar qayta tanlash shart emas.",
-    ].join('\n'), mainKeyboard(access.role));
+    ].join('\n'), {
+      inline_keyboard: [[{ text: '🔍 AI ulanishini tekshirish', callback_data: 'ai:check' }]],
+    });
     return { background: null };
   }
 
