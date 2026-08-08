@@ -1,19 +1,26 @@
 /**
- * Telegram bot: taqdimot, video va test materiallarini
- * qo'shish hamda boshqarish oqimlari.
+ * Telegram bot: taqdimot, video va test materiallari.
  *
- * Yaratish (barcha bot adminlari):
- *   kategoriya -> fayl/URL -> sarlavha -> tavsif -> saqlash (published=1)
- * Boshqarish (faqat owner):
- *   ro'yxat -> ko'rish -> publish/unpublish, o'chirish
+ * Asosiy g'oya — "yopishqoq bo'lim" (sticky section): admin bir marta
+ * bo'limni tanlaydi va keyin ketma-ket istagancha material yuboraveradi.
+ * Bo'lim faqat asosiy menyudan o'zgartiriladi.
+ *
+ * Oqimlar:
+ *   Taqdimot — fayl yuboriladi, qolganini AI qiladi (sarlavha, tavsif,
+ *              kategoriya), 1-sahifa muqova bo'ladi. Tasdiqlash so'ralmaydi.
+ *              Bir nechta fayl ketma-ket yuborilsa, har biri alohida qo'shiladi.
+ *   Video    — YouTube havolasi yuboriladi, qolganini AI qiladi.
+ *   Test     — .txt fayl yoki oddiy matn yuboriladi, so'ng faqat mavzu nomi
+ *              so'raladi; uch tilli nom va tavsifni AI yozadi.
  */
 
-import { inspectPdfFirstPages } from './pdf.js';
+import { analyzePresentation, analyzeTest, analyzeVideo } from './ai/content.js';
+import { createFirstPagesPdf, inspectPdfFirstPages } from './pdf.js';
 import { createStorageKey, deleteObjects, putObject } from './storage.js';
 import { parseTestTxt } from './test-parser.js';
+import { fetchYouTubeMeta } from './youtube-meta.js';
 import { extractYouTubeId } from './youtube.js';
 import {
-  categoryKeyboard,
   categoryLabel,
   downloadTelegramFile,
   getSession,
@@ -27,13 +34,14 @@ import {
 } from './telegram-core.js';
 
 const MATERIAL_TYPES = {
-  presentation: { label: 'Prezentatsiya', table: 'presentations', emoji: '📊', hash: '#presentations' },
+  presentation: { label: 'Taqdimot', table: 'presentations', emoji: '📊', hash: '#presentations' },
   video: { label: 'Video dars', table: 'videos', emoji: '🎥', hash: '#videos' },
   test: { label: 'Test', table: 'tests', emoji: '📝', hash: '#tests' },
 };
 
 const LIST_PAGE_SIZE = 6;
 const MAX_TXT_BYTES = 1024 * 1024;
+const MIN_INLINE_TEST_CHARS = 40;
 
 const PPTX_MIMES = [
   'application/vnd.openxmlformats-officedocument.presentationml.presentation',
@@ -50,69 +58,85 @@ function siteUrl(env) {
   return String(env.PUBLIC_SITE_URL || 'https://dl-library.uz').replace(/\/$/, '');
 }
 
-function pendingData(session) {
-  return parseJson(session.pending_metadata, {}) || {};
+// ============================================================
+// BO'LIMNI TANLASH (yopishqoq)
+// ============================================================
+
+function uploadKeyboard(type) {
+  return {
+    inline_keyboard: [
+      [{ text: "🔄 Boshqa bo'limga o'tish", callback_data: 'mat:section' }],
+      [{ text: '✅ Tugatdim', callback_data: 'mat:done' }],
+    ],
+  };
 }
 
-// ============================================================
-// YARATISH OQIMI
-// ============================================================
+export function sectionKeyboard() {
+  return {
+    inline_keyboard: [
+      [{ text: '📚 Kitob (PDF)', callback_data: 'create-type:book' }],
+      [{ text: '📊 Taqdimot (PDF/PPTX)', callback_data: 'create-type:presentation' }],
+      [{ text: '🎥 Video dars (YouTube)', callback_data: 'create-type:video' }],
+      [{ text: '📝 Test (TXT yoki matn)', callback_data: 'create-type:test' }],
+      [{ text: 'Bekor qilish', callback_data: 'cancel' }],
+    ],
+  };
+}
 
+/** Bo'lim tanlangach, admin ketma-ket material yuboraveradi. */
 export async function startMaterialCreate(env, chatId, userId, type) {
   const info = typeInfo(type);
-  const current = await getSession(env, userId);
-  await cleanupMaterialFiles(env, current);
   await saveSession(env, {
     user_id: userId,
     chat_id: chatId,
-    state: 'awaiting_material_category',
+    state: 'awaiting_material_source',
     material_type: type,
   });
-  await sendMessage(env, chatId, `${info.emoji} ${info.label} qaysi bo'limga tegishli?`, categoryKeyboard(`mat-cat:${type}`));
-}
 
-async function cleanupMaterialFiles(env, session) {
-  if (session?.pending_source_key) {
-    await deleteObjects(env.BUCKET, [session.pending_source_key]);
-  }
-}
-
-async function promptForSource(env, chatId, type) {
-  if (type === 'presentation') {
-    await sendMessage(env, chatId, `Taqdimot faylini yuboring: PDF, PPT yoki PPTX (maksimal ${Math.floor(maxPdfBytes(env) / 1024 / 1024)} MB).\n\nEng sifatli ko'rinish uchun PDF tavsiya etiladi.`);
-  } else if (type === 'video') {
-    await sendMessage(env, chatId, 'YouTube video havolasini yuboring.\nMasalan: https://youtu.be/XXXXXXXXXXX');
-  } else {
-    await sendMessage(env, chatId, [
-      'Test savollari yozilgan UTF-8 .txt faylni yuboring.',
+  const hints = {
+    presentation: [
+      "Taqdimot fayllarini yuboravering: PDF, PPT yoki PPTX.",
+      `Maksimal hajm: ${Math.floor(maxPdfBytes(env) / 1024 / 1024)} MB.`,
+      '',
+      "Sarlavha, tavsif va kategoriyani tizim o'zi aniqlaydi.",
+      "Birinchi sahifa muqova bo'lib qo'yiladi.",
+      "Bir nechta faylni ketma-ket yuborsangiz ham bo'ladi.",
+    ],
+    video: [
+      'YouTube havolalarini yuboravering.',
+      'Masalan: https://youtu.be/XXXXXXXXXXX',
+      '',
+      "Sarlavha, tavsif va kategoriyani tizim o'zi aniqlaydi.",
+    ],
+    test: [
+      'Test savollarini yuboring: .txt fayl yoki oddiy matn.',
       '',
       'Format:',
       'Savol matni?',
       '================',
       'Birinchi variant',
       '================',
-      "#To'g'ri variant (# belgisi bilan)",
+      "#To'g'ri variant",
       '',
       '+++++',
       '',
       'Keyingi savol...',
-    ].join('\n'));
-  }
+      '',
+      "So'ngra faqat mavzu nomini so'rayman.",
+    ],
+  };
+
+  await sendMessage(
+    env,
+    chatId,
+    [`${info.emoji} ${info.label} bo'limi tanlandi.`, '', ...hints[type]].join('\n'),
+    uploadKeyboard(type),
+  );
 }
 
-/** mat-cat:<type>:<key> — kategoriya tanlandi */
-async function handleCategoryPick(env, chatId, userId, type, categoryKey) {
-  const info = typeInfo(type);
-  await saveSession(env, {
-    user_id: userId,
-    chat_id: chatId,
-    state: type === 'video' ? 'awaiting_material_url' : 'awaiting_material_file',
-    material_type: type,
-    category: categoryKey,
-  });
-  await sendMessage(env, chatId, `${info.label} kategoriyasi: ${categoryLabel(categoryKey)}`);
-  await promptForSource(env, chatId, type);
-}
+// ============================================================
+// TAQDIMOT
+// ============================================================
 
 function getPresentationFile(message) {
   const document = message?.document;
@@ -124,6 +148,137 @@ function getPresentationFile(message) {
   return { document, isPdf };
 }
 
+async function processPresentation(env, { chatId, userId, document, isPdf }) {
+  const uploadedKeys = [];
+  try {
+    await sendMessage(env, chatId, `📊 "${shortText(document.file_name || 'fayl', 50)}" qabul qilindi, tahlil qilinmoqda...`);
+
+    const buffer = await downloadTelegramFile(env, document.file_id, document.file_size);
+
+    let pageCount = 0;
+    let firstPageText = '';
+    let coverKey = null;
+
+    if (isPdf) {
+      const info = await inspectPdfFirstPages(buffer, 2);
+      pageCount = info.pageCount || 0;
+      firstPageText = info.firstPagesText || '';
+
+      // Birinchi sahifa — muqova (kichik 1 sahifali PDF)
+      try {
+        const coverBuffer = await createFirstPagesPdf(buffer, 1);
+        coverKey = createStorageKey('presentation-covers', 'cover', 'application/pdf');
+        await putObject(env.BUCKET, coverKey, coverBuffer, 'application/pdf');
+        uploadedKeys.push(coverKey);
+      } catch (coverError) {
+        // Muqovasiz ham davom etamiz
+        console.error('Cover extraction failed:', coverError?.message);
+        coverKey = null;
+      }
+    }
+
+    const contentType = isPdf
+      ? 'application/pdf'
+      : 'application/vnd.openxmlformats-officedocument.presentationml.presentation';
+    const fileKey = createStorageKey('presentations', document.file_name || 'taqdimot', contentType);
+    await putObject(env.BUCKET, fileKey, buffer, contentType);
+    uploadedKeys.push(fileKey);
+
+    const meta = await analyzePresentation({
+      env,
+      firstPageText,
+      fileName: document.file_name,
+      pageCount,
+    });
+
+    const now = new Date().toISOString();
+    const result = await env.DB.prepare(
+      `INSERT INTO presentations
+       (title_uz, title_ru, title_en, description_uz, description_ru, description_en,
+        category, language, page_count, pdf_key, cover_key, published, created_at, updated_at)
+       VALUES (?, ?, ?, ?, ?, ?, ?, 'uz', ?, ?, ?, 1, ?, ?)`
+    ).bind(
+      meta.title.uz, meta.title.ru, meta.title.en,
+      meta.description.uz, meta.description.ru, meta.description.en,
+      meta.category, pageCount, fileKey, coverKey, now, now,
+    ).run();
+
+    await sendMessage(env, chatId, [
+      `✅ Taqdimot #${result.meta.last_row_id} qo'shildi`,
+      '',
+      `📌 ${meta.title.uz}`,
+      `🏷 ${categoryLabel(meta.category)}`,
+      isPdf ? `📄 ${pageCount} slayd${coverKey ? ' · muqova tayyor' : ''}` : '📄 PPTX (Office viewer)',
+      meta.aiUsed ? '' : "⚠️ AI ishlamadi — nomi fayl nomidan olindi",
+      '',
+      `${siteUrl(env)}/${typeInfo('presentation').hash}`,
+    ].filter(Boolean).join('\n'));
+  } catch (error) {
+    if (uploadedKeys.length) await deleteObjects(env.BUCKET, uploadedKeys);
+    await sendMessage(env, chatId, `❌ Taqdimotni qo'shishda xatolik:\n${safeErrorMessage(error)}\n\nFaylni qayta yuboring.`);
+  }
+}
+
+// ============================================================
+// VIDEO
+// ============================================================
+
+async function processVideo(env, { chatId, url }) {
+  try {
+    const videoId = extractYouTubeId(url);
+    if (!videoId) {
+      await sendMessage(env, chatId, "❌ YouTube havolasi noto'g'ri. To'g'ri havolani yuboring.\nMasalan: https://youtu.be/XXXXXXXXXXX");
+      return;
+    }
+
+    const existing = await env.DB.prepare('SELECT id FROM videos WHERE youtube_video_id = ?')
+      .bind(videoId).first();
+    if (existing) {
+      await sendMessage(env, chatId, `ℹ️ Bu video allaqachon qo'shilgan (#${existing.id}).`);
+      return;
+    }
+
+    await sendMessage(env, chatId, '🎥 Havola qabul qilindi, tahlil qilinmoqda...');
+
+    const ytMeta = await fetchYouTubeMeta(videoId);
+    const meta = await analyzeVideo({
+      env,
+      youtubeTitle: ytMeta.title || url,
+      channelName: ytMeta.author,
+      videoUrl: url,
+    });
+
+    const now = new Date().toISOString();
+    const result = await env.DB.prepare(
+      `INSERT INTO videos
+       (title_uz, title_ru, title_en, description_uz, description_ru, description_en,
+        category, language, youtube_url, youtube_video_id, published, created_at, updated_at)
+       VALUES (?, ?, ?, ?, ?, ?, ?, 'uz', ?, ?, 1, ?, ?)`
+    ).bind(
+      meta.title.uz, meta.title.ru, meta.title.en,
+      meta.description.uz, meta.description.ru, meta.description.en,
+      meta.category, `https://www.youtube.com/watch?v=${videoId}`, videoId, now, now,
+    ).run();
+
+    await sendMessage(env, chatId, [
+      `✅ Video dars #${result.meta.last_row_id} qo'shildi`,
+      '',
+      `📌 ${meta.title.uz}`,
+      `🏷 ${categoryLabel(meta.category)}`,
+      ytMeta.author ? `📺 ${ytMeta.author}` : '',
+      meta.aiUsed ? '' : "⚠️ AI ishlamadi — nomi YouTube'dan olindi",
+      '',
+      `${siteUrl(env)}/${typeInfo('video').hash}`,
+    ].filter(Boolean).join('\n'));
+  } catch (error) {
+    await sendMessage(env, chatId, `❌ Videoni qo'shishda xatolik:\n${safeErrorMessage(error)}`);
+  }
+}
+
+// ============================================================
+// TEST
+// ============================================================
+
 function getTxtFile(message) {
   const document = message?.document;
   if (!document) return null;
@@ -131,204 +286,113 @@ function getTxtFile(message) {
   return isTxt ? document : null;
 }
 
-async function processPresentationFile(env, { chatId, userId, session, document, isPdf }) {
-  let uploadedKey = null;
-  try {
-    await sendMessage(env, chatId, 'Fayl qabul qilindi, tekshirilmoqda...');
-    const buffer = await downloadTelegramFile(env, document.file_id, document.file_size);
+async function stageTestQuestions(env, { chatId, userId, session, content }) {
+  const parsed = parseTestTxt(content);
 
-    let pageCount = 0;
-    if (isPdf) {
-      const info = await inspectPdfFirstPages(buffer, 1);
-      pageCount = info.pageCount || 0;
-    }
-
-    const contentType = isPdf
-      ? 'application/pdf'
-      : 'application/vnd.openxmlformats-officedocument.presentationml.presentation';
-    uploadedKey = createStorageKey('presentations', document.file_name || 'taqdimot', contentType);
-    await putObject(env.BUCKET, uploadedKey, buffer, contentType);
-
-    const pending = {
-      ...pendingData(session),
-      category: session.category,
-      pdf_key: uploadedKey,
-      page_count: pageCount,
-      file_name: document.file_name || null,
-    };
-    await saveSession(env, {
-      ...session,
-      user_id: userId,
-      chat_id: chatId,
-      state: 'awaiting_material_title',
-      pending_metadata: JSON.stringify(pending),
-      pending_source_key: uploadedKey,
-    });
-    await cleanupOldKey(env, session.pending_source_key, uploadedKey);
-
+  if (!parsed.success) {
+    const errorLines = (parsed.errors || []).slice(0, 5).map((e) => `• ${e.message}`);
     await sendMessage(env, chatId, [
-      isPdf ? `PDF qabul qilindi: ${pageCount} slayd.` : 'PPTX qabul qilindi (Office viewer orqali ochiladi).',
+      '❌ Test matnida xatolik topildi:',
+      ...errorLines,
       '',
-      'Endi taqdimot sarlavhasini yuboring.',
+      "Tuzatib qayta yuboring.",
     ].join('\n'));
-  } catch (error) {
-    if (uploadedKey) await deleteObjects(env.BUCKET, [uploadedKey]);
-    await sendMessage(env, chatId, `Faylni qayta ishlashda xatolik:\n${safeErrorMessage(error)}\n\nFaylni qayta yuboring.`);
-  }
-}
-
-async function cleanupOldKey(env, oldKey, newKey) {
-  if (oldKey && oldKey !== newKey) {
-    await deleteObjects(env.BUCKET, [oldKey]);
-  }
-}
-
-async function processTestFile(env, { chatId, userId, session, document }) {
-  try {
-    await sendMessage(env, chatId, 'Test fayli qabul qilindi, tekshirilmoqda...');
-    const buffer = await downloadTelegramFile(env, document.file_id, document.file_size);
-    const content = new TextDecoder('utf-8').decode(buffer);
-    const parsed = parseTestTxt(content);
-
-    if (!parsed.success) {
-      const errorLines = (parsed.errors || []).slice(0, 5).map((e) => `- ${e.message}`);
-      await sendMessage(env, chatId, [
-        'Test faylida xatolik topildi:',
-        ...errorLines,
-        '',
-        "Faylni to'g'rilab qayta yuboring.",
-      ].join('\n'));
-      return;
-    }
-
-    const pending = {
-      ...pendingData(session),
-      category: session.category,
-      questions: parsed.questions,
-    };
-    await saveSession(env, {
-      ...session,
-      user_id: userId,
-      chat_id: chatId,
-      state: 'awaiting_material_title',
-      pending_metadata: JSON.stringify(pending),
-    });
-    await sendMessage(env, chatId, [
-      `Fayl qabul qilindi: ${parsed.questions.length} ta savol.`,
-      '',
-      'Endi test sarlavhasini yuboring.',
-    ].join('\n'));
-  } catch (error) {
-    await sendMessage(env, chatId, `Test faylini o'qishda xatolik:\n${safeErrorMessage(error)}\n\nFaylni qayta yuboring.`);
-  }
-}
-
-async function handleVideoUrl(env, { chatId, userId, session, text }) {
-  const videoId = extractYouTubeId(text);
-  if (!videoId) {
-    await sendMessage(env, chatId, "YouTube havolasi noto'g'ri. To'g'ri havolani yuboring.\nMasalan: https://youtu.be/XXXXXXXXXXX");
     return;
   }
-  const pending = {
-    ...pendingData(session),
-    category: session.category,
-    youtube_url: text,
-    youtube_video_id: videoId,
-  };
+
   await saveSession(env, {
     ...session,
     user_id: userId,
     chat_id: chatId,
-    state: 'awaiting_material_title',
-    pending_metadata: JSON.stringify(pending),
+    state: 'awaiting_material_topic',
+    material_type: 'test',
+    pending_metadata: JSON.stringify({ questions: parsed.questions }),
   });
-  await sendMessage(env, chatId, 'Video qabul qilindi.\n\nEndi video dars sarlavhasini yuboring.');
-}
-
-async function handleTitle(env, { chatId, userId, session, text }) {
-  const title = text.trim();
-  if (title.length < 3 || title.length > 250) {
-    await sendMessage(env, chatId, "Sarlavha 3-250 belgi oralig'ida bo'lishi kerak. Qayta yuboring.");
-    return;
-  }
-  const pending = { ...pendingData(session), title_uz: title };
-  await saveSession(env, {
-    ...session,
-    user_id: userId,
-    chat_id: chatId,
-    state: 'awaiting_material_desc',
-    pending_metadata: JSON.stringify(pending),
-  });
-  await sendMessage(env, chatId, "Qisqa tavsif yuboring (yoki o'tkazib yuborish uchun \"-\" yozing).");
-}
-
-async function handleDescriptionAndSave(env, { chatId, userId, session, text }) {
-  const info = typeInfo(session.material_type);
-  const description = text.trim() === '-' ? null : text.trim();
-  const pending = pendingData(session);
-  const now = new Date().toISOString();
-
-  let savedId = null;
-  if (session.material_type === 'presentation') {
-    const res = await env.DB.prepare(
-      `INSERT INTO presentations (title_uz, description_uz, category, language, page_count, pdf_key, published, created_at, updated_at)
-       VALUES (?, ?, ?, 'uz', ?, ?, 1, ?, ?)`
-    ).bind(pending.title_uz, description, pending.category, pending.page_count || 0, pending.pdf_key, now, now).run();
-    savedId = res.meta.last_row_id;
-  } else if (session.material_type === 'video') {
-    const res = await env.DB.prepare(
-      `INSERT INTO videos (title_uz, description_uz, category, language, youtube_url, youtube_video_id, published, created_at, updated_at)
-       VALUES (?, ?, ?, 'uz', ?, ?, 1, ?, ?)`
-    ).bind(pending.title_uz, description, pending.category, pending.youtube_url, pending.youtube_video_id, now, now).run();
-    savedId = res.meta.last_row_id;
-  } else if (session.material_type === 'test') {
-    const res = await env.DB.prepare(
-      `INSERT INTO tests (title_uz, description_uz, category, language, published, created_at, updated_at)
-       VALUES (?, ?, ?, 'uz', 1, ?, ?)`
-    ).bind(pending.title_uz, description, pending.category, now, now).run();
-    savedId = res.meta.last_row_id;
-
-    for (let qIdx = 0; qIdx < pending.questions.length; qIdx++) {
-      const q = pending.questions[qIdx];
-      const qRes = await env.DB.prepare(
-        `INSERT INTO test_questions (test_id, position, question_text, created_at) VALUES (?, ?, ?, ?)`
-      ).bind(savedId, qIdx + 1, q.questionText || q.text, now).run();
-      const qId = qRes.meta.last_row_id;
-      for (let oIdx = 0; oIdx < q.options.length; oIdx++) {
-        const opt = q.options[oIdx];
-        await env.DB.prepare(
-          `INSERT INTO test_options (question_id, position, option_text, is_correct) VALUES (?, ?, ?, ?)`
-        ).bind(qId, oIdx + 1, opt.text || opt.option_text, opt.isCorrect ? 1 : 0).run();
-      }
-    }
-  }
-
-  // pending_source_key endi materialga tegishli — sessiyadan tozalaymiz
-  await saveSession(env, {
-    user_id: userId,
-    chat_id: chatId,
-    state: 'idle',
-  });
-
-  const extra = session.material_type === 'test'
-    ? `Savollar: ${pending.questions.length} ta`
-    : session.material_type === 'presentation'
-      ? `Slaydlar: ${pending.page_count || 'Office viewer'}`
-      : `YouTube: ${pending.youtube_video_id}`;
 
   await sendMessage(env, chatId, [
-    `${info.emoji} ${info.label} saytga joylandi!`,
+    `✅ ${parsed.questions.length} ta savol o'qildi.`,
     '',
-    `Sarlavha: ${pending.title_uz}`,
-    `Kategoriya: ${categoryLabel(pending.category)}`,
-    extra,
-    '',
-    `${siteUrl(env)}/${info.hash}`,
+    "Endi test qaysi fan yoki mavzu doirasida ekanini o'zbek tilida yozing.",
+    'Masalan: "Axborot xavfsizligi asoslari"',
   ].join('\n'));
 }
 
+async function saveTestWithTopic(env, { chatId, userId, session, topicName }) {
+  try {
+    const pending = parseJson(session.pending_metadata, {}) || {};
+    const questions = pending.questions || [];
+    if (questions.length === 0) {
+      await resetSession(env, userId, chatId);
+      await sendMessage(env, chatId, '❌ Savollar topilmadi. Testni qaytadan yuboring.');
+      return;
+    }
+
+    await sendMessage(env, chatId, "📝 Ma'lumotlar tayyorlanmoqda...");
+
+    const meta = await analyzeTest({
+      env,
+      topicName,
+      sampleQuestions: questions.slice(0, 5).map((q) => q.questionText),
+      questionCount: questions.length,
+    });
+
+    const now = new Date().toISOString();
+    const testResult = await env.DB.prepare(
+      `INSERT INTO tests
+       (title_uz, title_ru, title_en, description_uz, description_ru, description_en,
+        category, language, published, created_at, updated_at)
+       VALUES (?, ?, ?, ?, ?, ?, ?, 'uz', 1, ?, ?)`
+    ).bind(
+      meta.title.uz, meta.title.ru, meta.title.en,
+      meta.description.uz, meta.description.ru, meta.description.en,
+      meta.category, now, now,
+    ).run();
+
+    const testId = testResult.meta.last_row_id;
+
+    // Savollar va variantlarni yozish
+    for (let qIdx = 0; qIdx < questions.length; qIdx++) {
+      const q = questions[qIdx];
+      const qRes = await env.DB.prepare(
+        'INSERT INTO test_questions (test_id, position, question_text, created_at) VALUES (?, ?, ?, ?)'
+      ).bind(testId, qIdx + 1, q.questionText, now).run();
+
+      const questionId = qRes.meta.last_row_id;
+      for (let oIdx = 0; oIdx < q.options.length; oIdx++) {
+        const opt = q.options[oIdx];
+        await env.DB.prepare(
+          'INSERT INTO test_options (question_id, position, option_text, is_correct) VALUES (?, ?, ?, ?)'
+        ).bind(questionId, oIdx + 1, opt.text, opt.isCorrect ? 1 : 0).run();
+      }
+    }
+
+    // Bo'lim saqlanadi — admin yana test yuborishi mumkin
+    await saveSession(env, {
+      user_id: userId,
+      chat_id: chatId,
+      state: 'awaiting_material_source',
+      material_type: 'test',
+    });
+
+    await sendMessage(env, chatId, [
+      `✅ Test #${testId} qo'shildi`,
+      '',
+      `📌 ${meta.title.uz}`,
+      `🏷 ${categoryLabel(meta.category)}`,
+      `❓ ${questions.length} ta savol`,
+      meta.aiUsed ? '' : '⚠️ AI ishlamadi — nomi siz yozgan mavzudan olindi',
+      '',
+      `${siteUrl(env)}/${typeInfo('test').hash}`,
+      '',
+      'Keyingi testni yuborishingiz mumkin.',
+    ].filter(Boolean).join('\n'), uploadKeyboard('test'));
+  } catch (error) {
+    await sendMessage(env, chatId, `❌ Testni saqlashda xatolik:\n${safeErrorMessage(error)}`);
+  }
+}
+
 // ============================================================
-// BOSHQARISH OQIMI (owner)
+// BOSHQARISH (owner)
 // ============================================================
 
 export async function sendMaterialManageMenu(env, chatId, type) {
@@ -341,14 +405,15 @@ async function sendMaterialList(env, chatId, type, page) {
 
   const totalRow = await env.DB.prepare(`SELECT COUNT(*) as total FROM ${info.table}`).first();
   const total = totalRow?.total || 0;
-  const { results = [] } = await env.DB.prepare(
-    `SELECT id, title_uz, published FROM ${info.table} ORDER BY created_at DESC LIMIT ? OFFSET ?`
-  ).bind(LIST_PAGE_SIZE, offset).all();
 
   if (total === 0) {
     await sendMessage(env, chatId, `Hozircha ${info.label.toLowerCase()} yo'q. "Material qo'shish" orqali qo'shishingiz mumkin.`);
     return;
   }
+
+  const { results = [] } = await env.DB.prepare(
+    `SELECT id, title_uz, published FROM ${info.table} ORDER BY created_at DESC LIMIT ? OFFSET ?`
+  ).bind(LIST_PAGE_SIZE, offset).all();
 
   const rows = results.map((item) => [{
     text: `${item.published ? '✅' : '🚫'} #${item.id} ${shortText(item.title_uz, 40)}`,
@@ -356,8 +421,8 @@ async function sendMaterialList(env, chatId, type, page) {
   }]);
 
   const navigation = [];
-  if (page > 0) navigation.push({ text: 'Oldingi', callback_data: `mat:list:${type}:${page - 1}` });
-  if (offset + LIST_PAGE_SIZE < total) navigation.push({ text: 'Keyingi', callback_data: `mat:list:${type}:${page + 1}` });
+  if (page > 0) navigation.push({ text: '◀ Oldingi', callback_data: `mat:list:${type}:${page - 1}` });
+  if (offset + LIST_PAGE_SIZE < total) navigation.push({ text: 'Keyingi ▶', callback_data: `mat:list:${type}:${page + 1}` });
   if (navigation.length) rows.push(navigation);
 
   const pageCount = Math.max(1, Math.ceil(total / LIST_PAGE_SIZE));
@@ -370,8 +435,7 @@ async function sendMaterialList(env, chatId, type, page) {
 }
 
 async function getMaterial(env, type, id) {
-  const info = typeInfo(type);
-  return env.DB.prepare(`SELECT * FROM ${info.table} WHERE id = ?`).bind(id).first();
+  return env.DB.prepare(`SELECT * FROM ${typeInfo(type).table} WHERE id = ?`).bind(id).first();
 }
 
 async function sendMaterialDetail(env, chatId, type, id) {
@@ -389,7 +453,10 @@ async function sendMaterialDetail(env, chatId, type, id) {
     `Kategoriya: ${categoryLabel(item.category)}`,
     `Holat: ${item.published ? "✅ Saytda ko'rinadi" : '🚫 Yashirilgan'}`,
   ];
-  if (type === 'presentation') lines.push(`Slaydlar: ${item.page_count || 'Office viewer'}`, `Fayl: ${item.pdf_key}`);
+  if (type === 'presentation') {
+    lines.push(`Slaydlar: ${item.page_count || 'Office viewer'}`);
+    lines.push(`Muqova: ${item.cover_key ? 'bor' : "yo'q"}`);
+  }
   if (type === 'video') lines.push(`YouTube: ${item.youtube_url}`);
   if (type === 'test') {
     const countRow = await env.DB.prepare('SELECT COUNT(*) as c FROM test_questions WHERE test_id = ?').bind(id).first();
@@ -416,13 +483,12 @@ async function deleteMaterial(env, type, id) {
 
   if (type === 'test') {
     await env.DB.prepare(
-      `DELETE FROM test_options WHERE question_id IN (SELECT id FROM test_questions WHERE test_id = ?)`
+      'DELETE FROM test_options WHERE question_id IN (SELECT id FROM test_questions WHERE test_id = ?)'
     ).bind(id).run();
     await env.DB.prepare('DELETE FROM test_questions WHERE test_id = ?').bind(id).run();
   }
   await env.DB.prepare(`DELETE FROM ${info.table} WHERE id = ?`).bind(id).run();
 
-  // R2 fayllarini tozalash
   const keys = [item.pdf_key, item.cover_key].filter(Boolean);
   if (keys.length) await deleteObjects(env.BUCKET, keys);
   return true;
@@ -432,11 +498,16 @@ async function deleteMaterial(env, type, id) {
 // DISPATCH
 // ============================================================
 
-/** Callbacklar: mat-cat:<type>:<key>, mat:list|view|pub|del|del-confirm:<type>:<id> */
+/** Callbacklar: mat:section, mat:done, mat:list|view|pub|del|del-confirm:<type>:<id> */
 export async function handleMaterialCallback(env, chatId, userId, data, isOwnerUser) {
-  const catMatch = data.match(/^mat-cat:(presentation|video|test):([a-z_]+)$/);
-  if (catMatch) {
-    await handleCategoryPick(env, chatId, userId, catMatch[1], catMatch[2]);
+  if (data === 'mat:section') {
+    await sendMessage(env, chatId, "Qaysi turdagi material qo'shmoqchisiz?", sectionKeyboard());
+    return true;
+  }
+
+  if (data === 'mat:done') {
+    await resetSession(env, userId, chatId);
+    await sendMessage(env, chatId, "Tayyor. Yana material qo'shish uchun menyudan tanlang.");
     return true;
   }
 
@@ -496,7 +567,7 @@ export async function handleMaterialCallback(env, chatId, userId, data, isOwnerU
 }
 
 /**
- * Material yaratish holatlaridagi xabarlar.
+ * Material yuborish holatidagi xabarlar.
  * Boshqa holat bo'lsa null qaytaradi (dispatcher davom etadi).
  */
 export async function handleMaterialMessageState(env, { session, message, text, chatId, userId }) {
@@ -506,16 +577,23 @@ export async function handleMaterialMessageState(env, { session, message, text, 
   const type = session.material_type;
   if (!type || !MATERIAL_TYPES[type]) {
     await resetSession(env, userId, chatId);
-    await sendMessage(env, chatId, "Jarayon eskirgan. Boshidan boshlang: Material qo'shish.");
+    await sendMessage(env, chatId, "Jarayon eskirgan. Bo'limni qaytadan tanlang.", sectionKeyboard());
     return { background: null };
   }
 
-  if (state === 'awaiting_material_category') {
-    await sendMessage(env, chatId, 'Kategoriyani yuqoridagi tugmalardan tanlang.');
-    return { background: null };
+  // Test uchun mavzu nomi kutilmoqda
+  if (state === 'awaiting_material_topic') {
+    if (!text || text.trim().length < 3) {
+      await sendMessage(env, chatId, "Mavzu nomini matn sifatida yozing (kamida 3 ta belgi).");
+      return { background: null };
+    }
+    return { background: () => saveTestWithTopic(env, { chatId, userId, session, topicName: text.trim() }) };
   }
 
-  if (state === 'awaiting_material_file' && type === 'presentation') {
+  if (state !== 'awaiting_material_source') return null;
+
+  // --- Taqdimot ---
+  if (type === 'presentation') {
     const found = getPresentationFile(message);
     if (!found) {
       await sendMessage(env, chatId, 'PDF, PPT yoki PPTX formatidagi faylni yuboring.');
@@ -526,59 +604,50 @@ export async function handleMaterialMessageState(env, { session, message, text, 
       return { background: null };
     }
     return {
-      background: () => processPresentationFile(env, {
+      background: () => processPresentation(env, {
         chatId,
         userId,
-        session,
         document: found.document,
         isPdf: found.isPdf,
       }),
     };
   }
 
-  if (state === 'awaiting_material_file' && type === 'test') {
-    const document = getTxtFile(message);
-    if (!document) {
-      await sendMessage(env, chatId, 'UTF-8 kodlashdagi .txt faylni yuboring.');
-      return { background: null };
-    }
-    if ((document.file_size || 0) > MAX_TXT_BYTES) {
-      await sendMessage(env, chatId, 'Fayl juda katta. Maksimal hajm 1 MB.');
-      return { background: null };
-    }
-    return {
-      background: () => processTestFile(env, { chatId, userId, session, document }),
-    };
-  }
-
-  if (state === 'awaiting_material_url' && type === 'video') {
+  // --- Video ---
+  if (type === 'video') {
     if (!text) {
       await sendMessage(env, chatId, 'YouTube havolasini matn sifatida yuboring.');
       return { background: null };
     }
-    await handleVideoUrl(env, { chatId, userId, session, text });
-    return { background: null };
+    return { background: () => processVideo(env, { chatId, url: text.trim() }) };
   }
 
-  if (state === 'awaiting_material_title') {
-    if (!text) {
-      await sendMessage(env, chatId, 'Sarlavhani matn sifatida yuboring.');
-      return { background: null };
+  // --- Test: .txt fayl yoki oddiy matn ---
+  if (type === 'test') {
+    const document = getTxtFile(message);
+    if (document) {
+      if ((document.file_size || 0) > MAX_TXT_BYTES) {
+        await sendMessage(env, chatId, 'Fayl juda katta. Maksimal hajm 1 MB.');
+        return { background: null };
+      }
+      return {
+        background: async () => {
+          try {
+            const buffer = await downloadTelegramFile(env, document.file_id, document.file_size);
+            const content = new TextDecoder('utf-8').decode(buffer);
+            await stageTestQuestions(env, { chatId, userId, session, content });
+          } catch (error) {
+            await sendMessage(env, chatId, `❌ Faylni o'qishda xatolik:\n${safeErrorMessage(error)}`);
+          }
+        },
+      };
     }
-    await handleTitle(env, { chatId, userId, session, text });
-    return { background: null };
-  }
 
-  if (state === 'awaiting_material_desc') {
-    if (!text) {
-      await sendMessage(env, chatId, "Tavsifni matn sifatida yuboring (yoki \"-\" yozing).");
-      return { background: null };
+    if (text && text.length >= MIN_INLINE_TEST_CHARS) {
+      return { background: () => stageTestQuestions(env, { chatId, userId, session, content: text }) };
     }
-    try {
-      await handleDescriptionAndSave(env, { chatId, userId, session, text });
-    } catch (error) {
-      await sendMessage(env, chatId, `Saqlashda xatolik:\n${safeErrorMessage(error)}`);
-    }
+
+    await sendMessage(env, chatId, 'Test savollarini .txt fayl yoki to\'liq matn sifatida yuboring.');
     return { background: null };
   }
 

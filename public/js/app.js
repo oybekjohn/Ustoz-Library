@@ -10,6 +10,7 @@ import { initPresentationViewer } from './presentation-viewer.js';
 import { initVideoPlayer } from './video-player.js';
 import { initTestRunner } from './test-runner.js';
 import { initTelegramMiniApp } from './telegram-mini-app.js';
+import { isPdfUrl, lazyRenderPdfThumb } from './pdf-thumb.js';
 
 // ---------- Tarjimalar (i18n) ----------
 const translations = {
@@ -17,7 +18,7 @@ const translations = {
     siteTitle: "DL-library.uz — Raqamli kutubxona",
     heroName: "DL-library.uz",
     heroTitle: "Renessans Ta'lim Universiteti — Raqamli kutubxona",
-    heroBio: "Ushbu elektron kutubxona Renessans ta'lim universiteti Matematika va iqtisod fakultetining Axborot texnologiyalari kafedrasi jamoasi tomonidan yaratilgan bo'lib, uning asosiy maqsadi talabalarga fan dasturlarini, fanlar bo'yicha uslubiy qo'llanmalarni, o'quv qo'llanmalarni, darsliklarni va monografiyalarni taqdim etishdir. Bundan tashqari, saytda talabalar uchun qiziqarli mavzulardagi bir qancha adabiyotlar ham jamlangan.",
+    heroBio: "Ushbu elektron kutubxona Renessans ta'lim universiteti Matematika va iqtisod fakultetining Axborot texnologiyalari kafedrasi jamoasi tomonidan yaratilgan bo'lib, uning asosiy maqsadi talabalarga fan dasturlarini, fanlar bo'yicha uslubiy qo'llanmalarni, o'quv qo'llanmalarni, darsliklarni va monografiyalarni, shuningdek mavzularga doir taqdimotlar, video darslar va testlarni taqdim etishdir. Bundan tashqari, saytda talabalar uchun qiziqarli mavzulardagi bir qancha adabiyotlar ham jamlangan.",
     heroContact: "Elektron kutubxonadagi biror kitobni yuklab olmoqchi bo'lsangiz, quyidagi kontaktlarga murojaat qiling:",
     searchPlaceholder: "Kitob nomini qidirish...",
     filterAll: "Barchasi",
@@ -56,7 +57,7 @@ const translations = {
     siteTitle: "DL-library.uz — Цифровая библиотека",
     heroName: "DL-library.uz",
     heroTitle: "Университет образования Ренессанс — Цифровая библиотека",
-    heroBio: "Данная электронная библиотека создана коллективом кафедры Информационных технологий факультета Математики и экономики университета образования Ренессанс. Основная цель — предоставление студентам учебных программ, методических пособий, учебников и монографий. Кроме того, на сайте собран ряд материалов на темы, интересные студентам.",
+    heroBio: "Данная электронная библиотека создана коллективом кафедры Информационных технологий факультета Математики и экономики университета образования Ренессанс. Основная цель — предоставление студентам учебных программ, методических пособий, учебников и монографий, а также тематических презентаций, видеоуроков и тестов. Кроме того, на сайте собран ряд материалов на темы, интересные студентам.",
     heroContact: "Если вы хотите скачать книгу из электронной библиотеки, свяжитесь с нами:",
     searchPlaceholder: "Поиск по названию книги...",
     filterAll: "Все",
@@ -95,7 +96,7 @@ const translations = {
     siteTitle: "DL-library.uz — Digital Library",
     heroName: "DL-library.uz",
     heroTitle: "Renaissance University of Education — Digital Library",
-    heroBio: "This digital library was created by the Information Technology Department of the Faculty of Mathematics and Economics at Renaissance University of Education. Its main goal is to provide students with curricula, study guides, textbooks and monographs. The site also offers a range of materials on topics of interest to students.",
+    heroBio: "This digital library was created by the Information Technology Department of the Faculty of Mathematics and Economics at Renaissance University of Education. Its main goal is to provide students with curricula, study guides, textbooks and monographs, as well as topical presentations, video lessons and tests. The site also offers a range of materials on topics of interest to students.",
     heroContact: "If you would like to download a book from the digital library, please contact us:",
     searchPlaceholder: "Search books...",
     filterAll: "All",
@@ -132,19 +133,20 @@ const translations = {
   },
 };
 
-// Kategoriya nomlari (kalitlar backend CATEGORIES bilan bir xil)
-const CATEGORY_LABELS = {
-  it: { uz: "Axborot texnologiyalari", ru: "Информационные технологии", en: "IT" },
-  ai: { uz: "Sun'iy intellekt", ru: "Искусственный интеллект", en: "AI" },
-  iqtisodiyot: { uz: "Iqtisodiyot", ru: "Экономика", en: "Economics" },
-  biznes: { uz: "Biznes", ru: "Бизнес", en: "Business" },
-  salomatlik: { uz: "Salomatlik", ru: "Здоровье", en: "Health" },
-  bogdorchilik: { uz: "Bog'dorchilik", ru: "Садоводство", en: "Gardening" },
-  fandastur: { uz: "Fan dasturlari", ru: "Учебные программы", en: "Curricula" },
-  ai_darslar: { uz: "AI darslar", ru: "Уроки AI", en: "AI lessons" },
-  ai_agentlar: { uz: "AI agentlar", ru: "AI-агенты", en: "AI agents" },
-  boshqa: { uz: "Boshqa", ru: "Прочее", en: "Other" },
-};
+// Kategoriyalar (kalitlar backend CATEGORIES bilan bir xil).
+// `stat: true` bo'lganlari hero ostidagi statistika qatorida ko'rsatiladi.
+const CATEGORIES = [
+  { key: 'it',           emoji: '💻', uz: 'IT',                      ru: 'IT',                           en: 'IT',                          stat: true  },
+  { key: 'ai',           emoji: '🤖', uz: "Sun'iy intellekt",        ru: 'Искусственный интеллект',      en: 'Artificial Intelligence',     stat: true  },
+  { key: 'iqtisodiyot',  emoji: '📈', uz: 'Iqtisodiyot',             ru: 'Экономика',                    en: 'Economics',                   stat: true  },
+  { key: 'biznes',       emoji: '💼', uz: 'Biznes va Tadbirkorlik',  ru: 'Бизнес и предпринимательство', en: 'Business & Entrepreneurship', stat: true  },
+  { key: 'salomatlik',   emoji: '💊', uz: 'Salomatlik va Kosmetika', ru: 'Здоровье и косметика',         en: 'Health & Cosmetics',          stat: false },
+  { key: 'bogdorchilik', emoji: '🌱', uz: "Bog'dorchilik",           ru: 'Садоводство',                  en: 'Gardening',                   stat: false },
+  { key: 'fandastur',    emoji: '📋', uz: 'Fan dasturlari',          ru: 'Учебные программы',            en: 'Syllabi',                     stat: false },
+  { key: 'ai_darslar',   emoji: '🎓', uz: 'SI darslar',              ru: 'Уроки ИИ',                     en: 'AI Lessons',                  stat: false },
+  { key: 'ai_agentlar',  emoji: '🧠', uz: 'SI agentlar',             ru: 'ИИ-агенты',                    en: 'AI Agents',                   stat: false },
+  { key: 'boshqa',       emoji: '📚', uz: 'Boshqa',                  ru: 'Другое',                       en: 'Other',                       stat: false },
+];
 
 const VIEWS = ['books', 'presentations', 'videos', 'tests'];
 
@@ -167,7 +169,7 @@ export function t() {
 }
 
 export function catLabel(key) {
-  const entry = CATEGORY_LABELS[key];
+  const entry = CATEGORIES.find((c) => c.key === key);
   if (!entry) return key;
   return entry[state.currentLang] || entry.uz;
 }
@@ -318,11 +320,14 @@ async function renderPresentationsView(container) {
       const title = localized(p, 'title');
       const desc = localized(p, 'description');
       const cover = p.cover_key ? `/files/${p.cover_key}` : '';
+      // Muqova PDF bo'lsa (taqdimotning 1-sahifasi) uni PDF.js chizadi
+      const coverIsPdf = isPdfUrl(cover);
       const card = document.createElement('article');
       card.className = 'material-card material-card--clickable';
       card.innerHTML = `
-        <div class="material-card__media ${cover ? '' : 'material-card__media--placeholder'}">
-          ${cover ? `<img src="${cover}" alt="" loading="lazy" />` : '<span class="material-card__media-icon">📊</span>'}
+        <div class="material-card__media ${cover ? '' : 'material-card__media--placeholder'} ${coverIsPdf ? 'material-card__media--loading' : ''}">
+          ${cover && !coverIsPdf ? `<img src="${cover}" alt="" loading="lazy" />` : ''}
+          ${!cover ? '<span class="material-card__media-icon">📊</span>' : ''}
           ${p.page_count > 0 ? `<span class="material-card__count">${p.page_count} ${t().presSlides}</span>` : ''}
         </div>
         <div class="material-card__body">
@@ -334,14 +339,19 @@ async function renderPresentationsView(container) {
       `;
       card.querySelector('.material-card__title').textContent = title;
       card.querySelector('.material-card__desc').textContent = desc;
-      card.querySelector('button').addEventListener('click', () => {
+      const open = () => {
         container.innerHTML = '';
         renderBackButton(container, () => renderPresentationsView(container));
         const target = document.createElement('div');
         container.appendChild(target);
         initPresentationViewer(p, target, { lang: state.currentLang });
-      });
+      };
+      card.querySelector('button').addEventListener('click', open);
+      const media = card.querySelector('.material-card__media');
+      media.addEventListener('click', open);
       grid.appendChild(card);
+
+      if (coverIsPdf) lazyRenderPdfThumb(cover, media);
     });
   } catch (err) {
     console.error('Presentations load error:', err);
@@ -699,31 +709,64 @@ function updateStaticTexts() {
   });
 }
 
+// Statistika: umumiy kitoblar + `stat: true` kategoriyalar, raqamlar animatsiya bilan
 function renderStats() {
   const stats = $('#stats');
   const count = $('#search-count');
   const tr = t();
   if (count) count.textContent = `${state.filteredBooks.length}/${state.books.length}`;
   if (!stats) return;
-  stats.innerHTML = `
-    <div class="stat-card">
-      <div class="stat-card__number">${state.books.length}</div>
-      <div class="stat-card__label">${tr.statBooks}</div>
+
+  const cards = [{ num: state.books.length, label: tr.statBooks }];
+  for (const c of CATEGORIES) {
+    if (!c.stat) continue;
+    cards.push({
+      num: state.books.filter((b) => b.category === c.key).length,
+      label: c[state.currentLang] || c.uz,
+    });
+  }
+
+  stats.innerHTML = cards.map((c) => `
+    <div class="stat">
+      <div class="stat__number" data-target="${c.num}">0</div>
+      <div class="stat__label">${c.label}</div>
     </div>
-  `;
+  `).join('');
+
+  stats.querySelectorAll('.stat__number').forEach((el) => {
+    animateNumber(el, Number(el.dataset.target) || 0);
+  });
 }
 
+function animateNumber(el, target) {
+  const duration = 800;
+  const start = performance.now();
+  const step = (now) => {
+    const progress = Math.min(1, (now - start) / duration);
+    // easeOutCubic
+    el.textContent = Math.round(target * (1 - Math.pow(1 - progress, 3)));
+    if (progress < 1) requestAnimationFrame(step);
+    else el.textContent = target;
+  };
+  requestAnimationFrame(step);
+  // rAF to'xtab qolsa ham yakuniy qiymat ko'rinadi
+  setTimeout(() => { el.textContent = target; }, duration + 150);
+}
+
+// Filtrlar: "Barchasi" + barcha kategoriyalar (emoji bilan)
 function renderFilters() {
   const filters = $('#filters');
   if (!filters) return;
   const tr = t();
-  const categories = Array.from(new Set(state.books.map((b) => b.category).filter(Boolean)));
+
   filters.innerHTML = [
     `<button class="filter-btn ${state.currentCategory === 'all' ? 'active' : ''}" data-category="all">${tr.filterAll}</button>`,
-    ...categories.map(
-      (c) => `<button class="filter-btn ${state.currentCategory === c ? 'active' : ''}" data-category="${c}">${catLabel(c)}</button>`
-    ),
+    ...CATEGORIES.map((c) => {
+      const active = state.currentCategory === c.key ? 'active' : '';
+      return `<button class="filter-btn ${active}" data-category="${c.key}">${c.emoji} ${c[state.currentLang] || c.uz}</button>`;
+    }),
   ].join('');
+
   filters.querySelectorAll('.filter-btn').forEach((btn) => {
     btn.addEventListener('click', () => {
       filters.querySelectorAll('.filter-btn').forEach((item) => item.classList.remove('active'));
