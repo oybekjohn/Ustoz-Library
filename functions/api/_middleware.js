@@ -17,6 +17,12 @@ const WRITE_LIMIT = 30;
 const LOGIN_WINDOW_SECONDS = 600;
 const LOGIN_MAX_ATTEMPTS = 10;
 
+// So'rov tanasining maksimal hajmi (fayl yuklashdan tashqari).
+// Content-Length yo'q bo'lsa tekshirilmaydi — bunday holda endpointning
+// o'z cheklovlari ishlaydi.
+const MAX_JSON_BODY_BYTES = 256 * 1024;
+const UPLOAD_PATHS = ['/api/upload', '/api/ai/analyze'];
+
 // isolate darajasidagi hisoblagichlar: key -> { windowStart, count }
 const memoryBuckets = new Map();
 
@@ -77,6 +83,18 @@ export async function onRequest(context) {
   const isWrite = !['GET', 'HEAD', 'OPTIONS'].includes(method);
   if (!memoryAllow(`${ip}:${isWrite ? 'w' : 'r'}`, isWrite ? WRITE_LIMIT : READ_LIMIT)) {
     return tooManyRequests("So'rovlar soni juda ko'p. Bir daqiqadan so'ng urinib ko'ring.");
+  }
+
+  // Katta JSON tanalar bilan xotirani to'ldirish urinishini to'samiz.
+  // Fayl yuklaydigan endpointlar o'z hajm cheklovlariga ega.
+  if (isWrite && !UPLOAD_PATHS.some((p) => url.pathname.startsWith(p))) {
+    const declaredLength = Number(request.headers.get('Content-Length') || 0);
+    if (declaredLength > MAX_JSON_BODY_BYTES) {
+      return new Response(JSON.stringify({ ok: false, error: "So'rov hajmi juda katta" }), {
+        status: 413,
+        headers: { 'Content-Type': 'application/json; charset=utf-8' },
+      });
+    }
   }
 
   if (url.pathname === '/api/auth/login' && method === 'POST') {

@@ -7,8 +7,8 @@
 
 import { saveItemProgress, getItemProgress } from './local-progress.js';
 
-const PDFJS_URL = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js';
-const PDFJS_WORKER_URL = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+const PDFJS_URL = '/js/vendor/pdf.min.js';
+const PDFJS_WORKER_URL = '/js/vendor/pdf.worker.min.js';
 
 const TEXTS = {
   uz: {

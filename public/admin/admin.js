@@ -190,7 +190,7 @@ async function loadAdminPresentations() {
     container.innerHTML = items.map(p => `
       <div style="padding:10px; border-bottom:1px solid #eee; display:flex; justify-content:space-between; align-items:center; gap:8px; flex-wrap:wrap;">
         <span>
-          <strong>${p.title_uz}</strong> (${p.page_count} slayd)
+          <strong>${esc(p.title_uz)}</strong> (${Number(p.page_count) || 0} slayd)
           <span style="margin-left:8px; padding:2px 8px; border-radius:12px; font-size:12px; background:${p.published ? '#d4edda' : '#fff3cd'}; color:${p.published ? '#155724' : '#856404'};">
             ${p.published ? '✅ Published' : '📋 Draft'}
           </span>
@@ -303,8 +303,8 @@ async function loadAdminVideos() {
     container.innerHTML = items.map(v => `
       <div style="padding:10px; border-bottom:1px solid #eee; display:flex; justify-content:space-between; align-items:center; gap:8px; flex-wrap:wrap;">
         <span>
-          <strong>${v.title_uz}</strong>
-          <a href="https://youtu.be/${v.youtube_video_id}" target="_blank" style="font-size:12px; margin-left:6px;">${v.youtube_video_id}</a>
+          <strong>${esc(v.title_uz)}</strong>
+          <a href="https://youtu.be/${encodeURIComponent(v.youtube_video_id)}" target="_blank" rel="noopener" style="font-size:12px; margin-left:6px;">${esc(v.youtube_video_id)}</a>
           <span style="margin-left:8px; padding:2px 8px; border-radius:12px; font-size:12px; background:${v.published ? '#d4edda' : '#fff3cd'}; color:${v.published ? '#155724' : '#856404'};">
             ${v.published ? '✅ Published' : '📋 Draft'}
           </span>
@@ -429,7 +429,7 @@ async function loadAdminTests() {
     container.innerHTML = items.map(t => `
       <div style="padding:10px; border-bottom:1px solid #eee; display:flex; justify-content:space-between; align-items:center; gap:8px; flex-wrap:wrap;">
         <span>
-          <strong>${t.title_uz}</strong> (${t.question_count} savol, ${t.duration_minutes} min)
+          <strong>${esc(t.title_uz)}</strong> (${Number(t.question_count) || 0} savol, ${Number(t.duration_minutes) || 0} min)
           <span style="margin-left:8px; padding:2px 8px; border-radius:12px; font-size:12px; background:${t.published ? '#d4edda' : '#fff3cd'}; color:${t.published ? '#155724' : '#856404'};">
             ${t.published ? '✅ Published' : '📋 Draft'}
           </span>
@@ -485,11 +485,11 @@ function renderBooks() {
 
   $('#books-list').innerHTML = list.map(b => `
     <div class="book-row">
-      <img class="book-row__cover" src="${b.cover || ''}" alt="" onerror="this.style.visibility='hidden'">
+      <img class="book-row__cover" src="${esc(b.cover || '')}" alt="" onerror="this.style.visibility='hidden'">
       <div class="book-row__info">
         <div class="book-row__title">${esc(b.title.uz)}</div>
         <div class="book-row__meta">
-          <span class="tag">${CAT_NAMES[b.category] || b.category}</span>
+          <span class="tag">${esc(CAT_NAMES[b.category] || b.category)}</span>
           <span class="tag">${(b.language || '').toUpperCase()}</span>
           👤 ${esc(b.author)} · 📅 ${b.year || '—'}
         </div>

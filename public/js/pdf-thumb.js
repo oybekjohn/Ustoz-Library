@@ -6,8 +6,8 @@
    Cloudflare Workers muhitida mumkin emas.
    ============================================ */
 
-const PDFJS_URL = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js';
-const PDFJS_WORKER_URL = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+const PDFJS_URL = '/js/vendor/pdf.min.js';
+const PDFJS_WORKER_URL = '/js/vendor/pdf.worker.min.js';
 
 let pdfJsPromise = null;
 
@@ -32,14 +32,24 @@ export function isPdfUrl(url) {
   return /\.pdf($|\?)/i.test(String(url || ''));
 }
 
+const RENDER_TIMEOUT_MS = 15_000;
+
+function withTimeout(promise, ms, label) {
+  return Promise.race([
+    promise,
+    new Promise((_, reject) => setTimeout(() => reject(new Error(`${label}: vaqt tugadi`)), ms)),
+  ]);
+}
+
 /**
  * PDF ning 1-sahifasini canvas'ga chizadi.
  * Kartochka ko'rinish maydoniga kirganda chaqiriladi (lazy).
+ * Har qanday holatda ham skelet animatsiyasi olib tashlanadi.
  */
 export async function renderPdfThumb(url, containerEl, { maxWidth = 480 } = {}) {
   try {
-    const pdfjsLib = await loadPdfJs();
-    const doc = await pdfjsLib.getDocument(url).promise;
+    const pdfjsLib = await withTimeout(loadPdfJs(), RENDER_TIMEOUT_MS, 'PDF.js yuklash');
+    const doc = await withTimeout(pdfjsLib.getDocument(url).promise, RENDER_TIMEOUT_MS, 'PDF ochish');
     const page = await doc.getPage(1);
 
     const base = page.getViewport({ scale: 1 });
@@ -52,16 +62,26 @@ export async function renderPdfThumb(url, containerEl, { maxWidth = 480 } = {}) 
     canvas.height = viewport.height;
     canvas.className = 'pdf-thumb';
 
-    await page.render({ canvasContext: canvas.getContext('2d'), viewport }).promise;
-
+    // Canvas avval DOMga qo'yiladi: ajratilgan (detached) canvasda
+    // page.render() ba'zi brauzerlarda umuman yakunlanmaydi.
     containerEl.innerHTML = '';
     containerEl.appendChild(canvas);
+
+    await withTimeout(
+      page.render({ canvasContext: canvas.getContext('2d'), viewport }).promise,
+      RENDER_TIMEOUT_MS,
+      'PDF chizish',
+    );
+
     containerEl.classList.remove('material-card__media--loading');
     doc.destroy?.();
     return true;
   } catch (err) {
     console.error('PDF thumbnail render error:', err);
+    // Muqova chizilmasa ham kartochka bo'sh qolmasligi kerak
     containerEl.classList.remove('material-card__media--loading');
+    containerEl.classList.add('material-card__media--placeholder');
+    containerEl.innerHTML = '<span class="material-card__media-icon">📊</span>';
     return false;
   }
 }

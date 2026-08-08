@@ -981,40 +981,8 @@ export async function handleTelegramUpdate(env, update) {
 
   const text = String(message?.text || '').trim();
 
-  if (text.startsWith('/start link_')) {
-    const rawToken = text.slice('/start link_'.length).trim();
-    try {
-      const { verifyAndConsumeLinkToken } = await import('./telegram-link.js');
-      const userId = await verifyAndConsumeLinkToken(env, rawToken);
-      if (userId) {
-        const now = new Date().toISOString();
-        await env.DB.prepare(
-          `INSERT INTO user_telegram_links (telegram_user_id, user_id, telegram_username, telegram_first_name, telegram_last_name, linked_at, last_seen_at)
-           VALUES (?, ?, ?, ?, ?, ?, ?)
-           ON CONFLICT(telegram_user_id) DO UPDATE SET
-           user_id = excluded.user_id,
-           telegram_username = excluded.telegram_username,
-           telegram_first_name = excluded.telegram_first_name,
-           telegram_last_name = excluded.telegram_last_name,
-           revoked_at = NULL,
-           last_seen_at = excluded.last_seen_at`
-        ).bind(String(from.id), userId, from.username || null, from.first_name || null, from.last_name || null, now, now).run();
-
-        await sendMessage(
-          env,
-          chatId,
-          `✅ Telegram akkauntingiz DL-Library Google profili bilan muvaffaqiyatli bog'landi!`,
-          mainKeyboard(access.role)
-        );
-        return { background: null };
-      } else {
-        await sendMessage(env, chatId, `⚠️ Link kodi eskirgan yoki yaroqsiz. Qayta profil sahifasidan urinib ko'ring.`);
-        return { background: null };
-      }
-    } catch (linkErr) {
-      console.error('Telegram Link Error:', linkErr);
-    }
-  }
+  // Eslatma: Google profilini Telegram bilan bog'lash oqimi (/start link_TOKEN)
+  // foydalanuvchi profili bilan birga keyingi relizga qoldirildi.
 
   if (text === '/start' || text === '/cancel') {
     const current = await getSession(env, from.id);
