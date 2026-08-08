@@ -77,8 +77,27 @@ export function parseJsonText(text) {
   return JSON.parse(fenced ? fenced[1] : value);
 }
 
+/**
+ * Model javobidagi HTML/boshqaruv belgilarini olib tashlaydi.
+ * PDF ichidagi matn ishonchsiz manba: prompt injection orqali javobga
+ * `<img onerror=...>` kabi qiymat tushishi mumkin, bu esa keyinchalik
+ * admin panelida saqlangan XSS ga aylanadi.
+ */
+function stripMarkup(value) {
+  const withoutTags = String(value ?? '')
+    .replace(/<[^>]*>/g, ' ')
+    .replace(/[<>]/g, ' ');
+
+  let result = '';
+  for (const ch of withoutTags) {
+    const code = ch.codePointAt(0);
+    result += (code < 32 || code === 127) ? ' ' : ch;
+  }
+  return result;
+}
+
 function cleanText(value, fallback = '', maxLength = 4000) {
-  const text = String(value ?? '').replace(/\s+/g, ' ').trim();
+  const text = stripMarkup(value).replace(/\s+/g, ' ').trim();
   return (text || fallback).slice(0, maxLength);
 }
 

@@ -77,8 +77,8 @@ async function openFlipbook(file, title, qrImage) {
     const loading = document.getElementById('flipbook-loading');
     if (loading) loading.style.display = 'flex';
     try {
-      await loadScript('https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js');
-      window.pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+      await loadScript('/js/vendor/pdf.min.js');
+      window.pdfjsLib.GlobalWorkerOptions.workerSrc = '/js/vendor/pdf.worker.min.js';
     } catch (e) {
       console.error('PDF.js yuklashda xatolik', e);
     }

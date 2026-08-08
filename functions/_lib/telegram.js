@@ -35,9 +35,11 @@ import {
 import {
   handleMaterialCallback,
   handleMaterialMessageState,
+  sectionKeyboard,
   startMaterialCreate,
   sendMaterialManageMenu,
 } from './telegram-materials.js';
+import { resolveOpenRouterModel } from './ai/text-json.js';
 
 export { TELEGRAM_CATEGORIES };
 
@@ -56,23 +58,34 @@ const EDIT_FIELDS = {
   description_en: 'Tavsif (ingliz)',
 };
 
+// Asosiy menyu: bo'limlar to'g'ridan-to'g'ri tugmalarda.
+// Bo'lim tanlangach admin ketma-ket material yuboraveradi.
+const MENU_BOOKS = '📚 Kitoblar';
+const MENU_PRESENTATIONS = '📊 Taqdimotlar';
+const MENU_VIDEOS = '🎥 Videolar';
+const MENU_TESTS = '📝 Testlar';
+const MENU_ADMINS = '👤 Adminlar';
+const MENU_ABOUT = 'ℹ️ Bot haqida';
+
 function mainKeyboard(role = 'owner') {
-  if (role === 'library') {
-    return {
-      keyboard: [
-        [{ text: 'Material qo\'shish' }],
-        [{ text: 'Bot haqida' }],
-      ],
-      resize_keyboard: true,
-    };
+  const rows = [
+    [{ text: MENU_BOOKS }, { text: MENU_PRESENTATIONS }],
+    [{ text: MENU_VIDEOS }, { text: MENU_TESTS }],
+  ];
+  rows.push(role === 'owner'
+    ? [{ text: MENU_ADMINS }, { text: MENU_ABOUT }]
+    : [{ text: MENU_ABOUT }]);
+  return { keyboard: rows, resize_keyboard: true };
+}
+
+// Bo'lim ochilganda owner uchun qo'shimcha boshqaruv tugmasi
+function sectionActionsKeyboard(type, isOwnerUser) {
+  const rows = [];
+  if (isOwnerUser) {
+    rows.push([{ text: '⚙️ Ro\'yxat va boshqaruv', callback_data: `mat:list:${type}:0` }]);
   }
-  return {
-    keyboard: [
-      [{ text: 'Materiallarni boshqarish' }],
-      [{ text: 'Adminlar' }, { text: 'Bot haqida' }],
-    ],
-    resize_keyboard: true,
-  };
+  rows.push([{ text: '✅ Tugatdim', callback_data: 'mat:done' }]);
+  return { inline_keyboard: rows };
 }
 
 function bookManagementKeyboard() {
@@ -908,6 +921,7 @@ export async function handleTelegramUpdate(env, update) {
         await startCreate(env, chatId, from.id);
       } else if (['presentation', 'video', 'test'].includes(type)) {
         await startMaterialCreate(env, chatId, from.id, type);
+        await sendMessage(env, chatId, 'Yuborishni boshlang 👇', sectionActionsKeyboard(type, isOwner(env, from.id)));
       } else {
         await sendMessage(env, chatId, "Noma'lum material turi.", mainKeyboard(access.role));
       }
@@ -967,40 +981,8 @@ export async function handleTelegramUpdate(env, update) {
 
   const text = String(message?.text || '').trim();
 
-  if (text.startsWith('/start link_')) {
-    const rawToken = text.slice('/start link_'.length).trim();
-    try {
-      const { verifyAndConsumeLinkToken } = await import('./telegram-link.js');
-      const userId = await verifyAndConsumeLinkToken(env, rawToken);
-      if (userId) {
-        const now = new Date().toISOString();
-        await env.DB.prepare(
-          `INSERT INTO user_telegram_links (telegram_user_id, user_id, telegram_username, telegram_first_name, telegram_last_name, linked_at, last_seen_at)
-           VALUES (?, ?, ?, ?, ?, ?, ?)
-           ON CONFLICT(telegram_user_id) DO UPDATE SET
-           user_id = excluded.user_id,
-           telegram_username = excluded.telegram_username,
-           telegram_first_name = excluded.telegram_first_name,
-           telegram_last_name = excluded.telegram_last_name,
-           revoked_at = NULL,
-           last_seen_at = excluded.last_seen_at`
-        ).bind(String(from.id), userId, from.username || null, from.first_name || null, from.last_name || null, now, now).run();
-
-        await sendMessage(
-          env,
-          chatId,
-          `✅ Telegram akkauntingiz DL-Library Google profili bilan muvaffaqiyatli bog'landi!`,
-          mainKeyboard(access.role)
-        );
-        return { background: null };
-      } else {
-        await sendMessage(env, chatId, `⚠️ Link kodi eskirgan yoki yaroqsiz. Qayta profil sahifasidan urinib ko'ring.`);
-        return { background: null };
-      }
-    } catch (linkErr) {
-      console.error('Telegram Link Error:', linkErr);
-    }
-  }
+  // Eslatma: Google profilini Telegram bilan bog'lash oqimi (/start link_TOKEN)
+  // foydalanuvchi profili bilan birga keyingi relizga qoldirildi.
 
   if (text === '/start' || text === '/cancel') {
     const current = await getSession(env, from.id);
@@ -1009,42 +991,55 @@ export async function handleTelegramUpdate(env, update) {
     await sendMessage(
       env,
       chatId,
-      text === '/cancel' ? 'Jarayon bekor qilindi.' : 'DL Library boshqaruv botiga xush kelibsiz.',
+      text === '/cancel'
+        ? 'Jarayon bekor qilindi.'
+        : [
+            'DL Library boshqaruv botiga xush kelibsiz! 👋',
+            '',
+            "Quyidagi bo'limlardan birini tanlang. Bo'lim tanlangach,",
+            "ketma-ket material yuboraverasiz — har safar qayta tanlash shart emas.",
+          ].join('\n'),
       mainKeyboard(access.role),
     );
     return { background: null };
   }
 
-  if (text === 'Materiallarni boshqarish' || text === 'Material qo\'shish') {
-    if (text === 'Material qo\'shish') {
-      await sendMessage(env, chatId, 'Qaysi turdagi materialni qo\'shmoqchisiz?', {
+  // ---- Asosiy menyu bo'limlari ----
+  if (text === MENU_BOOKS) {
+    const current = await getSession(env, from.id);
+    await cleanupSessionFiles(env, current);
+    await sendMessage(
+      env,
+      chatId,
+      "📚 Kitoblar bo'limi.\n\nKitob qo'shish uchun avval kategoriyani tanlang.",
+      {
         inline_keyboard: [
-          [{ text: 'Kitob (PDF)', callback_data: 'create-type:book' }],
-          [{ text: 'Prezentatsiya (PDF)', callback_data: 'create-type:presentation' }],
-          [{ text: 'Video dars (YouTube)', callback_data: 'create-type:video' }],
-          [{ text: 'Test (TXT)', callback_data: 'create-type:test' }],
-          [{ text: 'Bekor qilish', callback_data: 'cancel' }],
+          [{ text: "➕ Kitob qo'shish", callback_data: 'books:create' }],
+          ...(isOwner(env, from.id) ? [[
+            { text: "📋 Ro'yxat", callback_data: 'books:list:0' },
+            { text: '🔍 Qidirish', callback_data: 'books:search' },
+          ]] : []),
         ],
-      });
-    } else {
-      if (!isOwner(env, from.id)) {
-        await sendMessage(env, chatId, 'Materiallarni boshqarish faqat owner uchun.', mainKeyboard(access.role));
-      } else {
-        await sendMessage(env, chatId, 'Qaysi material turini boshqarmoqchisiz?', {
-          inline_keyboard: [
-            [{ text: 'Kitoblar', callback_data: 'manage-type:book' }],
-            [{ text: 'Prezentatsiyalar', callback_data: 'manage-type:presentation' }],
-            [{ text: 'Videolar', callback_data: 'manage-type:video' }],
-            [{ text: 'Testlar', callback_data: 'manage-type:test' }],
-            [{ text: 'Yopish', callback_data: 'cancel' }],
-          ],
-        });
-      }
-    }
+      },
+    );
     return { background: null };
   }
 
-  if (text === '/admin' || text === 'Adminlar') {
+  const sectionByMenu = {
+    [MENU_PRESENTATIONS]: 'presentation',
+    [MENU_VIDEOS]: 'video',
+    [MENU_TESTS]: 'test',
+  };
+  if (sectionByMenu[text]) {
+    const type = sectionByMenu[text];
+    const current = await getSession(env, from.id);
+    await cleanupSessionFiles(env, current);
+    await startMaterialCreate(env, chatId, from.id, type);
+    await sendMessage(env, chatId, "Yuborishni boshlang 👇", sectionActionsKeyboard(type, isOwner(env, from.id)));
+    return { background: null };
+  }
+
+  if (text === '/admin' || text === MENU_ADMINS) {
     if (!isOwner(env, from.id)) {
       await sendMessage(env, chatId, 'Adminlarni faqat owner boshqaradi.');
       return { background: null };
@@ -1053,19 +1048,28 @@ export async function handleTelegramUpdate(env, update) {
     return { background: null };
   }
 
-  if (text === 'Bot haqida') {
+  if (text === MENU_ABOUT || text === 'Bot haqida') {
     const provider = String(env.AI_METADATA_PROVIDER || 'mock');
     const model = provider === 'anthropic'
       ? String(env.ANTHROPIC_METADATA_MODEL || 'claude-haiku-4-5')
-      : String(env.OPENROUTER_METADATA_MODEL || env.OPENAI_METADATA_MODEL || env.GEMINI_METADATA_MODEL || '-');
+      : provider === 'openrouter'
+        ? resolveOpenRouterModel(env)
+        : String(env.OPENAI_METADATA_MODEL || env.GEMINI_METADATA_MODEL || '-');
     await sendMessage(env, chatId, [
       `DL Library Bot v${BOT_VERSION}`,
       `Sayt: ${env.PUBLIC_SITE_URL || 'https://dl-library.uz'}`,
+      '',
       `AI provayder: ${provider}`,
       `AI model: ${model}`,
-      `PDF limiti: ${Math.floor(maxPdfBytes(env) / 1024 / 1024)} MB`,
-      'PDF sahifalar soni AI ishlatmasdan aniqlanadi.',
-      "Muqova rasmi admin tomonidan tayyorlanadi.",
+      `Fayl limiti: ${Math.floor(maxPdfBytes(env) / 1024 / 1024)} MB`,
+      '',
+      'Bo\'limlar:',
+      "📚 Kitoblar — kategoriya tanlaysiz, PDF yuborasiz, ma'lumotlarni AI tayyorlaydi, siz tasdiqlaysiz.",
+      "📊 Taqdimotlar — faylni yuborasiz, qolganini tizim qiladi (1-sahifa muqova bo'ladi).",
+      '🎥 Videolar — YouTube havolasini yuborasiz, qolganini tizim qiladi.',
+      '📝 Testlar — savollarni yuborasiz, faqat mavzu nomini yozasiz.',
+      '',
+      "Bo'lim tanlangach ketma-ket material yuboraverasiz — har safar qayta tanlash shart emas.",
     ].join('\n'), mainKeyboard(access.role));
     return { background: null };
   }
@@ -1268,6 +1272,6 @@ export async function handleTelegramUpdate(env, update) {
     return { background: null };
   }
 
-  await sendMessage(env, chatId, 'Kerakli bo‘limni menyudan tanlang.', mainKeyboard(access.role));
+  await sendMessage(env, chatId, "Kerakli bo'limni menyudan tanlang.", mainKeyboard(access.role));
   return { background: null };
 }

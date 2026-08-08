@@ -114,3 +114,181 @@ textarea { resize: vertical; }
   display: inline-block; font-size: 11px; padding: 2px 8px; border-radius: 20px;
   background: var(--bg); border: 1px solid var(--border); color: var(--muted); margin-right: 6px;
 }
+
+/* ============================================
+   AI YORDAMCHISI
+   ============================================ */
+
+/* Header'dagi animatsion toggle */
+.ai-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px 6px 10px;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  background: var(--panel-2);
+  color: var(--muted);
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.ai-toggle:hover { border-color: var(--primary); }
+
+.ai-toggle.is-on {
+  color: #fff;
+  border-color: transparent;
+  background: linear-gradient(120deg, #4f7cff, #9333ea, #4f7cff);
+  background-size: 200% 100%;
+  animation: aiGradient 4s ease infinite;
+  box-shadow: 0 0 16px rgba(79, 124, 255, 0.35);
+}
+
+@keyframes aiGradient {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+.ai-toggle__spark {
+  font-size: 14px;
+  transition: transform 0.3s ease;
+}
+
+.ai-toggle.is-on .ai-toggle__spark {
+  animation: aiSparkle 2.5s ease-in-out infinite;
+}
+
+@keyframes aiSparkle {
+  0%, 100% { transform: scale(1) rotate(0deg); opacity: 1; }
+  50% { transform: scale(1.25) rotate(15deg); opacity: 0.85; }
+}
+
+.ai-toggle__switch {
+  position: relative;
+  width: 34px;
+  height: 18px;
+  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.35);
+  flex-shrink: 0;
+}
+
+.ai-toggle__knob {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #fff;
+  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.ai-toggle.is-on .ai-toggle__knob { transform: translateX(16px); }
+
+.ai-toggle.is-pulsing { animation: aiPulse 0.6s ease; }
+
+@keyframes aiPulse {
+  0% { transform: scale(1); }
+  40% { transform: scale(1.06); }
+  100% { transform: scale(1); }
+}
+
+/* Formalar ustidagi AI bloki */
+.ai-assist {
+  border: 1px solid rgba(79, 124, 255, 0.35);
+  border-radius: var(--radius);
+  background: linear-gradient(160deg, rgba(79, 124, 255, 0.1), rgba(147, 51, 234, 0.06));
+  padding: 14px 16px;
+  margin-bottom: 18px;
+  transition: opacity 0.25s ease;
+}
+
+.ai-assist.is-hidden { display: none; }
+
+.ai-assist__head {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  margin-bottom: 12px;
+}
+
+.ai-assist__icon { font-size: 18px; line-height: 1.4; }
+.ai-assist__head strong { font-size: 14px; color: var(--text); }
+.ai-assist__head p { margin: 2px 0 0; font-size: 12.5px; color: var(--muted); }
+
+.ai-assist__row {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.ai-assist__row input[type="text"],
+.ai-assist__row input[type="file"] {
+  flex: 1;
+  min-width: 220px;
+  padding: 8px 10px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text);
+  font-family: inherit;
+  font-size: 13px;
+}
+
+.btn--ai {
+  background: linear-gradient(120deg, #4f7cff, #9333ea);
+  color: #fff;
+  border: none;
+  white-space: nowrap;
+}
+
+.btn--ai:hover:not(:disabled) { filter: brightness(1.1); }
+.btn--ai:disabled { opacity: 0.6; cursor: not-allowed; }
+.btn--ai.is-busy { animation: aiGradient 2s ease infinite; background-size: 200% 100%; }
+
+/* Holat qatori */
+.ai-status {
+  margin-top: 10px;
+  font-size: 13px;
+  min-height: 18px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ai-status.is-loading { color: var(--primary); }
+.ai-status.is-success { color: var(--ok); }
+.ai-status.is-error { color: var(--danger); }
+
+.ai-spinner {
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(79, 124, 255, 0.25);
+  border-top-color: var(--primary);
+  border-radius: 50%;
+  animation: aiSpin 0.7s linear infinite;
+  flex-shrink: 0;
+}
+
+@keyframes aiSpin { to { transform: rotate(360deg); } }
+
+.ai-status__text { animation: aiFadeText 0.4s ease; }
+
+@keyframes aiFadeText {
+  from { opacity: 0.4; }
+  to { opacity: 1; }
+}
+
+/* AI to'ldirgan maydonni qisqa vaqt yoritish */
+.is-ai-filled {
+  animation: aiFilled 1.2s ease;
+}
+
+@keyframes aiFilled {
+  0% { background-color: rgba(79, 124, 255, 0.28); }
+  100% { background-color: transparent; }
+}

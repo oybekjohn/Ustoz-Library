@@ -5,6 +5,7 @@ import {
   parseJsonText,
   readJsonResponse,
 } from '../common.js';
+import { resolveOpenRouterModel } from '../text-json.js';
 
 function outputText(payload) {
   const text = payload?.choices?.[0]?.message?.content;
@@ -22,7 +23,7 @@ export async function analyzeWithOpenRouter({
   firstPagesText,
 }) {
   if (!env.OPENROUTER_API_KEY) throw new Error("OPENROUTER_API_KEY sozlanmagan");
-  const model = env.OPENROUTER_METADATA_MODEL || 'openrouter/free';
+  const model = resolveOpenRouterModel(env);
   const hasTextLayer = Boolean(firstPagesText?.trim());
 
   const content = [{
