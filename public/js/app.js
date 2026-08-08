@@ -4,13 +4,13 @@
    Barcha bo'limlar ro'yxatdan o'tishsiz ishlaydi.
    ============================================ */
 
-import { initThemeToggle } from './theme.js';
-import { showToast } from './toast.js';
-import { initPresentationViewer } from './presentation-viewer.js';
-import { initVideoPlayer } from './video-player.js';
-import { initTestRunner } from './test-runner.js';
-import { initTelegramMiniApp } from './telegram-mini-app.js';
-import { isPdfUrl, lazyRenderPdfThumb } from './pdf-thumb.js';
+import { initThemeToggle } from './theme.js?v=5.0.0';
+import { showToast } from './toast.js?v=5.0.0';
+import { initPresentationViewer } from './presentation-viewer.js?v=5.0.0';
+import { initVideoPlayer } from './video-player.js?v=5.0.0';
+import { initTestRunner } from './test-runner.js?v=5.0.0';
+import { initTelegramMiniApp } from './telegram-mini-app.js?v=5.0.0';
+import { isPdfUrl, lazyRenderPdfThumb } from './pdf-thumb.js?v=5.0.0';
 
 // ---------- Tarjimalar (i18n) ----------
 const translations = {

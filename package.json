@@ -1,6 +1,6 @@
 {
   "name": "ustoz-library",
-  "version": "4.0.0",
+  "version": "5.0.0",
   "description": "DL-library.uz — Renessans Ta'lim Universiteti raqamli kutubxonasi (Cloudflare Pages + D1 + R2)",
   "type": "module",
   "scripts": {
@@ -28,7 +28,8 @@
     "postinstall": "node scripts/patch-unpdf.mjs",
     "test:pdf-worker": "wrangler dev scripts/pdf-worker-smoke.js --local --port 8799",
     "telegram:webhook": "node scripts/telegram-webhook.mjs",
-    "test": "node --test"
+    "test": "node --test",
+    "stamp": "node scripts/stamp-assets.mjs"
   },
   "devDependencies": {
     "wrangler": "^4.120.0"
