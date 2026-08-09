@@ -738,8 +738,9 @@ body {
 
 /* Kitob nomi.
    Avval 2 qatorga cheklangan edi va uzun nomlarning yarmi ko'rinmasdi.
-   Endi 3 qator, va min-height barcha kartochkalarni bir xil balandlikda
-   ushlab turadi (grid buzilmaydi). */
+   Endi kesish umuman yo'q — nom qancha uzun bo'lsa, shuncha ko'rinadi.
+   min-height esa kartochkalarni bir xil balandlikda ushlab turadi,
+   ya'ni qisqa nomli kartochkalar ham tekis joylashadi. */
 .book-card__title {
   font-family: 'Outfit', sans-serif;
   font-size: 1.05rem;
@@ -747,11 +748,8 @@ body {
   line-height: 1.4;
   margin-bottom: 8px;
   color: var(--text-primary);
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
   min-height: calc(1.05rem * 1.4 * 3);
+  overflow-wrap: break-word;
   cursor: pointer;
 }
 
