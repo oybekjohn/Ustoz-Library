@@ -11,7 +11,7 @@
 
 # 1-QISM: HOZIRGI HOLAT
 
-**Tekshirilgan sana:** 2026-08-08 · **Versiya:** 6.0.0 · **Holat:** production'da ishlayapti
+**Tekshirilgan sana:** 2026-08-09 · **Versiya:** 7.0.1 · **Holat:** production'da ishlayapti
 
 ## 1.1. Umumiy ma'lumot
 
@@ -24,6 +24,7 @@
 | Baza | Cloudflare D1 (`ustoz-library-db`) |
 | Fayllar | Cloudflare R2 (`ustoz-library-files`) |
 | Testlar | 47 ta, 100% o'tadi (`npm test`) |
+| Zaxira | Har kuni avtomatik → R2 `backups/` ([qo'llanma](./docs/ZAXIRA.md)) |
 
 ## 1.2. Bazadagi kontent (2026-08-08 holati)
 
@@ -223,6 +224,27 @@ Cloudflare Pages > Settings > Environment variables da 14 ta secret:
 ---
 
 # 2-QISM: RELIZLAR TARIXI
+
+## v7.0.1 — Zaxira tizimi va o'qish qulayligi (ustoz tavsiyalari, 1-bosqich), 2026-08-09
+
+- [x] **Zaxira nusxa tizimi** (12-band) — avval umuman yo'q edi:
+      `npm run backup` bazani eksport qiladi, ichida ma'lumot borligini
+      tekshiradi va R2 ga yuklaydi; har kuni avtomatik ham ishlaydi.
+      Sinovdan o'tkazildi: 517 KB, 19 jadval, 158 kitob — R2 ga yuklanib,
+      qaytarib o'qildi. Qo'llanma: `docs/ZAXIRA.md`.
+- [x] Zaxira fayllari `.gitignore` da va CI artifact sifatida saqlanmaydi —
+      ichida Telegram ID va IP manzillar bor, repo esa ochiq.
+- [x] **Matn kontrasti** (10, 11-band) — yorug' rejim tungi rejimning rangini
+      ishlatib turgan ekan, natijada 3.12 kontrast (talab 4.5). Endi har bir
+      rejim uchun alohida rang. O'lchov: 20/20 element o'tdi, eng pasti 5.08.
+- [x] **Kitob nomlari** (1-band) — 2 qatordan keyin kesilardi. Endi kesish
+      yo'q: eng kami 3 qator, kerak bo'lsa o'sadi, qatorlar tekis qoladi.
+- [x] **Bo'lim nomlari** (4-band) — qalinlik 600 → 700, o'lcham kattalashdi;
+      filtrlar, muallif, statistika, footer ham qalinroq.
+- [x] Tavsiyalar tahlili: `tavfsiya_rejasi.md`.
+
+> Eslatma: 2 va 3-band (ai → Sun'iy intellekt, it → IT) v5.0.0 da
+> allaqachon tuzatilgan edi.
 
 ## v6.0.0 — Maxsus imkoniyatlar, Claude API va tezlik, 2026-08-08
 
