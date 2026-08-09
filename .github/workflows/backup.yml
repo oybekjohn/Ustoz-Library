@@ -1,0 +1,42 @@
+name: Kunlik zaxira nusxa
+
+# Har kuni tunda (Toshkent vaqti bilan ~06:00) bazani zaxiralaydi.
+# Qo'lda ham ishga tushirish mumkin: Actions > Kunlik zaxira nusxa > Run workflow
+on:
+  schedule:
+    - cron: '0 1 * * *'   # UTC 01:00 = Toshkent 06:00
+  workflow_dispatch:
+
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Kodni olish
+        uses: actions/checkout@v4
+
+      - name: Node o'rnatish
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Paketlarni o'rnatish
+        run: npm ci
+
+      - name: Zaxira olish va R2 ga yuklash
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: npm run backup
+
+      # DIQQAT: zaxirada shaxsiy ma'lumotlar bor (Telegram ID, IP manzillar),
+      # repo esa ochiq. Shuning uchun artifact sifatida saqlanmaydi —
+      # ochiq repoda artifactlarni har kim yuklab olishi mumkin.
+      # Yagona nusxa R2 da (yopiq) turadi.
+
+      - name: Natijani xabar qilish
+        if: failure()
+        run: |
+          echo "::error::Zaxira olinmadi. Sabablari:"
+          echo "::error::1. CLOUDFLARE_API_TOKEN da D1 o'qish ruxsati yo'q bo'lishi mumkin"
+          echo "::error::2. Tokenda R2 yozish ruxsati kerak"
+          echo "::error::Vaqtinchalik yechim: kompyuterda 'npm run backup' ishga tushiring"

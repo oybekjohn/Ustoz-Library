@@ -224,3 +224,6 @@ node_modules/
 _migrate_tmp.sql
 contact-import-*.txt
 npm-debug.log*
+
+# Zaxira nusxalar — shaxsiy maʼlumot bor, ochiq repoga qoʻyilmaydi
+backups/

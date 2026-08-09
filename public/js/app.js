@@ -4,14 +4,14 @@
    Barcha bo'limlar ro'yxatdan o'tishsiz ishlaydi.
    ============================================ */
 
-import { initThemeToggle } from './theme.js?v=6.0.0';
-import { showToast } from './toast.js?v=6.0.0';
-import { initPresentationViewer } from './presentation-viewer.js?v=6.0.0';
-import { initVideoPlayer } from './video-player.js?v=6.0.0';
-import { initTestRunner } from './test-runner.js?v=6.0.0';
-import { initTelegramMiniApp } from './telegram-mini-app.js?v=6.0.0';
-import { isPdfUrl, lazyRenderPdfThumb } from './pdf-thumb.js?v=6.0.0';
-import { initAccessibility, updateAccessibilityLanguage } from './accessibility.js?v=6.0.0';
+import { initThemeToggle } from './theme.js?v=7.0.0';
+import { showToast } from './toast.js?v=7.0.0';
+import { initPresentationViewer } from './presentation-viewer.js?v=7.0.0';
+import { initVideoPlayer } from './video-player.js?v=7.0.0';
+import { initTestRunner } from './test-runner.js?v=7.0.0';
+import { initTelegramMiniApp } from './telegram-mini-app.js?v=7.0.0';
+import { isPdfUrl, lazyRenderPdfThumb } from './pdf-thumb.js?v=7.0.0';
+import { initAccessibility, updateAccessibilityLanguage } from './accessibility.js?v=7.0.0';
 
 // ---------- Tarjimalar (i18n) ----------
 const translations = {

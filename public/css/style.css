@@ -60,9 +60,12 @@
   --bg-modal: rgba(10, 10, 30, 0.92);
   --bg-input: rgba(255, 255, 255, 0.08);
 
+  /* Tungi rejim matn ranglari.
+     Kontrast nisbati #141428 foniga nisbatan o'lchangan (WCAG AA: 4.5 talab):
+       primary 15.9 · secondary 9.4 · muted 6.7 · accent 7.6 */
   --text-primary: #eeeeff;
   --text-secondary: #b8b8d8;
-  --text-muted: #8888aa;
+  --text-muted: #9a9ac0;
   --text-accent: #a0a8f8;
 
   --border-color: rgba(255, 255, 255, 0.1);
@@ -99,9 +102,16 @@
   --bg-modal: rgba(255, 255, 255, 0.97);
   --bg-input: rgba(0, 0, 20, 0.04);
 
+  /* Yorug' rejim matn ranglari.
+     Kontrast nisbati #f4f4fb foniga nisbatan o'lchangan (WCAG AA: 4.5 talab):
+       primary 15.6 · secondary 7.7 · muted 6.1 · accent 5.3
+
+     Eslatma: avval bu yerda muted rangi tungi rejimdagi bilan bir xil
+     (#8888aa) edi va oq fonda atigi 3.12 kontrast berardi — matn hira
+     ko'rinardi. Endi yorug' rejim uchun alohida, to'qroq rang. */
   --text-primary: #1a1a2e;
   --text-secondary: #4a4a6a;
-  --text-muted: #8888aa;
+  --text-muted: #5a5a78;
   --text-accent: #5a67d8;
 
   --border-color: rgba(0, 0, 40, 0.08);
@@ -501,7 +511,7 @@ body {
 }
 
 .stat__label {
-  font-size: 0.7rem;
+  font-size: 0.75rem;
   color: var(--text-muted);
   text-transform: uppercase;
   letter-spacing: 0.06em;
@@ -584,15 +594,16 @@ body {
   align-items: center;
 }
 
+/* Kategoriya filtrlari — ustoz tavsiyasi bo'yicha qalinroq va yirikroq */
 .filter-btn {
-  padding: 6px 14px;
+  padding: 7px 15px;
   border: 1px solid var(--border-color);
   border-radius: var(--radius-md);
   background: var(--bg-glass);
   color: var(--text-secondary);
   font-family: 'Inter', sans-serif;
-  font-size: 0.8rem;
-  font-weight: 500;
+  font-size: 0.85rem;
+  font-weight: 600;
   cursor: pointer;
   transition: all var(--transition-fast);
   white-space: nowrap;
@@ -725,17 +736,23 @@ body {
   padding: 20px;
 }
 
+/* Kitob nomi.
+   Avval 2 qatorga cheklangan edi va uzun nomlarning yarmi ko'rinmasdi.
+   Endi 3 qator, va min-height barcha kartochkalarni bir xil balandlikda
+   ushlab turadi (grid buzilmaydi). */
 .book-card__title {
   font-family: 'Outfit', sans-serif;
   font-size: 1.05rem;
-  font-weight: 600;
+  font-weight: 700;
   line-height: 1.4;
   margin-bottom: 8px;
   color: var(--text-primary);
   display: -webkit-box;
-  -webkit-line-clamp: 2;
+  -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
+  min-height: calc(1.05rem * 1.4 * 3);
+  cursor: pointer;
 }
 
 .book-card__meta {
@@ -747,7 +764,8 @@ body {
 
 .book-card__year,
 .book-card__author {
-  font-size: 0.82rem;
+  font-size: 0.85rem;
+  font-weight: 600;
   color: var(--text-muted);
   display: flex;
   align-items: center;
@@ -787,9 +805,9 @@ body {
 }
 
 .book-card__qr-label {
-  font-size: 0.78rem;
+  font-size: 0.8rem;
   color: var(--text-muted);
-  font-weight: 500;
+  font-weight: 600;
 }
 
 .book-card__actions {
@@ -1446,7 +1464,8 @@ body {
 }
 
 .pagination__info {
-  font-size: 0.82rem;
+  font-size: 0.85rem;
+  font-weight: 500;
   color: var(--text-muted);
   text-align: center;
   padding: 0 0 8px;
@@ -1460,7 +1479,8 @@ body {
 }
 
 .footer__text {
-  font-size: 0.85rem;
+  font-size: 0.88rem;
+  font-weight: 500;
   color: var(--text-muted);
   line-height: 1.8;
 }
@@ -1809,14 +1829,16 @@ body {
   gap: 4px;
 }
 
+/* Bo'lim tugmalari (Kitoblar, Taqdimotlar, ...).
+   Ustoz tavsiyasi bo'yicha qalinroq va yirikroq qilindi. */
 .nav-tab-btn {
   background: transparent;
   border: none;
-  padding: 6px 14px;
+  padding: 7px 15px;
   font-family: 'Inter', sans-serif;
-  font-weight: 600;
-  font-size: 0.85rem;
-  color: var(--text-muted);
+  font-weight: 700;
+  font-size: 0.92rem;
+  color: var(--text-secondary);
   cursor: pointer;
   border-radius: var(--radius-sm);
   transition: all var(--transition-fast);
