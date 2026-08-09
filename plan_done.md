@@ -1,4 +1,248 @@
-# DL-Library ta'lim platformasi: Bajarilgan ishlar jurnali (plan_done.md)
+# DL-Library — loyiha holati va bajarilgan ishlar jurnali
+
+> **Bu faylning 1-qismi — loyihaning HOZIRGI holati.** Yangi funksiya
+> qo'shishdan oldin shu qismni o'qing: nima ishlayapti, qayerda turadi,
+> nimaga tegmaslik kerak.
+> 2-qism — relizlar tarixi (nima qachon qilingan).
+>
+> Kod qaysi faylda ekanini bilish uchun: [docs/KOD-TUZILISHI.md](./docs/KOD-TUZILISHI.md)
+
+---
+
+# 1-QISM: HOZIRGI HOLAT
+
+**Tekshirilgan sana:** 2026-08-08 · **Versiya:** 6.0.0 · **Holat:** production'da ishlayapti
+
+## 1.1. Umumiy ma'lumot
+
+| | |
+|---|---|
+| Sayt | https://dl-library.uz |
+| Admin panel | https://dl-library.uz/admin |
+| Repo | github.com/oybekjohn/Ustoz-Library (`master` → avtomatik deploy) |
+| Hosting | Cloudflare Pages + Functions |
+| Baza | Cloudflare D1 (`ustoz-library-db`) |
+| Fayllar | Cloudflare R2 (`ustoz-library-files`) |
+| Testlar | 47 ta, 100% o'tadi (`npm test`) |
+
+## 1.2. Bazadagi kontent (2026-08-08 holati)
+
+| Tur | Soni | Izoh |
+|---|---|---|
+| Kitoblar | 158 | Barchasi faol (`archived = 0`) |
+| Taqdimotlar | 3 | Hammasi nashr etilgan |
+| Video darslar | 1 | Nashr etilgan |
+| Testlar | 2 | Nashr etilgan, jami 38 ta savol |
+| Bot adminlari | 1 | Owner'dan tashqari |
+
+## 1.3. Sayt — nima ishlayapti
+
+**Muhim:** sayt hozir **ro'yxatdan o'tishsiz** ishlaydi. "Google orqali kirish"
+tugmasi bosilganda faqat "Bu funksiya hali mavjud emas" degan xabar chiqadi.
+Progress (o'qilgan sahifa, ko'rilgan slayd, test natijalari) brauzerda
+(`localStorage`, kalit: `dl_progress_v1`) saqlanadi.
+
+| Bo'lim | Holat | Tafsilot |
+|---|---|---|
+| 📚 Kitoblar | ✅ | Grid 12 tadan, sahifalash, qidiruv, 10 ta kategoriya filtri (emoji bilan), har kitobda QR kod, `?book=<id>` havolasi orqali to'g'ridan-to'g'ri ochish |
+| 📊 Taqdimotlar | ✅ | PDF — ichki viewer (klaviatura, swipe, to'liq ekran, progress); PPT/PPTX — Microsoft Office viewer orqali |
+| 🎥 Videolar | ✅ | YouTube (nocookie) pleyer, thumbnail'li kartochkalar |
+| 📝 Testlar | ✅ | Har urinishda tasodifiy 20 savol, vaqt cheklovsiz (sarflangan vaqt sanaladi), javob belgilanganda darhol to'g'ri/noto'g'ri, oxirida natija va tahlil |
+| ♿ Maxsus imkoniyatlar | ✅ | Shrift 100–200%, yuqori kontrast, kulrang rejim, harflar oralig'i, havolalarni ajratish, rasmlarni yashirish |
+| 🌙 Tema | ✅ | Yorug'/tungi, brauzerda saqlanadi |
+| 🌐 Til | ✅ | UZ / RU / EN — butun interfeys va material metadatasi |
+| 📱 Mobil | ✅ | Pastki menyu, gorizontal scroll yo'q |
+
+## 1.4. Telegram bot — nima ishlayapti
+
+`/start` bosilganda 6 ta tugma chiqadi:
+
+```
+📚 Kitoblar        📊 Taqdimotlar
+🎥 Videolar        📝 Testlar
+👤 Adminlar        ℹ️ Bot haqida
+```
+
+**Asosiy tamoyil — "yopishqoq bo'lim":** bo'lim bir marta tanlanadi, keyin
+ketma-ket istagancha material yuboriladi. Boshqa bo'limga o'tish uchungina
+menyuga qaytiladi.
+
+| Bo'lim | Siz nima qilasiz | Tizim nima qiladi |
+|---|---|---|
+| 📚 Kitob | Kategoriya tanlaysiz → PDF yuborasiz → muqova rasmini yuborasiz | AI metadata tayyorlaydi, siz ko'rib **tasdiqlaysiz** |
+| 📊 Taqdimot | Faqat faylni yuborasiz (PDF/PPT/PPTX) | Sarlavha, tavsif, kategoriya — hammasi avtomatik. 1-sahifa muqova bo'ladi. **Tasdiqlash so'ralmaydi**, darhol saytga chiqadi |
+| 🎥 Video | Faqat YouTube havolasini yuborasiz | Uch tilli nom va tavsif avtomatik. Takroriy havola rad etiladi |
+| 📝 Test | Savollarni yuborasiz (.txt fayl yoki oddiy matn) | Faqat mavzu nomini so'raydi, uch tilli nom va tavsifni o'zi yozadi |
+| 👤 Adminlar | Telegram ID kiritasiz | Admin qo'shish/o'chirish (**faqat owner**) |
+| ℹ️ Bot haqida | — | Versiya, AI provayder/model + "🔍 AI ulanishini tekshirish" tugmasi |
+
+**Rollar:** owner (`TELEGRAM_OWNER_ID`) — hamma narsa; admin — faqat material
+qo'shish. Materiallarni o'chirish/yashirish faqat owner uchun.
+
+**Test fayl formati:**
+```
+Savol matni?
+================
+Birinchi variant
+================
+#To'g'ri variant
+================
+Uchinchi variant
+
++++++
+
+Keyingi savol?
+...
+```
+`+++++` savollarni ajratadi, `#` to'g'ri javobni belgilaydi (aynan bitta),
+`====` qatorlari e'tiborga olinmaydi.
+
+## 1.5. Admin panel — nima ishlayapti
+
+4 ta tab: Kitoblar · Taqdimotlar · Video darslar · Testlar.
+
+Header'da **"✨ AI bilan qo'shish"** tugmasi:
+- **Yoqilgan** (standart): PDF tanlaysiz / YouTube havolasini qo'yasiz /
+  mavzu nomini yozasiz → "Ma'lumotlarni tayyorlash" → formalar avtomatik
+  to'ladi → siz tekshirib **Saqlash** bosasiz.
+- **O'chirilgan**: AI bloklari yashiriladi, hech qanday AI so'rovi
+  yuborilmaydi, hamma maydon qo'lda to'ldiriladi.
+
+Tanlov brauzerda saqlanadi (`dl_admin_ai_enabled`).
+
+## 1.6. AI sozlamalari
+
+| | |
+|---|---|
+| Provayder | Anthropic (to'g'ridan-to'g'ri Claude API) |
+| Model | `claude-haiku-4-5-20251001` |
+| Zaxira | Kalit ishlamasa avtomatik OpenRouter'ga o'tadi |
+| Xato bo'lsa | Oqim to'xtamaydi — nom fayl nomidan olinadi |
+
+AI **faqat** metadata (uch tilli sarlavha, tavsif, kategoriya) uchun
+ishlatiladi. Uning javobi hech qachon kod yoki so'rov sifatida
+bajarilmaydi — `stripMarkup()` barcha HTML teglarini o'chiradi.
+
+## 1.7. Ma'lumotlar bazasi jadvallari
+
+**Faol ishlatiladi:** `books`, `presentations`, `videos`, `tests`,
+`test_questions`, `test_options`, `telegram_sessions`, `telegram_admins`,
+`telegram_updates`, `rate_limits`
+
+**Bo'sh, keyingi reliz uchun turibdi** (Google profil bilan birga
+ishlatiladi): `users`, `user_sessions`, `user_progress`, `test_attempts`,
+`test_answers`, `test_violations`, `user_telegram_links`,
+`account_link_tokens`, `telegram_webapp_sessions`
+
+> Bu jadvallarni o'chirmang — keyingi relizda kerak bo'ladi.
+
+## 1.8. API endpointlari
+
+| Yo'l | Kirish | Tavsif |
+|---|---|---|
+| `GET /api/books` | ochiq | Faol kitoblar |
+| `POST/PUT/DELETE /api/books[/:id]` | admin | Kitob CRUD |
+| `GET /api/presentations` · `/videos` · `/tests` | ochiq | Nashr etilganlar |
+| `POST/PUT/DELETE` shu yo'llarda | admin | Material CRUD |
+| `POST /api/{tur}/:id/publish` | admin | Nashr etish/yashirish |
+| `GET /api/tests/quiz/:id` | ochiq | Test uchun tasodifiy 20 savol |
+| `POST /api/tests/parse` | admin | `.txt` testni tekshirish |
+| `POST /api/ai/analyze` | admin | AI metadata (alohida rate limit) |
+| `POST /api/upload` | admin | R2 ga fayl yuklash |
+| `POST /api/auth/login` · `logout` · `GET me` | — | Admin sessiyasi |
+| `POST /api/telegram` | webhook secret | Bot |
+| `GET /files/*` | ochiq | R2 fayllari (faqat ruxsat etilgan papkalar) |
+
+`/api/user-auth/google/*` — mavjud, lekin **o'chirilgan** (keyingi reliz).
+
+## 1.9. Xavfsizlik holati
+
+| Himoya | Holat |
+|---|---|
+| Rate limiting | ✅ o'qish 120/daq, yozish 30/daq, login 10/10daq, AI 20/5daq |
+| Barcha yozuvchi endpointlarda auth | ✅ |
+| XSS himoyasi | ✅ escape + AI javobidan teglar o'chiriladi |
+| Security headerlar | ✅ CSP, HSTS, X-Frame-Options, nosniff, COOP |
+| Tashqi CDN | ✅ yo'q — barcha kutubxonalar `/js/vendor/` da |
+| npm zaifliklari | ✅ 0 ta |
+| Xatolik xabarlari | ✅ ichki tafsilot oshkor qilinmaydi |
+
+**Qo'lda qilinishi kerak** (Cloudflare dashboard): Bot Fight Mode,
+WAF rate limiting qoidasi. Batafsil: [docs/SECURITY.md](./docs/SECURITY.md)
+
+## 1.10. Production muhit o'zgaruvchilari
+
+Cloudflare Pages > Settings > Environment variables da 14 ta secret:
+`ADMIN_USERNAME`, `ADMIN_PASSWORD`, `SESSION_SECRET`,
+`AI_METADATA_PROVIDER`, `ANTHROPIC_API_KEY`, `ANTHROPIC_METADATA_MODEL`,
+`OPENROUTER_API_KEY`, `OPENROUTER_METADATA_MODEL`, `PUBLIC_SITE_URL`,
+`TELEGRAM_BOT_TOKEN`, `TELEGRAM_WEBHOOK_SECRET`, `TELEGRAM_OWNER_ID`,
+`TELEGRAM_ALLOWED_USER_IDS`, `TELEGRAM_MAX_PDF_MB`
+
+## 1.11. ⚠️ Yangi funksiya qo'shishdan oldin bilish kerak
+
+1. **Reliz tartibi majburiy:**
+   ```
+   npm test
+   package.json da versiyani oshiring
+   npm run stamp          ← BU QADAMNI TASHLAB KETMANG
+   git push origin master
+   ```
+   Sabab: Cloudflare Pages fayllarni 4 soat keshlaydi va `_headers` dagi
+   qisqaroq qiymatni e'tiborga olmaydi. `stamp` bo'lmasa foydalanuvchilarda
+   eski va yangi kod aralashadi (avval shu muammo bo'lgan).
+
+2. **Baza sxemasi o'zgarsa:** avval migratsiya (`migrations/` ga yangi fayl
+   + `wrangler d1 execute --remote`), keyin kod push. `schema.sql` faqat
+   yangi bo'sh baza uchun.
+
+3. **GitHub Actions'dagi `CLOUDFLARE_API_TOKEN` da D1 yozish ruxsati yo'q** —
+   migratsiyalar avtomatik qo'llanmaydi, qo'lda ishga tushiriladi.
+
+4. **`js/vendor/` papkasini tahrirlamang** — tashqi kutubxonalar.
+
+5. **AI javobini tozalash (`stripMarkup`) ni olib tashlamang** — XSS himoyasi.
+
+6. **Fon animatsiyasida "sprite" optimizatsiyasini qayta urinmang** — sinab
+   ko'rilgan va o'lchov bo'yicha gradientdan sekinroq chiqqan (sabab kodda
+   izohlangan).
+
+## 1.12. Keyingi rejadagi ishlar
+
+- **Google orqali kirish** — backend kodi tayyor turibdi
+  (`/api/user-auth/google/*`), faqat `GOOGLE_CLIENT_ID` va
+  `GOOGLE_CLIENT_SECRET` kerak. Foydalanuvchi profilida test natijalari,
+  o'qilgan kitoblar va slaydlar saqlanadi. Bazadagi bo'sh jadvallar shu
+  uchun tayyor.
+  > Eslatma: foydalanuvchining Google Cloud akkaunti express rejimda va
+  > kartasi billing tekshiruvidan o'tmaydi — OAuth client uchun boshqa
+  > Gmail akkaunt kerak bo'ladi.
+- Telegram Mini App ichida testlarni ishlash.
+- Cloudflare dashboard xavfsizlik sozlamalari (Bot Fight Mode, WAF).
+
+---
+
+# 2-QISM: RELIZLAR TARIXI
+
+## v6.0.0 — Maxsus imkoniyatlar, Claude API va tezlik, 2026-08-08
+
+- [x] **Ko'zi ojizlar uchun panel** (header'dagi ♿): shrift 100–200%, yuqori
+      kontrast (qora fon + sariq matn), kulrang rejim, harflar oralig'i,
+      havolalarni ajratish, rasmlarni yashirish, tiklash. Sozlamalar
+      saqlanadi va til bilan birga o'zgaradi.
+- [x] To'liq WCAG o'tishi: "asosiy kontentga o'tish" havolasi, semantik
+      belgilar (header/main/section/footer), har bir ikonka tugmasiga ARIA
+      nomi, klaviatura fokusi, Escape bilan yopish, `prefers-reduced-motion`.
+      Audit toza: nomsiz tugma, alt matnsiz rasm, labelsiz input yo'q.
+- [x] **To'g'ridan-to'g'ri Claude API** ga o'tildi (avval xato bilan
+      OpenRouter tavsiya qilingan edi). Provayder zaxira zanjiri qo'shildi.
+      Botga "🔍 AI ulanishini tekshirish" tugmasi qo'shildi.
+- [x] **Tezlik:** fon animatsiyasi 30 kadr/sek, nuqtalar soni ekranga
+      moslashadi, sahifa ko'rinmasa yoki modal ochilsa to'xtaydi. Shriftlar
+      CSS `@import` (bloklovchi) o'rniga asinxron `<link>` orqali.
+- [x] `index.html` Header → Main (4 bo'lim) → Footer tuzilishida qayta
+      yozildi, hamma joyda o'zbekcha izohlar.
+- [x] `docs/KOD-TUZILISHI.md` — har bir fayl nima qilishi jadvali.
 
 ## v5.0.0 — Claude AI avtomatizatsiyasi va xavfsizlik auditi, 2026-08-08
 
@@ -26,6 +270,15 @@
 - [x] Migratsiya 0008 (books.archived + rate_limits) va yo'qotishsiz katalog sinxronizatsiya skripti (`catalog:sync:remote`).
 - [x] Kod tozalash: schema.sql DROP olib tashlandi, eskirgan fayllar o'chirildi, README/DEPLOY/TELEGRAM_BOT/SECURITY hujjatlari yangilandi, uz-lotin matnlari tuzatildi.
 - [x] 41 ta unit test 100% o'tadi.
+
+---
+
+## Arxiv: v3 → v4 o'tishdagi dastlabki bosqichlar (2026-08-05/06)
+
+> Quyidagilar — kutubxonani o'quv platformasiga aylantirish paytidagi
+> ish jurnali. Ba'zi qismlari (masalan, Google OAuth va test-attempts
+> oqimi) keyinchalik v4/v5 da o'chirilgan yoki qayta yozilgan.
+> Joriy holat uchun **1-QISM** ga qarang.
 
 ## Bosqich 0: Xavfsiz boshlash
 - [x] Baseline snapshot tekshirildi: git commit `070cd9f7a81c98ba28ca50ab4b9e70a31001c9c0` (`Remove Telegram group management`).
