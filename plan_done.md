@@ -225,6 +225,33 @@ Cloudflare Pages > Settings > Environment variables da 14 ta secret:
 
 # 2-QISM: RELIZLAR TARIXI
 
+## v7.1.1 — Interfeys nuqsonlari (footer, ixcham panel, kartalar), 2026-08-15
+
+Egasi aytgan uchta nuqson tuzatildi. Faqat lokalda sinaldi.
+
+- [x] **Footer pastda turadi** — videolar, testlar va taqdimotlar bo'limida
+      kontent kam bo'lgani uchun footer sahifa o'rtasiga chiqib qolardi.
+      `body` endi ustunli flex, `#main-content { flex: 1 0 auto }`,
+      `.footer { flex-shrink: 0 }`. O'lchov: uchala bo'limda footer'ning
+      pastki qirrasi 900px = oyna balandligi, ya'ni aynan pastda.
+      ⚠️ Bunda `.navbar` ning sticky'si buzildi (flex bola bo'lib qoldi) —
+      shuning uchun sticky `.site-header` ga ko'chirildi.
+- [x] **Ixcham qidiruv paneli** — pastga surilganda header yuqoriga chiqib
+      ketadi (`translateY(-100%)`), qidiruv paneli uning o'rniga `top: 0`
+      ga yopishadi va Apple uslubida ixchamlashadi: balandlik 46px,
+      shaffof blur fon, qidiruv maydoni 34px va yumaloq, filtrlar
+      yashiriladi, o'rniga chapda logo va o'ngda 4 ta bo'lim tugmasi
+      chiqadi. 900px dan tor ekranda logo/menyu chiqmaydi — joy yetmaydi.
+      Ostona: 140px da yoqiladi, 60px da o'chadi (titrashning oldini oladi).
+      Bo'lim almashganda darhol qayta hisoblanadi.
+- [x] **Kitob kartasi ixchamlandi** — ichki matnlar tiqilib qolgandi va
+      QR tugmasining yarmi kesilardi. Tugma matni "📱 QR yuklab olish" dan
+      "📱 QR" ga qisqardi (3 tilda), ichki bo'shliqlar va shrift o'lchamlari
+      kamaydi, tugmalar `flex-wrap` bilan joylashadi. Natija: karta
+      626 → 545px, tugmalar to'liq sig'adi, 4 ustun saqlanib qoldi.
+      Mobil (375px): karta 554px, QR tugmasi 140px, kesilish yo'q.
+- [x] Gorizontal scroll yo'q (desktop ham, mobil ham), 47/47 test o'tdi.
+
 ## v7.0.1 — Zaxira tizimi va o'qish qulayligi (ustoz tavsiyalari, 1-bosqich), 2026-08-09
 
 - [x] **Zaxira nusxa tizimi** (12-band) — avval umuman yo'q edi:

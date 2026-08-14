@@ -139,14 +139,30 @@ html {
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* Sahifa ustunli flex konteyner.
+   Bu footer'ni doim pastda ushlab turadi: kontent kam bo'lgan
+   bo'limlarda ham (masalan bitta video) footer o'rtaga chiqib
+   qolmaydi, chunki main qolgan bo'sh joyni to'ldiradi. */
 body {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   background: transparent;
   color: var(--text-primary);
   line-height: 1.6;
   min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
   overflow-x: hidden;
   transition: color var(--transition-normal);
+}
+
+/* Asosiy kontent bo'sh joyni egallaydi — footer pastga suriladi */
+#main-content {
+  flex: 1 0 auto;
+}
+
+.footer {
+  flex-shrink: 0;
 }
 
 /* ---------- Neural Network Background ---------- */
@@ -241,10 +257,17 @@ body {
 }
 
 /* ---------- Navbar ---------- */
-.navbar {
+/* Yopishqoqlik site-header da: body flex konteyner bo'lgani uchun
+   .navbar o'z ota-onasi ichida yopishib qolardi va surilib ketardi. */
+.site-header {
   position: sticky;
   top: 0;
   z-index: 100;
+  transition: transform var(--transition-normal);
+  will-change: transform;
+}
+
+.navbar {
   background: var(--bg-glass-strong);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
@@ -519,13 +542,113 @@ body {
 }
 
 /* ---------- Controls ---------- */
+/* ============================================================
+   QIDIRUV PANELI (controls)
+
+   Ikki holati bor:
+     1. Odatiy — header ostida, oddiy ko'rinishda
+     2. Surilgan (`html.is-scrolled`) — header yashirinadi va bu panel
+        uning o'rniga chiqadi: ixchamlashadi, shishasimon fon oladi va
+        ichida kichik logo hamda bo'limlar menyusi paydo bo'ladi.
+   ============================================================ */
 .controls {
   padding: 8px 0 6px;
   position: sticky;
   top: var(--header-height);
-  z-index: 50;
+  z-index: 60;
   background: var(--bg-body);
-  transition: background var(--transition-normal);
+  transition:
+    top var(--transition-normal),
+    padding var(--transition-normal),
+    background var(--transition-normal),
+    box-shadow var(--transition-normal);
+}
+
+/* Panel ichidagi qatorni bir tekislikka keltiramiz */
+.controls > .container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.controls .search-wrapper {
+  flex: 1 1 260px;
+  min-width: 0;
+  margin: 0;
+}
+
+.controls .filters {
+  flex: 1 1 100%;
+}
+
+/* Logo va ixcham menyu — odatiy holatda ko'rinmaydi */
+.controls__logo,
+.controls__nav {
+  display: none;
+}
+
+/* ---------- Surilgan holat: "fluid" shisha panel ---------- */
+
+/* Yopishqoq element .navbar (site-header emas) — shuni yashiramiz */
+.is-scrolled .site-header {
+  transform: translateY(-100%);
+  pointer-events: none;
+}
+
+.is-scrolled .controls {
+  top: 0;
+  padding: 6px 0;
+  background: var(--bg-glass-strong);
+  backdrop-filter: saturate(180%) blur(20px);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  box-shadow: 0 1px 0 var(--border-color), 0 6px 24px rgba(0, 0, 0, 0.08);
+}
+
+/* Surilganda logo va menyu paydo bo'ladi */
+.is-scrolled .controls__logo {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  opacity: 0.9;
+}
+
+.is-scrolled .controls__nav {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  flex-shrink: 0;
+}
+
+/* Surilganda qidiruv maydoni ixchamlashadi */
+.is-scrolled .search-wrapper {
+  flex: 1 1 180px;
+}
+
+.is-scrolled .search-input {
+  height: 34px;
+  font-size: 0.85rem;
+  border-radius: 999px;
+}
+
+/* Ixcham menyu tugmalari kichikroq */
+.is-scrolled .controls__nav .nav-tab-btn {
+  padding: 5px 10px;
+  font-size: 0.82rem;
+}
+
+/* Filtrlar surilganda joy egallamasin */
+.is-scrolled .controls .filters {
+  display: none;
+}
+
+/* Tor ekranlarda ixcham menyu sig'maydi — faqat qidiruv qoladi
+   (bo'limlar pastki mobil menyudan tanlanadi) */
+@media (max-width: 900px) {
+  .is-scrolled .controls__nav,
+  .is-scrolled .controls__logo {
+    display: none;
+  }
 }
 
 .controls::after {
@@ -732,8 +855,9 @@ body {
   backdrop-filter: blur(8px);
 }
 
+/* Kartochka ichi ixcham: 4 ustunda ham hamma narsa bemalol joylashadi */
 .book-card__body {
-  padding: 20px;
+  padding: 16px;
 }
 
 /* Kitob nomi.
@@ -743,12 +867,12 @@ body {
    ya'ni qisqa nomli kartochkalar ham tekis joylashadi. */
 .book-card__title {
   font-family: 'Outfit', sans-serif;
-  font-size: 1.05rem;
+  font-size: 0.98rem;
   font-weight: 700;
-  line-height: 1.4;
-  margin-bottom: 8px;
+  line-height: 1.35;
+  margin-bottom: 6px;
   color: var(--text-primary);
-  min-height: calc(1.05rem * 1.4 * 3);
+  min-height: calc(0.98rem * 1.35 * 3);
   overflow-wrap: break-word;
   cursor: pointer;
 }
@@ -756,13 +880,14 @@ body {
 .book-card__meta {
   display: flex;
   align-items: center;
-  gap: 12px;
-  margin-bottom: 12px;
+  flex-wrap: wrap;
+  gap: 6px 10px;
+  margin-bottom: 8px;
 }
 
 .book-card__year,
 .book-card__author {
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   font-weight: 600;
   color: var(--text-muted);
   display: flex;
@@ -771,9 +896,9 @@ body {
 }
 
 .book-card__desc {
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   color: var(--text-secondary);
-  line-height: 1.5;
+  line-height: 1.45;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
@@ -785,17 +910,17 @@ body {
 .book-card__qr {
   display: flex;
   align-items: center;
-  gap: 10px;
-  margin-bottom: 16px;
-  padding: 10px 12px;
+  gap: 8px;
+  margin-bottom: 12px;
+  padding: 8px 10px;
   background: var(--bg-glass);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-md);
 }
 
 .book-card__qr-img {
-  width: 56px;
-  height: 56px;
+  width: 46px;
+  height: 46px;
   border-radius: 6px;
   object-fit: contain;
   background: #fff;
@@ -808,9 +933,18 @@ body {
   font-weight: 600;
 }
 
+/* Tugmalar: joy tor bo'lsa pastga tushadi, hech qachon kesilmaydi */
 .book-card__actions {
   display: flex;
+  flex-wrap: wrap;
   gap: 8px;
+}
+
+.book-card__actions .btn {
+  flex: 1 1 auto;
+  min-width: 0;
+  padding: 9px 12px;
+  font-size: 0.82rem;
 }
 
 .btn {
