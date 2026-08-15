@@ -5,7 +5,7 @@
    Progress localStorage'da saqlanadi.
    ============================================ */
 
-import { saveItemProgress, getItemProgress } from './local-progress.js?v=7.1.2';
+import { saveItemProgress, getItemProgress } from './local-progress.js?v=7.1.3';
 
 const PDFJS_URL = '/js/vendor/pdf.min.js';
 const PDFJS_WORKER_URL = '/js/vendor/pdf.worker.min.js';

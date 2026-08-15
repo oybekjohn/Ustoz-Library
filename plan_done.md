@@ -225,7 +225,7 @@ Cloudflare Pages > Settings > Environment variables da 14 ta secret:
 
 # 2-QISM: RELIZLAR TARIXI
 
-## v7.1.2 — Interfeys nuqsonlari (footer, yopishqoq qidiruv, kartalar), 2026-08-15
+## v7.1.3 — Interfeys nuqsonlari (footer, yopishqoq qidiruv, kartalar), 2026-08-15
 
 Egasi aytgan uchta nuqson tuzatildi. Faqat lokalda sinaldi.
 
@@ -249,6 +249,27 @@ Egasi aytgan uchta nuqson tuzatildi. Faqat lokalda sinaldi.
       > tugmalar tepada qotib turishi kerak emasligini aytdi —
       > `.controls__logo`, `.controls__nav` va `.is-scrolled` bilan
       > bog'liq barcha kod olib tashlandi.
+
+- [x] **Panel foni shishasimon** — avval `--bg-body` bilan to'liq bo'yalgani
+      uchun bu bo'lim atrofidagi sahifadan oqroq ko'rinardi va orqadagi
+      neyron animatsiyani to'sib qo'yardi. Endi yarim shaffof
+      (`--bg-controls`) + `backdrop-filter: blur(14px)`. Qidiruv maydoni
+      va filtr tugmalarining ranglariga tegilmadi.
+
+      Alpha ikki qarama-qarshi talab orasida tanlangan: past bo'lsa
+      animatsiya yaxshi ko'rinadi, lekin panel ostidan surilayotgan
+      kartochkalar matni sizib chiqadi va kontrast tushadi.
+      O'lchangan (eng yomon holat — yorqin zarracha aynan matn ortida):
+
+      | Rejim | Alpha | Animatsiya | Qidiruv | Filtr | AA (4.5) |
+      |---|---|---|---|---|---|
+      | Yorug' | 0.55 | 45% | 13.48 | 6.69 | ✅ |
+      | Tungi  | 0.75 | 25% | 8.27 | 4.91 | ✅ |
+
+      Tungi rejimda alpha 0.75 dan pasaytirilmasin — 0.70 da filtr matni
+      4.42 ga tushadi va AA dan o'tmaydi. `backdrop-filter` ni
+      qo'llamaydigan brauzerlar uchun `@supports` bilan to'liq fon
+      zaxirasi qo'yilgan.
 - [x] **Kitob kartasi ixchamlandi** — ichki matnlar tiqilib qolgandi va
       QR tugmasining yarmi kesilardi. Tugma matni "📱 QR yuklab olish" dan
       "📱 QR" ga qisqardi (3 tilda), ichki bo'shliqlar va shrift o'lchamlari

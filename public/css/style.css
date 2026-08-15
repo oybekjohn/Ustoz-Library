@@ -60,6 +60,14 @@
   --bg-modal: rgba(10, 10, 30, 0.92);
   --bg-input: rgba(255, 255, 255, 0.08);
 
+  /* Qidiruv panelining foni — yarim shaffof, orqadagi neyron
+     animatsiya ko'rinib tursin uchun (blur bilan birga ishlatiladi).
+
+     Tungi rejimda 0.75 dan pastga tushirmang: zarrachalar och rangda,
+     ular nofaol filtr tugmasi ortiga tushganda matn kontrasti 4.5 dan
+     pasayib ketadi (0.70 da 4.42, 0.75 da 4.91). O'lchangan. */
+  --bg-controls: rgba(20, 20, 40, 0.75);
+
   /* Tungi rejim matn ranglari.
      Kontrast nisbati #141428 foniga nisbatan o'lchangan (WCAG AA: 4.5 talab):
        primary 15.9 · secondary 9.4 · muted 6.7 · accent 7.6 */
@@ -101,6 +109,11 @@
   --bg-glass-strong: rgba(255, 255, 255, 0.85);
   --bg-modal: rgba(255, 255, 255, 0.97);
   --bg-input: rgba(0, 0, 20, 0.04);
+
+  /* Yorug' rejimda matn to'q, zarrachalar esa o'rta rangda — shuning
+     uchun bu yerda kontrast xavfi yo'q (0.55 da 6.69). Alpha faqat
+     panel ostidan surilib o'tayotgan kartochkalarni yashirish uchun. */
+  --bg-controls: rgba(244, 244, 251, 0.55);
 
   /* Yorug' rejim matn ranglari.
      Kontrast nisbati #f4f4fb foniga nisbatan o'lchangan (WCAG AA: 4.5 talab):
@@ -547,13 +560,30 @@ body {
    va sahifa tepasiga yetganda o'sha yerda qotib qoladi — ya'ni
    header'ning o'rnini egallaydi. Ko'rinishi o'zgarmaydi: qidiruv
    maydoni ham, filtrlar ham qanday bo'lsa shundayligicha qoladi.
+
+   Foni yarim shaffof (shishasimon): orqadagi neyron animatsiya
+   ko'rinib turadi. `backdrop-filter` esa panel ostidan surilib
+   o'tayotgan kitob kartochkalarini xiralashtiradi — aks holda
+   ularning matni qidiruv maydoni ortidan ko'rinib, o'qishga
+   xalaqit berardi.
    ============================================================ */
 .controls {
   padding: 8px 0 6px;
   position: sticky;
   top: 0;
   z-index: 60;
-  background: var(--bg-body);
+  background: var(--bg-controls);
+  backdrop-filter: blur(14px) saturate(160%);
+  -webkit-backdrop-filter: blur(14px) saturate(160%);
+}
+
+/* Eski brauzerlarda backdrop-filter yo'q — u holda ostidagi kartochkalar
+   xiralashmaydi va matn ustiga matn tushadi. Shuning uchun fon to'liq
+   qilinadi (animatsiya ko'rinmaydi, lekin o'qish buzilmaydi). */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .controls {
+    background: var(--bg-body);
+  }
 }
 
 /* Panel ichidagi qatorni bir tekislikka keltiramiz */
@@ -574,6 +604,8 @@ body {
   flex: 1 1 100%;
 }
 
+/* Panel ostidagi yumshoq chegara. Fon shaffof bo'lgani uchun bu ham
+   shaffofdan shaffofga o'tadi — aks holda oq chiziq bo'lib turardi. */
 .controls::after {
   content: '';
   position: absolute;
@@ -581,7 +613,7 @@ body {
   left: 0;
   right: 0;
   height: 6px;
-  background: linear-gradient(to bottom, var(--bg-body), transparent);
+  background: linear-gradient(to bottom, var(--bg-controls), transparent);
   pointer-events: none;
 }
 
