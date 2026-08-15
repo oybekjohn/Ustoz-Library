@@ -604,6 +604,26 @@ body {
   flex: 1 1 100%;
 }
 
+/* Panel tepaga yopishganini aniqlaydigan ko'rinmas nuqta.
+   Balandligi 0 — sahifa joylashuviga umuman ta'sir qilmaydi. */
+.controls-sentinel {
+  height: 0;
+}
+
+/* ---------- Tepada qotgan holat ----------
+   Qidiruv maydoni yashiriladi, faqat bo'lim filtrlari qoladi.
+   `display: none` ataylab: maydon fokus tartibidan ham chiqib ketadi,
+   aks holda ko'rinmas input'ga Tab bilan tushib qolinardi. */
+.controls.is-stuck .search-wrapper {
+  display: none;
+}
+
+/* Istisno: foydalanuvchi qidiruv maydoniga yozayotgan bo'lsa,
+   surilganda ham yo'qolmasin — yozuvi yarim qolib ketmasin. */
+.controls.is-stuck:focus-within .search-wrapper {
+  display: block;
+}
+
 /* Panel ostidagi yumshoq chegara. Fon shaffof bo'lgani uchun bu ham
    shaffofdan shaffofga o'tadi — aks holda oq chiziq bo'lib turardi. */
 .controls::after {

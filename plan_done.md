@@ -225,7 +225,7 @@ Cloudflare Pages > Settings > Environment variables da 14 ta secret:
 
 # 2-QISM: RELIZLAR TARIXI
 
-## v7.1.3 — Interfeys nuqsonlari (footer, yopishqoq qidiruv, kartalar), 2026-08-15
+## v7.1.5 — Interfeys nuqsonlari (footer, yopishqoq qidiruv, kartalar), 2026-08-15
 
 Egasi aytgan uchta nuqson tuzatildi. Faqat lokalda sinaldi.
 
@@ -270,6 +270,28 @@ Egasi aytgan uchta nuqson tuzatildi. Faqat lokalda sinaldi.
       4.42 ga tushadi va AA dan o'tmaydi. `backdrop-filter` ni
       qo'llamaydigan brauzerlar uchun `@supports` bilan to'liq fon
       zaxirasi qo'yilgan.
+
+- [x] **Qotganda faqat filtrlar qoladi** — panel tepaga yopishganda
+      qidiruv maydoni yashirinadi, bo'lim filtrlari qoladi. Panel
+      138 → 88px ga pasayadi (mobil: 228 → 178px).
+
+      Qotganlikni aniqlash uchun paneldan **oldinga** balandligi 0
+      bo'lgan `#controls-sentinel` qo'yilgan. Panelning o'zini o'lchab
+      bo'lmaydi: yopishgach `top` doim 0 bo'lib qoladi. Sentinel
+      oldinda turgani muhim — qidiruv yashirinib panel pasayganda unga
+      ta'sir qilmaydi, aks holda "yashirdi → pasaydi → ko'rindi"
+      tsikli hosil bo'lardi.
+
+      `display: none` ataylab tanlandi: maydon fokus tartibidan ham
+      chiqadi (tekshirildi: `offsetParent === null`), aks holda
+      ko'rinmas input'ga Tab bilan tushib qolinardi. Foydalanuvchi
+      qidiruvga yozayotgan bo'lsa `:focus-within` uni yo'qolishdan
+      saqlaydi.
+
+      > Dastlab `IntersectionObserver` bilan yozilgandi — u brauzer
+      > panelida umuman ishga tushmadi (0 marta chaqirildi), chunki
+      > kadrlar render qilinmaydi. Mavjud scroll tinglovchisiga
+      > qo'shildi: qo'shimcha xarajat yo'q va o'lchab bo'ladi.
 - [x] **Kitob kartasi ixchamlandi** — ichki matnlar tiqilib qolgandi va
       QR tugmasining yarmi kesilardi. Tugma matni "📱 QR yuklab olish" dan
       "📱 QR" ga qisqardi (3 tilda), ichki bo'shliqlar va shrift o'lchamlari

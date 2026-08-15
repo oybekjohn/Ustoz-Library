@@ -4,14 +4,14 @@
    Barcha bo'limlar ro'yxatdan o'tishsiz ishlaydi.
    ============================================ */
 
-import { initThemeToggle } from './theme.js?v=7.1.3';
-import { showToast } from './toast.js?v=7.1.3';
-import { initPresentationViewer } from './presentation-viewer.js?v=7.1.3';
-import { initVideoPlayer } from './video-player.js?v=7.1.3';
-import { initTestRunner } from './test-runner.js?v=7.1.3';
-import { initTelegramMiniApp } from './telegram-mini-app.js?v=7.1.3';
-import { isPdfUrl, lazyRenderPdfThumb } from './pdf-thumb.js?v=7.1.3';
-import { initAccessibility, updateAccessibilityLanguage } from './accessibility.js?v=7.1.3';
+import { initThemeToggle } from './theme.js?v=7.1.5';
+import { showToast } from './toast.js?v=7.1.5';
+import { initPresentationViewer } from './presentation-viewer.js?v=7.1.5';
+import { initVideoPlayer } from './video-player.js?v=7.1.5';
+import { initTestRunner } from './test-runner.js?v=7.1.5';
+import { initTelegramMiniApp } from './telegram-mini-app.js?v=7.1.5';
+import { isPdfUrl, lazyRenderPdfThumb } from './pdf-thumb.js?v=7.1.5';
+import { initAccessibility, updateAccessibilityLanguage } from './accessibility.js?v=7.1.5';
 
 // ---------- Tarjimalar (i18n) ----------
 const translations = {
@@ -794,23 +794,38 @@ function initScrollTop() {
 /* ============================================================
    SURILISHNI KUZATISH
 
-   Qidiruv panelining yopishib qolishi butunlay CSS bilan hal
-   qilingan (`.controls { position: sticky; top: 0 }`), shuning uchun
-   bu yerda JS ishtiroki kerak emas. Faqat "yuqoriga qaytish"
-   tugmasi kuzatiladi.
+   Panelning yopishib qolishining o'zi CSS bilan hal qilingan
+   (`.controls { position: sticky; top: 0 }`). Bu yerda ikki ish:
+     1. "Yuqoriga qaytish" tugmasini ko'rsatish/yashirish
+     2. Panel tepaga yopishganini aniqlab, `is-stuck` klassini qo'yish
+        (shunda qidiruv maydoni yashirinib, faqat filtrlar qoladi)
    ============================================================ */
 const SCROLL_TUGMA_CHEGARASI = 600; // shu nuqtadan keyin tugma ko'rinadi
 
 function initScrollHeader() {
   const btn = $('#scroll-top');
-  if (!btn) return;
+  const panel = $('#controls');
+  const sentinel = $('#controls-sentinel');
 
-  // Faqat scrollY o'qiladi va klass almashtiriladi — arzon amallar,
-  // shuning uchun qo'shimcha throttle kerak emas.
+  /* Bitta tinglovchi ikkala ishni bajaradi — ikkinchisini qo'shish
+     qo'shimcha xarajat bermaydi.
+
+     Panelning o'zini o'lchab bo'lmaydi: u yopishgach `top` doim 0
+     bo'lib qoladi. Shuning uchun undan OLDINGA qo'yilgan balandligi 0
+     bo'lgan nuqta (sentinel) o'lchanadi — u ekran tepasidan chiqib
+     ketsa, demak panel tepaga yetgan.
+
+     Sentinel paneldan oldinda turgani muhim: qidiruv yashiringanda
+     panel pasayadi, lekin bu sentinelga ta'sir qilmaydi. Aks holda
+     "yashirdi → panel pasaydi → yana ko'rindi" tsikli hosil bo'lardi. */
   const holatniYangila = () => {
-    btn.classList.toggle('visible', window.scrollY > SCROLL_TUGMA_CHEGARASI);
+    if (btn) btn.classList.toggle('visible', window.scrollY > SCROLL_TUGMA_CHEGARASI);
+    if (panel && sentinel) {
+      panel.classList.toggle('is-stuck', sentinel.getBoundingClientRect().top <= 0);
+    }
   };
 
   window.addEventListener('scroll', holatniYangila, { passive: true });
+  window.addEventListener('resize', holatniYangila, { passive: true });
   holatniYangila();
 }

@@ -40,8 +40,8 @@
   </noscript>
 
   <!-- ===== Uslublar ===== -->
-  <link rel="stylesheet" href="css/style.css?v=7.1.3">
-  <link rel="stylesheet" href="css/accessibility.css?v=7.1.3">
+  <link rel="stylesheet" href="css/style.css?v=7.1.5">
+  <link rel="stylesheet" href="css/accessibility.css?v=7.1.5">
 
   <!-- QR kod generatori (kitob kartochkalari uchun) -->
   <script src="/js/vendor/qrcode.min.js" defer></script>
@@ -168,7 +168,11 @@
       </div>
     </section>
 
-    <!-- ========== 2-BO'LIM: Qidiruv va filtrlar ========== -->
+    <!-- ========== 2-BO'LIM: Qidiruv va filtrlar ==========
+         Oldidagi "sentinel" — panel tepaga yopishganini aniqlash uchun.
+         U ko'rinmay qolsa, demak panel qotdi (app.js dagi kuzatuvchi
+         shunda qidiruv maydonini yashiradi). -->
+    <div class="controls-sentinel" id="controls-sentinel" aria-hidden="true"></div>
     <section class="controls" id="controls" aria-label="Kitoblarni qidirish va saralash">
       <div class="container">
 
@@ -333,10 +337,10 @@
        SKRIPTLAR
        defer — HTML tahlilini to'xtatmaydi, sahifa tezroq ko'rinadi.
        ============================================================ -->
-  <script src="js/neural-bg.js?v=7.1.3" defer></script>
-  <script src="js/qr.js?v=7.1.3" defer></script>
-  <script src="js/flipbook.js?v=7.1.3" defer></script>
-  <script type="module" src="js/app.js?v=7.1.3"></script>
+  <script src="js/neural-bg.js?v=7.1.5" defer></script>
+  <script src="js/qr.js?v=7.1.5" defer></script>
+  <script src="js/flipbook.js?v=7.1.5" defer></script>
+  <script type="module" src="js/app.js?v=7.1.5"></script>
 
 </body>
 
