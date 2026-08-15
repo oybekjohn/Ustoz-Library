@@ -40,8 +40,8 @@
   </noscript>
 
   <!-- ===== Uslublar ===== -->
-  <link rel="stylesheet" href="css/style.css?v=7.1.1">
-  <link rel="stylesheet" href="css/accessibility.css?v=7.1.1">
+  <link rel="stylesheet" href="css/style.css?v=7.1.2">
+  <link rel="stylesheet" href="css/accessibility.css?v=7.1.2">
 
   <!-- QR kod generatori (kitob kartochkalari uchun) -->
   <script src="/js/vendor/qrcode.min.js" defer></script>
@@ -172,29 +172,12 @@
     <section class="controls" id="controls" aria-label="Kitoblarni qidirish va saralash">
       <div class="container">
 
-        <!-- Sahifa surilganda header yashirinadi va uning o'rniga shu panel
-             chiqadi. Quyidagi ikki element faqat o'sha holatda ko'rinadi:
-             kichik logo va bo'limlar menyusi. -->
-        <a href="/" class="controls__logo" id="controls-logo-btn" aria-hidden="true" tabindex="-1">
-          <img src="pictures/RTU_logo.svg" alt="" width="26" height="26">
-        </a>
-
         <div class="search-wrapper">
           <span class="search-icon" aria-hidden="true">🔍</span>
           <label for="search-input" class="sr-only">Kitob nomini qidirish</label>
           <input type="search" class="search-input" id="search-input"
             placeholder="Kitob nomini qidirish..." autocomplete="off">
           <span class="search-count" id="search-count" aria-live="polite"></span>
-        </div>
-
-        <!-- Bo'limlar menyusining ixcham nusxasi (surilganda ko'rinadi).
-             Sinf nomlari header'dagidek — shuning uchun app.js dagi
-             mavjud hodisa boshqaruvchilari bularga ham o'z-o'zidan ulanadi. -->
-        <div class="controls__nav" id="controls-nav">
-          <button class="nav-tab-btn active" data-view="books">📚 Kitoblar</button>
-          <button class="nav-tab-btn" data-view="presentations">📊 Taqdimotlar</button>
-          <button class="nav-tab-btn" data-view="videos">🎥 Videolar</button>
-          <button class="nav-tab-btn" data-view="tests">📝 Testlar</button>
         </div>
 
         <!-- Kategoriya filtrlari (JS to'ldiradi) -->
@@ -350,10 +333,10 @@
        SKRIPTLAR
        defer — HTML tahlilini to'xtatmaydi, sahifa tezroq ko'rinadi.
        ============================================================ -->
-  <script src="js/neural-bg.js?v=7.1.1" defer></script>
-  <script src="js/qr.js?v=7.1.1" defer></script>
-  <script src="js/flipbook.js?v=7.1.1" defer></script>
-  <script type="module" src="js/app.js?v=7.1.1"></script>
+  <script src="js/neural-bg.js?v=7.1.2" defer></script>
+  <script src="js/qr.js?v=7.1.2" defer></script>
+  <script src="js/flipbook.js?v=7.1.2" defer></script>
+  <script type="module" src="js/app.js?v=7.1.2"></script>
 
 </body>
 

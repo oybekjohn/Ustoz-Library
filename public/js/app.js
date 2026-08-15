@@ -4,14 +4,14 @@
    Barcha bo'limlar ro'yxatdan o'tishsiz ishlaydi.
    ============================================ */
 
-import { initThemeToggle } from './theme.js?v=7.1.1';
-import { showToast } from './toast.js?v=7.1.1';
-import { initPresentationViewer } from './presentation-viewer.js?v=7.1.1';
-import { initVideoPlayer } from './video-player.js?v=7.1.1';
-import { initTestRunner } from './test-runner.js?v=7.1.1';
-import { initTelegramMiniApp } from './telegram-mini-app.js?v=7.1.1';
-import { isPdfUrl, lazyRenderPdfThumb } from './pdf-thumb.js?v=7.1.1';
-import { initAccessibility, updateAccessibilityLanguage } from './accessibility.js?v=7.1.1';
+import { initThemeToggle } from './theme.js?v=7.1.2';
+import { showToast } from './toast.js?v=7.1.2';
+import { initPresentationViewer } from './presentation-viewer.js?v=7.1.2';
+import { initVideoPlayer } from './video-player.js?v=7.1.2';
+import { initTestRunner } from './test-runner.js?v=7.1.2';
+import { initTelegramMiniApp } from './telegram-mini-app.js?v=7.1.2';
+import { isPdfUrl, lazyRenderPdfThumb } from './pdf-thumb.js?v=7.1.2';
+import { initAccessibility, updateAccessibilityLanguage } from './accessibility.js?v=7.1.2';
 
 // ---------- Tarjimalar (i18n) ----------
 const translations = {
@@ -249,8 +249,8 @@ function initNavigation() {
     btn.addEventListener('click', () => switchView(btn.dataset.view));
   });
 
-  // Header'dagi va ixcham paneldagi logolar — ikkalasi ham kitoblarga qaytaradi
-  $$('#nav-logo-btn, #controls-logo-btn').forEach((logoBtn) => {
+  // Header'dagi logo — kitoblar bo'limiga qaytaradi
+  $$('#nav-logo-btn').forEach((logoBtn) => {
     logoBtn.addEventListener('click', (e) => {
       e.preventDefault();
       switchView('books');
@@ -277,11 +277,6 @@ function switchView(viewName, { updateHash = true } = {}) {
 
   if (!isBooks) renderActiveView();
   window.scrollTo({ top: 0, behavior: 'smooth' });
-
-  // Ixcham panel holatini darhol qayta hisoblaymiz: silliq surilish
-  // tugashini kutib o'tirmaymiz, aks holda boshqa bo'limga o'tganda
-  // header yashiringancha qolib ketishi mumkin.
-  scrollHolatiniYangila();
 }
 
 function toggleSection(sel, visible) {
@@ -799,52 +794,23 @@ function initScrollTop() {
 /* ============================================================
    SURILISHNI KUZATISH
 
-   Sahifa pastga surilganda header yashirinadi va uning o'rniga
-   qidiruv paneli chiqadi (CSS dagi `.is-scrolled` holati).
-
-   Ikki chegara ishlatiladi (hysteresis): panel yoqilishi va
-   o'chishi turli nuqtalarda bo'ladi, aks holda chegara atrofida
-   "titrab" qoladi.
+   Qidiruv panelining yopishib qolishi butunlay CSS bilan hal
+   qilingan (`.controls { position: sticky; top: 0 }`), shuning uchun
+   bu yerda JS ishtiroki kerak emas. Faqat "yuqoriga qaytish"
+   tugmasi kuzatiladi.
    ============================================================ */
-const SCROLL_YOQISH = 140;   // shu nuqtadan keyin ixcham panel yoqiladi
-const SCROLL_OCHIRISH = 60;  // shu nuqtadan yuqorida odatiy holatga qaytadi
-
-// Bo'lim almashganda holatni darhol qayta hisoblash uchun saqlanadi
-let scrollHolatiniYangila = () => {};
+const SCROLL_TUGMA_CHEGARASI = 600; // shu nuqtadan keyin tugma ko'rinadi
 
 function initScrollHeader() {
-  const root = document.documentElement;
-  let ixcham = false;
+  const btn = $('#scroll-top');
+  if (!btn) return;
 
+  // Faqat scrollY o'qiladi va klass almashtiriladi — arzon amallar,
+  // shuning uchun qo'shimcha throttle kerak emas.
   const holatniYangila = () => {
-    const y = window.scrollY;
-
-    // Ixcham panel faqat "Kitoblar" bo'limida ishlaydi, chunki qidiruv
-    // paneli faqat o'sha yerda ko'rinadi. Boshqa bo'limlarda header
-    // yashirinsa, foydalanuvchi menyusiz qolib ketardi.
-    if (state.activeView !== 'books') {
-      if (ixcham) {
-        ixcham = false;
-        root.classList.remove('is-scrolled');
-      }
-    } else if (!ixcham && y > SCROLL_YOQISH) {
-      ixcham = true;
-      root.classList.add('is-scrolled');
-    } else if (ixcham && y < SCROLL_OCHIRISH) {
-      ixcham = false;
-      root.classList.remove('is-scrolled');
-    }
-
-    // Yuqoriga qaytish tugmasi
-    const btn = $('#scroll-top');
-    if (btn) btn.classList.toggle('visible', y > 600);
+    btn.classList.toggle('visible', window.scrollY > SCROLL_TUGMA_CHEGARASI);
   };
 
-  // Faqat scrollY o'qiladi va klass almashtiriladi — bu arzon amallar,
-  // shuning uchun qo'shimcha throttle kerak emas.
   window.addEventListener('scroll', holatniYangila, { passive: true });
-
-  // switchView shu orqali holatni darhol yangilaydi
-  scrollHolatiniYangila = holatniYangila;
   holatniYangila();
 }

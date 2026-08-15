@@ -257,14 +257,12 @@ body {
 }
 
 /* ---------- Navbar ---------- */
-/* Yopishqoqlik site-header da: body flex konteyner bo'lgani uchun
-   .navbar o'z ota-onasi ichida yopishib qolardi va surilib ketardi. */
+/* Header yopishqoq EMAS: sahifa surilganda u boshqa kontent kabi
+   yuqoriga chiqib ketadi va uning o'rniga qidiruv paneli yopishadi
+   (pastdagi "QIDIRUV PANELI" bo'limiga qarang). */
 .site-header {
-  position: sticky;
-  top: 0;
+  position: relative;
   z-index: 100;
-  transition: transform var(--transition-normal);
-  will-change: transform;
 }
 
 .navbar {
@@ -545,23 +543,17 @@ body {
 /* ============================================================
    QIDIRUV PANELI (controls)
 
-   Ikki holati bor:
-     1. Odatiy — header ostida, oddiy ko'rinishda
-     2. Surilgan (`html.is-scrolled`) — header yashirinadi va bu panel
-        uning o'rniga chiqadi: ixchamlashadi, shishasimon fon oladi va
-        ichida kichik logo hamda bo'limlar menyusi paydo bo'ladi.
+   Sahifa surilganda bu panel kontent bilan birga yuqoriga siljiydi
+   va sahifa tepasiga yetganda o'sha yerda qotib qoladi — ya'ni
+   header'ning o'rnini egallaydi. Ko'rinishi o'zgarmaydi: qidiruv
+   maydoni ham, filtrlar ham qanday bo'lsa shundayligicha qoladi.
    ============================================================ */
 .controls {
   padding: 8px 0 6px;
   position: sticky;
-  top: var(--header-height);
+  top: 0;
   z-index: 60;
   background: var(--bg-body);
-  transition:
-    top var(--transition-normal),
-    padding var(--transition-normal),
-    background var(--transition-normal),
-    box-shadow var(--transition-normal);
 }
 
 /* Panel ichidagi qatorni bir tekislikka keltiramiz */
@@ -580,75 +572,6 @@ body {
 
 .controls .filters {
   flex: 1 1 100%;
-}
-
-/* Logo va ixcham menyu — odatiy holatda ko'rinmaydi */
-.controls__logo,
-.controls__nav {
-  display: none;
-}
-
-/* ---------- Surilgan holat: "fluid" shisha panel ---------- */
-
-/* Yopishqoq element .navbar (site-header emas) — shuni yashiramiz */
-.is-scrolled .site-header {
-  transform: translateY(-100%);
-  pointer-events: none;
-}
-
-.is-scrolled .controls {
-  top: 0;
-  padding: 6px 0;
-  background: var(--bg-glass-strong);
-  backdrop-filter: saturate(180%) blur(20px);
-  -webkit-backdrop-filter: saturate(180%) blur(20px);
-  box-shadow: 0 1px 0 var(--border-color), 0 6px 24px rgba(0, 0, 0, 0.08);
-}
-
-/* Surilganda logo va menyu paydo bo'ladi */
-.is-scrolled .controls__logo {
-  display: inline-flex;
-  align-items: center;
-  flex-shrink: 0;
-  opacity: 0.9;
-}
-
-.is-scrolled .controls__nav {
-  display: flex;
-  align-items: center;
-  gap: 2px;
-  flex-shrink: 0;
-}
-
-/* Surilganda qidiruv maydoni ixchamlashadi */
-.is-scrolled .search-wrapper {
-  flex: 1 1 180px;
-}
-
-.is-scrolled .search-input {
-  height: 34px;
-  font-size: 0.85rem;
-  border-radius: 999px;
-}
-
-/* Ixcham menyu tugmalari kichikroq */
-.is-scrolled .controls__nav .nav-tab-btn {
-  padding: 5px 10px;
-  font-size: 0.82rem;
-}
-
-/* Filtrlar surilganda joy egallamasin */
-.is-scrolled .controls .filters {
-  display: none;
-}
-
-/* Tor ekranlarda ixcham menyu sig'maydi — faqat qidiruv qoladi
-   (bo'limlar pastki mobil menyudan tanlanadi) */
-@media (max-width: 900px) {
-  .is-scrolled .controls__nav,
-  .is-scrolled .controls__logo {
-    display: none;
-  }
 }
 
 .controls::after {

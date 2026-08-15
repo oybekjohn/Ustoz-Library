@@ -225,7 +225,7 @@ Cloudflare Pages > Settings > Environment variables da 14 ta secret:
 
 # 2-QISM: RELIZLAR TARIXI
 
-## v7.1.1 — Interfeys nuqsonlari (footer, ixcham panel, kartalar), 2026-08-15
+## v7.1.2 — Interfeys nuqsonlari (footer, yopishqoq qidiruv, kartalar), 2026-08-15
 
 Egasi aytgan uchta nuqson tuzatildi. Faqat lokalda sinaldi.
 
@@ -236,14 +236,19 @@ Egasi aytgan uchta nuqson tuzatildi. Faqat lokalda sinaldi.
       pastki qirrasi 900px = oyna balandligi, ya'ni aynan pastda.
       ⚠️ Bunda `.navbar` ning sticky'si buzildi (flex bola bo'lib qoldi) —
       shuning uchun sticky `.site-header` ga ko'chirildi.
-- [x] **Ixcham qidiruv paneli** — pastga surilganda header yuqoriga chiqib
-      ketadi (`translateY(-100%)`), qidiruv paneli uning o'rniga `top: 0`
-      ga yopishadi va Apple uslubida ixchamlashadi: balandlik 46px,
-      shaffof blur fon, qidiruv maydoni 34px va yumaloq, filtrlar
-      yashiriladi, o'rniga chapda logo va o'ngda 4 ta bo'lim tugmasi
-      chiqadi. 900px dan tor ekranda logo/menyu chiqmaydi — joy yetmaydi.
-      Ostona: 140px da yoqiladi, 60px da o'chadi (titrashning oldini oladi).
-      Bo'lim almashganda darhol qayta hisoblanadi.
+- [x] **Qidiruv paneli header o'rnida qotadi** — avval panel header ostiga
+      yopishardi va header doim tepada turardi. Endi header yopishqoq emas:
+      u oddiy kontent kabi yuqoriga chiqib ketadi, qidiruv va filtrlar
+      paneli esa `position: sticky; top: 0` bilan sahifa tepasiga yetganda
+      o'sha yerda qotadi. **Panelning ko'rinishi umuman o'zgarmaydi** —
+      balandlik, qidiruv maydoni va filtrlar uchala holatda ham bir xil
+      (1280px: 138 / 40 / 74 px). Hammasi CSS bilan, JS ishtirokisiz.
+
+      > Birinchi urinishda men buni noto'g'ri tushunib, panelni
+      > kichraytirib ichiga bo'lim tugmalarini qo'ygan edim. Egasi
+      > tugmalar tepada qotib turishi kerak emasligini aytdi —
+      > `.controls__logo`, `.controls__nav` va `.is-scrolled` bilan
+      > bog'liq barcha kod olib tashlandi.
 - [x] **Kitob kartasi ixchamlandi** — ichki matnlar tiqilib qolgandi va
       QR tugmasining yarmi kesilardi. Tugma matni "📱 QR yuklab olish" dan
       "📱 QR" ga qisqardi (3 tilda), ichki bo'shliqlar va shrift o'lchamlari
